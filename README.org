@@ -1,0 +1,6 @@
+#+TITLE: Autonomous agents in SDL
+
+This is a port of the Flocking project I started in Qt. For learning
+purposes, I now feel like using SDL is better than using the Qt graphics
+pipeline I don't totally understand now. Also, it will provide an easy way to
+compare implementations.
