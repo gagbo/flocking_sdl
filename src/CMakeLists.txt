@@ -1,7 +1,7 @@
 project (Flocking_SDL-main)
 
 set (Flocking_VERSION_MAJOR 0)
-set (Flocking_VERSION_MINOR 0)
+set (Flocking_VERSION_MINOR 1)
 
 # configure a header file to pass some of the CMake settings
 # to the source code

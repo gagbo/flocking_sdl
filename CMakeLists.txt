@@ -19,3 +19,4 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g \
 -fprofile-arcs -ftest-coverage")
 
 add_subdirectory(src)
+add_subdirectory(data)
