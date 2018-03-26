@@ -123,16 +123,16 @@ void MainWindow::update() {
   SDL_GetWindowSize(gWindow, &stretchRect.w, &stretchRect.h);
 
   // Blit the different sprites
-  SDL_BlitScaled(g_bg_surface, NULL, gScreenSurface, &stretchRect);
+  //SDL_BlitScaled(g_bg_surface, NULL, gScreenSurface, &stretchRect);
 
   // Render texture to screen
-  SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
+  //SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
 
   // Update screen
   SDL_RenderPresent(gRenderer);
 
   // Put back buffer in front
-  SDL_UpdateWindowSurface(gWindow);
+  // SDL_UpdateWindowSurface(gWindow);
 }
 
 MainWindow::~MainWindow() {
