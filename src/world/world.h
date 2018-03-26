@@ -15,6 +15,7 @@
 #ifndef WORLD_WORLD_H_
 #define WORLD_WORLD_H_
 #include <iostream>
+#include <Eigen/Dense>
 
 struct World {
   static int width;
@@ -23,6 +24,7 @@ struct World {
 
   static void set_world_size(int w, int h);
   static void set_time_step(float t);
+  static void wrap_around(Eigen::Vector2d& position);
 };
 
 #endif // WORLD_WORLD_H_

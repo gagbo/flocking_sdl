@@ -47,6 +47,8 @@ int main(int argc, char * argv[]) {
       }
     }
 
+    main_window.clear_and_draw_bg();
+    test_ant.update();
     main_window.update();
   }
 

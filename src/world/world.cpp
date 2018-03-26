@@ -23,6 +23,21 @@ void World::set_world_size(int w, int h) {
   height = h;
 }
 
-void World::set_time_step(float t) {
-  time_step = t;
+void World::set_time_step(float t) { time_step = t; }
+
+void World::wrap_around(Eigen::Vector2d &position) {
+  while (position(0) >= width || position(0) < 0) {
+    if (position(0) < 0) {
+      position(0) += width;
+    } else if (position(0) >= width) {
+      position(0) -= width;
+    }
+  }
+  while (position(1) >= height || position(1) < 0) {
+    if (position(1) < 0) {
+      position(1) += height;
+    } else if (position(1) >= height) {
+      position(1) -= height;
+    }
+  }
 }

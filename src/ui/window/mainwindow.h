@@ -31,6 +31,7 @@ public:
 
   bool load_media_bg(std::string path);
   bool load_texture(std::string path);
+  void clear_and_draw_bg();
   void update();
   inline bool has_correct_init() const { return success; }
 

@@ -17,6 +17,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <limits>
+#include <random>
 
 #include "ui/window/mainwindow.h"
 #include "world/world.h"
@@ -29,13 +30,16 @@ public:
 
   void decision();
   void update();
+  void print();
 
 protected:
   MainWindow *render_window;
   Eigen::Vector2d position;
   Eigen::Vector2d velocity;
+  Eigen::Vector2d acceleration;
   float mass;
   float max_acceleration;
+  int color[4];
 };
 
 #endif // ENTITY_ANT_ANT_H_

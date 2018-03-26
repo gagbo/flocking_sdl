@@ -122,7 +122,7 @@ void MainWindow::add_DrawRect_to_renderer(int w0, int h0, int w_total,
   SDL_RenderDrawRect(gRenderer, &outlineRect);
 }
 
-void MainWindow::update() {
+void MainWindow::clear_and_draw_bg() {
   // Reset Render color
   SDL_SetRenderDrawColor(gRenderer, bg_render_color[0], bg_render_color[1],
                          bg_render_color[2], bg_render_color[3]);
@@ -134,19 +134,18 @@ void MainWindow::update() {
   // stretchRect.x = 0;
   // stretchRect.y = 0;
 
-  // Get the width and height of the window
   int width, height;
   SDL_GetWindowSize(gWindow, &width, &height);
 
-  // Blit the different sprites
-  // SDL_BlitScaled(g_bg_surface, NULL, gScreenSurface, &stretchRect);
-
-  // Render texture to screen
-  // SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
-  
-  int c_blue[4] = {0x00, 0x00, 0xFF, 0xFF};
+  int c_blue[4] = {0x22, 0x22, 0xFF, 0xFF};
   add_FillRect_to_renderer(width/4, height/4, width/2, height/2,
                            c_blue);
+}
+
+void MainWindow::update() {
+  // Get the width and height of the window
+  int width, height;
+  SDL_GetWindowSize(gWindow, &width, &height);
 
   int c_green[4] = {0x00, 0xFF, 0x00, 0xFF};
   add_DrawRect_to_renderer(width/6, height/6, 2*width/3, 2*height/3,
