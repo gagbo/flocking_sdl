@@ -15,6 +15,15 @@ compare implementations.
     - [X] Does SDL2 bring its accessible, wide-purposed linear algebra API ??
       - It does not look like it, so Eigen3 will be used
   - [ ] Make the abstraction graph for ants and food
+    - The position will be an Eigen3 2d vector
+    - These classes need to know the address of the MainWindow they'll draw
+      to
+      - The MainWindow class provides add_XXX_to_renderer methods to actually
+      ship the position to the renderer
+    - These classes need to work with the static World:: constants
+      - The width/height to know how to generate correct random values for
+      insertion
+      - The time-step value in order to correctly update the velocity
   - [ ] Draw one ant and one food
     - [ ] How to 'store' the vision of each ant ? (Not interesting until
       behaviours are implemented)
