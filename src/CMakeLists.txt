@@ -14,9 +14,12 @@ configure_file (
 # so that we will find FlockingConfig.h
 include_directories ("${PROJECT_BINARY_DIR}")
 
+add_subdirectory(window)
+
 add_executable (flocks main.cpp)
 # Maybe linking SDL2 is not necessary since it should be ui
 target_link_libraries (flocks SDL2)
+target_link_libraries (flocks mainwindow)
 
 install (TARGETS flocks DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/FlockingConfig.h"

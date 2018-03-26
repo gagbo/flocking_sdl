@@ -12,25 +12,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef WINDOW_MAINWINDOW_H
+#define WINDOW_MAINWINDOW_H
 #include <SDL2/SDL.h>
-#include <iostream>
 
-#include "FlockingConfig.h"
-#include "window/mainwindow.h"
+class MainWindow {
+ public:
+  MainWindow(int width, int height);
+  ~MainWindow();
 
-#define WINDOW_WIDTH  640
-#define WINDOW_HEIGHT 480
+  bool load_media();
+  void update();
+  inline bool has_correct_init() const {return success;}
 
-int main(int argc, char * argv[]) {
-  std::cerr << "Flocking_SDL version "
-      << Flocking_VERSION_MAJOR << "."
-      << Flocking_VERSION_MINOR << "\n";
 
-  MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT);
+ protected:
+  SDL_Window* gWindow;
+  SDL_Surface* gScreenSurface;
+  bool success;
+};
 
-  if (main_window.has_correct_init()) {
-    std::cout << "The window initialised without issue !\n";
-  }
-
-  return 0;
-}
+#endif // WINDOW_MAINWINDOW_H
