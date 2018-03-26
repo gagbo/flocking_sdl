@@ -22,6 +22,7 @@
 
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 480
+#define FRAMERATE 60
 
 int main(int argc, char * argv[]) {
   std::cerr << "Flocking_SDL version "
@@ -36,11 +37,16 @@ int main(int argc, char * argv[]) {
     std::cout << "The window initialised without issue !\n";
   }
 
+  // Initialise time variables
+  float frame_in_ms = 1000.0f / FRAMERATE;
+  World::set_time_step(frame_in_ms);
+
   bool quit = false;
   SDL_Event e;
   Ant test_ant(main_window);
 
   while (!quit) {
+    float start_ms = SDL_GetTicks();
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
@@ -50,6 +56,11 @@ int main(int argc, char * argv[]) {
     main_window.clear_and_draw_bg();
     test_ant.update();
     main_window.update();
+
+    // Limit Framerate
+    float end_ms = SDL_GetTicks();
+    float delay_ms = frame_in_ms - (end_ms - start_ms);
+    SDL_Delay(delay_ms);
   }
 
   return 0;

@@ -14,8 +14,8 @@
 
 #include "world.h"
 
-int World::width = 320;
-int World::height = 240;
+int World::width = 640;
+int World::height = 480;
 float World::time_step = 1.0;
 
 void World::set_world_size(int w, int h) {

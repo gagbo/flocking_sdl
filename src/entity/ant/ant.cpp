@@ -21,7 +21,7 @@ Ant::Ant()
                                                                  0x44, 0xFF} {}
 
 Ant::Ant(MainWindow &window)
-    : render_window(&window), position(0, 0), velocity(0.2, 0.1),
+    : render_window(&window), position(0, 0), velocity(0.5, 0.25),
       acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF} {
