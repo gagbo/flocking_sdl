@@ -16,6 +16,8 @@
 
 int World::width = 640;
 int World::height = 480;
+int World::width_in_px = 640;
+int World::height_in_px = 480;
 float World::time_step = 1.0;
 
 void World::set_world_size(int w, int h) {
@@ -40,4 +42,14 @@ void World::wrap_around(Eigen::Vector2d &position) {
       position(1) -= height;
     }
   }
+}
+
+Eigen::Vector2d World::convert(const Eigen::Vector2d &position) {
+  Eigen::Matrix2d transform;
+  transform << static_cast<float>(width_in_px) / width, 0, 0,
+      static_cast<float>(height_in_px) / height;
+  Eigen::Vector2d result = transform * position;
+  result(0) = std::floor(result(0));
+  result(1) = std::floor(result(1));
+  return result;
 }

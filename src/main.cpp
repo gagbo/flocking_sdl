@@ -37,12 +37,15 @@ int main(int argc, char * argv[]) {
     std::cout << "The window initialised without issue !\n";
   }
 
-  // Initialise time variables
+  // Initialize time variables
   float frame_in_ms = 1000.0f / FRAMERATE;
   World::set_time_step(frame_in_ms);
 
+  // Initialize game loop variables
   bool quit = false;
   SDL_Event e;
+
+  // TODO: Test Ant
   Ant test_ant(main_window);
 
   while (!quit) {
@@ -53,6 +56,7 @@ int main(int argc, char * argv[]) {
       }
     }
 
+    // Update the canvas
     main_window.clear_and_draw_bg();
     test_ant.update();
     main_window.update();

@@ -42,8 +42,9 @@ void Ant::update() {
   World::wrap_around(position);
 
   acceleration = Eigen::Vector2d(0, 0);
-  render_window->add_FillRect_to_renderer(std::floor(position(0)),
-                                          std::floor(position(1)), 5, 5, color);
+  Eigen::Vector2d screen_pos = World::convert(position);
+  render_window->add_FillRect_to_renderer(screen_pos(0),
+                                          screen_pos(1), 5, 5, color);
 }
 
 void Ant::print() {
