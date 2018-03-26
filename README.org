@@ -1,6 +1,19 @@
 #+TITLE: Autonomous agents in SDL
 
+* What is this ?
 This is a port of the Flocking project I started in Qt. For learning
 purposes, I now feel like using SDL is better than using the Qt graphics
 pipeline I don't totally understand now. Also, it will provide an easy way to
 compare implementations.
+
+* TODOs/Wishlist
+  - [ ] Create a skeleton game loop with generic callbacks implemented
+  - [ ] Consider using Eigen3 for the linear algebra
+    - [ ] Does SDL2 bring its accessible, wide-purposed linear algebra API ??
+  - [ ] Make the abstraction graph for ants and food
+  - [ ] Draw one ant and one food
+    - [ ] How to 'store' the vision of each ant ? (Not interesting until
+      behaviours are implemented)
+  - [ ] Implement movement (straight line) - test game loop updates
+  - [ ] Implement world wraping and wooming in/out
+  - [ ] Implement behaviours for ants
