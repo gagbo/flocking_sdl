@@ -19,8 +19,10 @@
 struct World {
   static int width;
   static int height;
+  static float time_step;
 
   static void set_world_size(int w, int h);
+  static void set_time_step(float t);
 };
 
 #endif // WORLD_WORLD_H_

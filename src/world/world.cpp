@@ -16,8 +16,13 @@
 
 int World::width = 640;
 int World::height = 480;
+float World::time_step = 1.0;
 
 void World::set_world_size(int w, int h) {
   width = w;
   height = h;
+}
+
+void World::set_time_step(float t) {
+  time_step = t;
 }
