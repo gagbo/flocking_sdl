@@ -18,10 +18,15 @@
 
 class Ant : public Entity {
 public:
+  // Default constructor
   Ant();
+  // Default constructor that sets the window to draw to
   Ant(MainWindow &window);
+
   ~Ant();
 
+  // Sets acceleration according to the decision of the ant
+  // TODO
   void decision();
 
 protected:

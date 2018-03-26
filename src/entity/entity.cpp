@@ -34,7 +34,6 @@ Entity::Entity(MainWindow &window)
   position(1) = height_dist(e1);
 }
 
-
 void Entity::update() {
   velocity += World::time_step * acceleration;
   position += World::time_step * velocity;
@@ -42,16 +41,16 @@ void Entity::update() {
 
   acceleration = Eigen::Vector2d(0, 0);
   Eigen::Vector2d screen_pos = World::convert(position);
-  render_window->add_FillRect_to_renderer(screen_pos(0),
-                                          screen_pos(1), 5, 5, color);
+  render_window->add_FillRect_to_renderer(screen_pos(0), screen_pos(1), 5, 5,
+                                          color);
 }
 
 void Entity::print() {
   std::cout << "***********************************\n";
   std::cout << "Position : " << position(0) << "\t" << position(1) << "\n";
   std::cout << "Velocity : " << velocity(0) << "\t" << velocity(1) << "\n";
-  std::cout << "Acceleration : " << acceleration(0) << "\t"
-            << acceleration(1) << "\n";
+  std::cout << "Acceleration : " << acceleration(0) << "\t" << acceleration(1)
+            << "\n";
 }
 
 Entity::~Entity() {}

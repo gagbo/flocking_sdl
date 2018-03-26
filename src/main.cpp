@@ -16,18 +16,17 @@
 #include <iostream>
 
 #include "FlockingConfig.h"
-#include "ui/window/mainwindow.h"
-#include "ui/input/user_input.h"
 #include "entity/ant/ant.h"
+#include "ui/input/user_input.h"
+#include "ui/window/mainwindow.h"
 
-#define WINDOW_WIDTH  640
+#define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 #define FRAMERATE 60
 
-int main(int argc, char * argv[]) {
-  std::cerr << "Flocking_SDL version "
-      << Flocking_VERSION_MAJOR << "."
-      << Flocking_VERSION_MINOR << "\n";
+int main(int argc, char *argv[]) {
+  std::cerr << "Flocking_SDL version " << Flocking_VERSION_MAJOR << "."
+            << Flocking_VERSION_MINOR << "\n";
 
   MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT);
 

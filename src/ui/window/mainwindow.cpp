@@ -138,7 +138,7 @@ void MainWindow::clear_and_draw_bg() {
   SDL_GetWindowSize(gWindow, &width, &height);
 
   int c_blue[4] = {0x22, 0x22, 0xFF, 0xFF};
-  add_FillRect_to_renderer(width/4, height/4, width/2, height/2,
+  add_FillRect_to_renderer(width / 4, height / 4, width / 2, height / 2,
                            c_blue);
 }
 
@@ -148,7 +148,7 @@ void MainWindow::update() {
   SDL_GetWindowSize(gWindow, &width, &height);
 
   int c_green[4] = {0x00, 0xFF, 0x00, 0xFF};
-  add_DrawRect_to_renderer(width/6, height/6, 2*width/3, 2*height/3,
+  add_DrawRect_to_renderer(width / 6, height / 6, 2 * width / 3, 2 * height / 3,
                            c_green);
 
   // Update screen

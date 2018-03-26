@@ -14,8 +14,8 @@
 
 #ifndef WORLD_WORLD_H_
 #define WORLD_WORLD_H_
-#include <iostream>
 #include <Eigen/Dense>
+#include <iostream>
 
 // A public struct that contains world-related helpers/definitions
 struct World {
@@ -35,9 +35,9 @@ struct World {
   // Setter for the time step
   static void set_time_step(float t);
   // Translate position in place so the world wraps around edges
-  static void wrap_around(Eigen::Vector2d& position);
+  static void wrap_around(Eigen::Vector2d &position);
   // Translate arbitrary unit to pixels position for the renderer
-  static Eigen::Vector2d convert(const Eigen::Vector2d& position);
+  static Eigen::Vector2d convert(const Eigen::Vector2d &position);
 };
 
 #endif // WORLD_WORLD_H_

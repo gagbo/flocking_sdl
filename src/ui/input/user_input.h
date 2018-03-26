@@ -16,4 +16,6 @@
 #define UI_INPUT_USERINPUT_H
 #include <SDL2/SDL.h>
 
+// TODO: Functions that handle input from the user (clicks, keys)
+
 #endif // UI_INPUT_USERINPUT_H

@@ -22,22 +22,37 @@
 #include "ui/window/mainwindow.h"
 #include "world/world.h"
 
+// Entity that lives in World and can move/should be displayed
 class Entity {
 public:
+  // Default constructor
   Entity();
+  // Default constructor that points to the window to use to display
   Entity(MainWindow &window);
+
   ~Entity();
 
+  // update the position according to World::time_step and add shape to
+  // renderer for next frame
   void update();
+
+  // Print debug info about the entity
   void print();
 
 protected:
+  // Pointer to the MainWindow on which to draw
   MainWindow *render_window;
+  // Position of the entity
   Eigen::Vector2d position;
+  // Velocity of the entity
   Eigen::Vector2d velocity;
+  // Acceleration of the entity
   Eigen::Vector2d acceleration;
+  // Mass of the entity
   float mass;
+  // Maximum acceleration possible for Entity
   float max_acceleration;
+  // Color used to display entity (in hex RGBA)
   int color[4];
 };
 
