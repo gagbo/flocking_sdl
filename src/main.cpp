@@ -18,6 +18,7 @@
 #include "FlockingConfig.h"
 #include "ui/window/mainwindow.h"
 #include "ui/input/user_input.h"
+#include "entity/ant/ant.h"
 
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 480
@@ -37,6 +38,7 @@ int main(int argc, char * argv[]) {
 
   bool quit = false;
   SDL_Event e;
+  Ant test_ant(main_window);
 
   while (!quit) {
     while (SDL_PollEvent(&e) != 0) {

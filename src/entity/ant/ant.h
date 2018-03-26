@@ -14,18 +14,28 @@
 
 #ifndef ENTITY_ANT_ANT_H_
 #define ENTITY_ANT_ANT_H_
+#include <Eigen/Dense>
 #include <iostream>
+#include <limits>
 
 #include "ui/window/mainwindow.h"
+#include "world/world.h"
 
 class Ant {
- public:
+public:
   Ant();
-  Ant(MainWindow& window);
+  Ant(MainWindow &window);
   ~Ant();
 
- protected:
+  void decision();
+  void update();
+
+protected:
   MainWindow *render_window;
+  Eigen::Vector2d position;
+  Eigen::Vector2d velocity;
+  float mass;
+  float max_acceleration;
 };
 
 #endif // ENTITY_ANT_ANT_H_

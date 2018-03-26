@@ -14,6 +14,20 @@
 
 #include "ant.h"
 
-Ant::Ant(): render_window(NULL) {}
+Ant::Ant()
+    : render_window(NULL), position(0, 0), velocity(0, 0), mass(0),
+      max_acceleration(std::numeric_limits<float>::max()) {}
 
-Ant::Ant(MainWindow &window) : render_window(&window) {}
+Ant::Ant(MainWindow &window)
+    : render_window(&window), position(0, 0), velocity(0, 0), mass(0),
+      max_acceleration(std::numeric_limits<float>::max()) {
+  position = Eigen::Vector2d::Random();
+  position(0) = (position(0) + 1.0) * World::width / 2;
+  position(1) = (position(1) + 1.0) * World::height / 2;
+}
+
+void Ant::decision() {}
+
+void Ant::update() {}
+
+Ant::~Ant() {}
