@@ -17,8 +17,8 @@
 SDL_Surface *MainWindow::g_bg_surface = NULL;
 
 MainWindow::MainWindow(int width, int height)
-    : gWindow(NULL), gScreenSurface(NULL), gRenderer(NULL), gTexture(NULL),
-      bg_render_color{0xFF, 0xFF, 0x00, 0xFF}, success(true) {
+    : gWindow(NULL), gScreenSurface(NULL), gRenderer(NULL),
+      gTexture(NULL), bg_render_color{0xFF, 0xFF, 0x00, 0xFF}, success(true) {
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError()
@@ -109,6 +109,19 @@ bool MainWindow::load_texture(std::string path) {
   return success;
 }
 
+void MainWindow::add_FillRect_to_renderer(int w0, int h0, int w_total,
+                                          int h_total, int color[4]) {
+  SDL_Rect fillRect = {w0, h0, w_total, h_total};
+  SDL_SetRenderDrawColor(gRenderer, color[0], color[1], color[2], color[3]);
+  SDL_RenderFillRect(gRenderer, &fillRect);
+}
+void MainWindow::add_DrawRect_to_renderer(int w0, int h0, int w_total,
+                                          int h_total, int color[4]) {
+  SDL_Rect outlineRect = {w0, h0, w_total, h_total};
+  SDL_SetRenderDrawColor(gRenderer, color[0], color[1], color[2], color[3]);
+  SDL_RenderDrawRect(gRenderer, &outlineRect);
+}
+
 void MainWindow::update() {
   // Reset Render color
   SDL_SetRenderDrawColor(gRenderer, bg_render_color[0], bg_render_color[1],
@@ -117,16 +130,27 @@ void MainWindow::update() {
   SDL_RenderClear(gRenderer);
 
   // Prepare the scaling surface
-  SDL_Rect stretchRect;
-  stretchRect.x = 0;
-  stretchRect.y = 0;
-  SDL_GetWindowSize(gWindow, &stretchRect.w, &stretchRect.h);
+  // SDL_Rect stretchRect;
+  // stretchRect.x = 0;
+  // stretchRect.y = 0;
+
+  // Get the width and height of the window
+  int width, height;
+  SDL_GetWindowSize(gWindow, &width, &height);
 
   // Blit the different sprites
-  //SDL_BlitScaled(g_bg_surface, NULL, gScreenSurface, &stretchRect);
+  // SDL_BlitScaled(g_bg_surface, NULL, gScreenSurface, &stretchRect);
 
   // Render texture to screen
-  //SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
+  // SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
+  
+  int c_blue[4] = {0x00, 0x00, 0xFF, 0xFF};
+  add_FillRect_to_renderer(width/4, height/4, width/2, height/2,
+                           c_blue);
+
+  int c_green[4] = {0x00, 0xFF, 0x00, 0xFF};
+  add_DrawRect_to_renderer(width/6, height/6, 2*width/3, 2*height/3,
+                           c_green);
 
   // Update screen
   SDL_RenderPresent(gRenderer);

@@ -20,23 +20,27 @@
 #include <string>
 
 class MainWindow {
- public:
+public:
   MainWindow(int width, int height);
   ~MainWindow();
+
+  void add_FillRect_to_renderer(int w0, int h0, int w_total, int h_total,
+                                int color[4]);
+  void add_DrawRect_to_renderer(int w0, int h0, int w_total, int h_total,
+                                int color[4]);
 
   bool load_media_bg(std::string path);
   bool load_texture(std::string path);
   void update();
-  inline bool has_correct_init() const {return success;}
+  inline bool has_correct_init() const { return success; }
 
   static SDL_Surface *g_bg_surface;
 
-
- protected:
-  SDL_Window* gWindow;
-  SDL_Surface* gScreenSurface;
-  SDL_Renderer* gRenderer;
-  SDL_Texture* gTexture;
+protected:
+  SDL_Window *gWindow;
+  SDL_Surface *gScreenSurface;
+  SDL_Renderer *gRenderer;
+  SDL_Texture *gTexture;
   int bg_render_color[4];
   bool success;
 };

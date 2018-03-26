@@ -15,11 +15,13 @@ configure_file (
 include_directories ("${PROJECT_BINARY_DIR}")
 
 add_subdirectory(ui)
+add_subdirectory(entity)
+add_subdirectory(world)
 
 add_executable (flocks main.cpp)
 # Maybe linking SDL2 is not necessary since it should be ui
 target_link_libraries (flocks SDL2)
-target_link_libraries (flocks mainwindow input)
+target_link_libraries (flocks mainwindow input ant world)
 
 install (TARGETS flocks DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/FlockingConfig.h"
