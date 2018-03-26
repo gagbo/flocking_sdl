@@ -14,7 +14,10 @@
 
 #include "mainwindow.h"
 
-MainWindow::MainWindow(int width, int height): gWindow(NULL), gScreenSurface(NULL) {
+SDL_Surface *MainWindow::g_bg_surface = NULL;
+
+MainWindow::MainWindow(int width, int height)
+    : gWindow(NULL), gScreenSurface(NULL) {
   success = true;
 
   // Initialize SDL
@@ -24,8 +27,8 @@ MainWindow::MainWindow(int width, int height): gWindow(NULL), gScreenSurface(NUL
   } else {
     // Create window
     gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED,
-                               SDL_WINDOWPOS_UNDEFINED, width,
-                               height, SDL_WINDOW_SHOWN);
+                               SDL_WINDOWPOS_UNDEFINED, width, height,
+                               SDL_WINDOW_SHOWN);
     if (gWindow == NULL) {
       printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
       success = false;
@@ -34,14 +37,45 @@ MainWindow::MainWindow(int width, int height): gWindow(NULL), gScreenSurface(NUL
       gScreenSurface = SDL_GetWindowSurface(gWindow);
     }
   }
-
 }
 
-bool MainWindow::load_media() {
+bool MainWindow::load_media_bg(std::string path) {
   // Loading success flag
   bool success = true;
+  // Load image at specified path
+  SDL_Surface *loadedSurface = SDL_LoadBMP(path.c_str());
+  if (loadedSurface == NULL) {
+    success = false;
+    std::cerr << "Unable to load image " << path
+              << "! SDL Error: " << SDL_GetError() << "\n";
+  } else {
+    // Convert surface to screen format
+    g_bg_surface =
+        SDL_ConvertSurface(loadedSurface, gScreenSurface->format, NULL);
+    if (g_bg_surface == NULL) {
+      std::cerr << "Unable to optimize image " << path
+                << "! SDL Error: " << SDL_GetError() << "\n";
+    }
+
+    // Get rid of old loaded surface
+    SDL_FreeSurface(loadedSurface);
+  }
 
   return success;
+}
+
+void MainWindow::update() {
+  // Prepare the scaling surface
+  SDL_Rect stretchRect;
+  stretchRect.x = 0;
+  stretchRect.y = 0;
+  SDL_GetWindowSize(gWindow, &stretchRect.w, &stretchRect.h);
+
+  // Blit the different sprites
+  SDL_BlitScaled(g_bg_surface, NULL, gScreenSurface, &stretchRect);
+
+  // Put back buffer in front
+  SDL_UpdateWindowSurface(gWindow);
 }
 
 MainWindow::~MainWindow() {

@@ -12,18 +12,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WINDOW_MAINWINDOW_H
-#define WINDOW_MAINWINDOW_H
+#ifndef UI_WINDOW_MAINWINDOW_H
+#define UI_WINDOW_MAINWINDOW_H
 #include <SDL2/SDL.h>
+#include <iostream>
+#include <string>
 
 class MainWindow {
  public:
   MainWindow(int width, int height);
   ~MainWindow();
 
-  bool load_media();
+  bool load_media_bg(std::string);
   void update();
   inline bool has_correct_init() const {return success;}
+
+  static SDL_Surface *g_bg_surface;
 
 
  protected:
@@ -32,4 +36,4 @@ class MainWindow {
   bool success;
 };
 
-#endif // WINDOW_MAINWINDOW_H
+#endif // UI_WINDOW_MAINWINDOW_H

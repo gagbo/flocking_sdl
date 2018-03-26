@@ -16,7 +16,8 @@
 #include <iostream>
 
 #include "FlockingConfig.h"
-#include "window/mainwindow.h"
+#include "ui/window/mainwindow.h"
+#include "ui/input/user_input.h"
 
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 480
@@ -28,8 +29,22 @@ int main(int argc, char * argv[]) {
 
   MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-  if (main_window.has_correct_init()) {
+  if (main_window.has_correct_init() &&
+      main_window.load_media_bg("../data/bg.bmp")) {
     std::cout << "The window initialised without issue !\n";
+  }
+
+  bool quit = false;
+  SDL_Event e;
+
+  while (!quit) {
+    while (SDL_PollEvent(&e) != 0) {
+      if (e.type == SDL_QUIT) {
+        quit = true;
+      }
+    }
+
+    main_window.update();
   }
 
   return 0;
