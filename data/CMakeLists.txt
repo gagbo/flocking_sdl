@@ -1,1 +1,1 @@
-install(FILES bg.bmp DESTINATION data)
+install(FILES bg.png DESTINATION data)

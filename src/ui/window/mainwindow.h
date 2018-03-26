@@ -15,6 +15,7 @@
 #ifndef UI_WINDOW_MAINWINDOW_H
 #define UI_WINDOW_MAINWINDOW_H
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <string>
 

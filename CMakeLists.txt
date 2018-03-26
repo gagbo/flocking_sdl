@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.8)
 set(CMAKE_CXX_STANDARD 14)
 project(Flocking_SDL)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 find_package(SDL2 REQUIRED QUIET)
+find_package(SDL2_image REQUIRED QUIET)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

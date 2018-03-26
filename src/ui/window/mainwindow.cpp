@@ -22,7 +22,8 @@ MainWindow::MainWindow(int width, int height)
 
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+    std::cerr << "SDL could not initialize! SDL Error: "
+        << SDL_GetError() << "\n";
     success = false;
   } else {
     // Create window
@@ -30,11 +31,20 @@ MainWindow::MainWindow(int width, int height)
                                SDL_WINDOWPOS_UNDEFINED, width, height,
                                SDL_WINDOW_SHOWN);
     if (gWindow == NULL) {
-      printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+      std::cerr << "Window could not be created! SDL Error: " <<
+          SDL_GetError() << "\n";
       success = false;
     } else {
+      // Initialise PNG Loading
+      int img_flags = IMG_INIT_PNG;
+      if( !( IMG_Init(img_flags) & img_flags ) ) {
+        std::cerr << "SDL_image could not initialize! SDL_image Error: " <<
+            IMG_GetError() << "\n";
+        success = false;
+      } else {
       // Get window surface
       gScreenSurface = SDL_GetWindowSurface(gWindow);
+      }
     }
   }
 }
@@ -43,11 +53,11 @@ bool MainWindow::load_media_bg(std::string path) {
   // Loading success flag
   bool success = true;
   // Load image at specified path
-  SDL_Surface *loadedSurface = SDL_LoadBMP(path.c_str());
+  SDL_Surface *loadedSurface = IMG_Load(path.c_str());
   if (loadedSurface == NULL) {
     success = false;
     std::cerr << "Unable to load image " << path
-              << "! SDL Error: " << SDL_GetError() << "\n";
+              << "! SDL Error: " << IMG_GetError() << "\n";
   } else {
     // Convert surface to screen format
     g_bg_surface =

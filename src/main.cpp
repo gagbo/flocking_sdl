@@ -30,7 +30,7 @@ int main(int argc, char * argv[]) {
   MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT);
 
   if (main_window.has_correct_init() &&
-      main_window.load_media_bg("../data/bg.bmp")) {
+      main_window.load_media_bg("../data/bg.png")) {
     std::cout << "The window initialised without issue !\n";
   }
 
