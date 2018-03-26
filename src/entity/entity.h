@@ -12,12 +12,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ant.h"
+#ifndef ENTITY_ENTITY_H_
+#define ENTITY_ENTITY_H_
+#include <Eigen/Dense>
+#include <iostream>
+#include <limits>
+#include <random>
 
-Ant::Ant() : Entity() {}
+#include "ui/window/mainwindow.h"
+#include "world/world.h"
 
-Ant::Ant(MainWindow &window) : Entity(window) {}
+class Entity {
+public:
+  Entity();
+  Entity(MainWindow &window);
+  ~Entity();
 
-void Ant::decision() {}
+  void update();
+  void print();
 
-Ant::~Ant() {}
+protected:
+  MainWindow *render_window;
+  Eigen::Vector2d position;
+  Eigen::Vector2d velocity;
+  Eigen::Vector2d acceleration;
+  float mass;
+  float max_acceleration;
+  int color[4];
+};
+
+#endif // ENTITY_ENTITY_H_
