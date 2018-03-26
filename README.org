@@ -24,9 +24,12 @@ compare implementations.
       - The width/height to know how to generate correct random values for
       insertion
       - The time-step value in order to correctly update the velocity
-  - [ ] Draw one ant and one food
+  - [-] Draw one ant and one food
+    - [X] Ant done
+    - [ ] Create a superclass to inherit update() from ?
     - [ ] How to 'store' the vision of each ant ? (Not interesting until
       behaviours are implemented)
-  - [ ] Implement movement (straight line) - test game loop updates
-  - [ ] Implement world wraping and zooming in/out
+  - [X] Implement movement (straight line) - test game loop updates
+  - [X] Implement world wrapping... 
+  - [ ] ... and zooming in/out
   - [ ] Implement behaviours for ants
