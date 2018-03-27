@@ -14,12 +14,12 @@
 
 #include "ant.h"
 
-Ant::Ant() : Entity() {
+Ant::Ant() : Entity(), id(-1) {
   mass = 1;
   friction_factor = 1e-2;
 }
 
-Ant::Ant(MainWindow &window) : Entity(window) {
+Ant::Ant(int i, MainWindow &window) : Entity(window), id(i) {
   mass = 1;
   friction_factor = 1e-2;
 }

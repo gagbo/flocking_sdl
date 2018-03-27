@@ -39,6 +39,10 @@ public:
   // Print debug info about the entity
   void print();
 
+  // Accessors
+  inline const Eigen::Vector2d& get_pos() { return position; }
+  inline const Eigen::Vector2d& get_vel() { return velocity; }
+
 protected:
   // Pointer to the MainWindow on which to draw
   MainWindow *render_window;

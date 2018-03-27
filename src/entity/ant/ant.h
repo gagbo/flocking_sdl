@@ -21,7 +21,7 @@ public:
   // Default constructor
   Ant();
   // Default constructor that sets the window to draw to
-  Ant(MainWindow &window);
+  Ant(int i, MainWindow &window);
 
   ~Ant();
 
@@ -31,6 +31,7 @@ public:
 protected:
   float vision_distance;
   float vision_angle_degrees;
+  int id;
 
   void cap_acceleration();
   void cap_force(float max_force);
