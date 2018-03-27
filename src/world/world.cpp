@@ -64,10 +64,14 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 
   if (result(0) > width / 2) {
     result(0) -= width;
+  } else if (result(0) < - width / 2) {
+    result(0) += width;
   }
 
   if (result(1) > height / 2) {
     result(1) -= height;
+  } else if (result(1) < - height / 2) {
+    result(1) += height;
   }
 
   return result;

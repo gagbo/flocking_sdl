@@ -4,6 +4,7 @@ target_link_libraries(test_flocks SDL2 SDL2_image)
 target_link_libraries(test_flocks world)
 
 target_include_directories(test_flocks PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(test_flocks PUBLIC ${EIGEN3_INCLUDE_DIR})
 
 install(TARGETS test_flocks DESTINATION bin)
 
