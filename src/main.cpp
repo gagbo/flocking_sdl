@@ -14,6 +14,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <vector>
 
 #include "FlockingConfig.h"
 #include "entity/ant/ant.h"
@@ -22,6 +23,7 @@
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 960
+#define ANT_COUNT 60
 #define FRAMERATE 60
 
 int main(int argc, char *argv[]) {
@@ -30,10 +32,11 @@ int main(int argc, char *argv[]) {
 
   MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-  if (main_window.has_correct_init() &&
+  if (!(main_window.has_correct_init() &&
       main_window.load_media_bg("../data/bg.png") &&
-      main_window.load_texture("../data/bg.png")) {
-    std::cout << "The window initialised without issue !\n";
+      main_window.load_texture("../data/bg.png"))) {
+    std::cerr << "Problem during window initalization !\n";
+    return 1;
   }
 
   // Initialize time variables
@@ -44,8 +47,10 @@ int main(int argc, char *argv[]) {
   bool quit = false;
   SDL_Event e;
 
-  // TODO: Test Ant
-  Ant test_ant(main_window);
+  std::vector<Ant*> ant_list;
+  for (int i = 0; i < ANT_COUNT; ++i) {
+    ant_list.push_back(new Ant(i, main_window));
+  }
 
   while (!quit) {
     float start_ms = SDL_GetTicks();
@@ -57,11 +62,10 @@ int main(int argc, char *argv[]) {
 
     // Update the canvas
     main_window.clear_and_draw_bg();
-    test_ant.decision();
-#ifndef NDEBUG
-    test_ant.print();
-#endif
-    test_ant.update();
+    for (auto ant : ant_list) {
+      ant->decision();
+      ant->update();
+    }
     main_window.update();
 
     // Limit Framerate
@@ -72,5 +76,8 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  for (auto ant : ant_list) {
+    delete ant;
+  }
   return 0;
 }
