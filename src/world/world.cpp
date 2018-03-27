@@ -53,3 +53,22 @@ Eigen::Vector2d World::convert(const Eigen::Vector2d &position) {
   result(1) = std::floor(result(1));
   return result;
 }
+
+Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
+                                const Eigen::Vector2d &head) {
+  if (!(head(0) >= 0 && head(1) < width && tail(0) >= 0 && tail(1) < height)) {
+    throw std::runtime_error(
+        "The provided vectors for point_to are not within World square !");
+  }
+  Eigen::Vector2d result = head - tail;
+
+  if (result(0) > width / 2) {
+    result(0) -= width;
+  }
+
+  if (result(1) > height / 2) {
+    result(1) -= height;
+  }
+
+  return result;
+}

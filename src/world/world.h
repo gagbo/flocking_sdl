@@ -16,6 +16,7 @@
 #define WORLD_WORLD_H_
 #include <Eigen/Dense>
 #include <iostream>
+#include <stdexcept>
 
 // A public struct that contains world-related helpers/definitions
 struct World {
@@ -38,6 +39,11 @@ struct World {
   static void wrap_around(Eigen::Vector2d &position);
   // Translate arbitrary unit to pixels position for the renderer
   static Eigen::Vector2d convert(const Eigen::Vector2d &position);
+  // Computes the vector to go from tail to head
+  // This only work on 'wrapped_around' vectors, for which coord
+  //   lie in [0 ; width] x [0 ; height]
+  static Eigen::Vector2d point_to(const Eigen::Vector2d &tail,
+                                  const Eigen::Vector2d &head);
 };
 
 #endif // WORLD_WORLD_H_
