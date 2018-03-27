@@ -8,6 +8,8 @@ find_package(SDL2 REQUIRED QUIET)
 find_package(SDL2_image REQUIRED QUIET)
 find_package(Eigen3 REQUIRED QUIET)
 
+enable_testing()
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
@@ -22,3 +24,4 @@ set(CMAKE_CXX_LINKER_FLAGS_DEBUG "-lasan")
 
 add_subdirectory(src)
 add_subdirectory(data)
+add_subdirectory(test)
