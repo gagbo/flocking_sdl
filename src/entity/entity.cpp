@@ -15,22 +15,22 @@
 #include "entity.h"
 
 Entity::Entity()
-    : render_window(NULL), size(5, 5), position(0, 0), velocity(0, 0),
-      acceleration(0, 0), mass(0),
+    : render_window(NULL), parent_world(NULL), size(5, 5), position(0, 0),
+      velocity(0, 0), acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF},
       friction_factor(0) {}
 
-Entity::Entity(MainWindow &window)
-    : render_window(&window), size(5, 5), position(0, 0), velocity(0, 0),
-      acceleration(0, 0), mass(0),
+Entity::Entity(MainWindow &window, World &world)
+    : render_window(&window), parent_world(&world), size(5, 5), position(0, 0),
+      velocity(0, 0), acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF},
       friction_factor(0) {
   std::random_device r;
   std::default_random_engine e1(r());
-  std::uniform_real_distribution<double> width_dist(0, World::width);
-  std::uniform_real_distribution<double> height_dist(0, World::height);
+  std::uniform_real_distribution<double> width_dist(0, world.width);
+  std::uniform_real_distribution<double> height_dist(0, world.height);
 
   position(0) = width_dist(e1);
   position(1) = height_dist(e1);
@@ -44,8 +44,8 @@ Eigen::Vector2d Entity::get_friction_acceleration() {
 
   scaling_factor = friction_factor * vel_norm;
 
-  if (scaling_factor >= mass * vel_norm / World::time_step) {
-    scaling_factor = vel_norm * mass / World::time_step;
+  if (scaling_factor >= mass * vel_norm / parent_world->time_step) {
+    scaling_factor = vel_norm * mass / parent_world->time_step;
   }
 
   result *= scaling_factor / mass;
@@ -54,13 +54,13 @@ Eigen::Vector2d Entity::get_friction_acceleration() {
 
 void Entity::update() {
   acceleration += get_friction_acceleration();
-  velocity += World::time_step * acceleration;
-  position += World::time_step * velocity;
-  World::wrap_around(position);
+  velocity += parent_world->time_step * acceleration;
+  position += parent_world->time_step * velocity;
+  parent_world->wrap_around(position);
 
   acceleration << 0, 0;
-  Eigen::Vector2d screen_pos = World::convert(position);
-  Eigen::Vector2d screen_size = World::convert(size);
+  Eigen::Vector2d screen_pos = parent_world->convert(position);
+  Eigen::Vector2d screen_size = parent_world->convert(size);
   render_window->add_FillRect_to_renderer(
       screen_pos(0), screen_pos(1), screen_size(0), screen_size(0), color);
 }

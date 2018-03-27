@@ -21,7 +21,7 @@ public:
   // Default constructor
   Ant();
   // Default constructor that sets the window to draw to
-  Ant(int i, MainWindow &window);
+  Ant(int i, MainWindow &window, World &parent_world);
 
   ~Ant();
 

@@ -14,11 +14,19 @@
 
 #include "world.h"
 
-int World::width = 640;
-int World::height = 480;
-int World::width_in_px = 640;
-int World::height_in_px = 480;
-float World::time_step = 1.0;
+#define DEFAULT_WORLD_WIDTH 640
+#define DEFAULT_WORLD_HEIGHT 480
+#define DEFAULT_PIX_WIDTH 640
+#define DEFAULT_PIX_HEIGHT 480
+#define DEFAULT_TIME_STEP 1.0
+
+World::World()
+    : width(DEFAULT_WORLD_WIDTH), height(DEFAULT_WORLD_HEIGHT),
+      time_step(DEFAULT_TIME_STEP) {}
+
+World::World(int w, int h, float dt) : width(w), height(h), time_step(dt) {}
+
+World::~World() {}
 
 void World::set_world_size(int w, int h) {
   width = w;
@@ -64,13 +72,13 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 
   if (result(0) > width / 2) {
     result(0) -= width;
-  } else if (result(0) < - width / 2) {
+  } else if (result(0) < -width / 2) {
     result(0) += width;
   }
 
   if (result(1) > height / 2) {
     result(1) -= height;
-  } else if (result(1) < - height / 2) {
+  } else if (result(1) < -height / 2) {
     result(1) += height;
   }
 

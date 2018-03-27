@@ -28,7 +28,7 @@ public:
   // Default constructor
   Entity();
   // Default constructor that points to the window to use to display
-  Entity(MainWindow &window);
+  Entity(MainWindow &window, World &world);
 
   ~Entity();
 
@@ -40,12 +40,14 @@ public:
   void print();
 
   // Accessors
-  inline const Eigen::Vector2d& get_pos() { return position; }
-  inline const Eigen::Vector2d& get_vel() { return velocity; }
+  inline const Eigen::Vector2d &get_pos() { return position; }
+  inline const Eigen::Vector2d &get_vel() { return velocity; }
 
 protected:
   // Pointer to the MainWindow on which to draw
   MainWindow *render_window;
+  // Pointer to the parent World
+  World *parent_world;
   // Size of the bounding rect that represents Entity
   Eigen::Vector2d size;
   // Position of the entity

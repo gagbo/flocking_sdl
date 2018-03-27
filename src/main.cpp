@@ -30,26 +30,27 @@ int main(int argc, char *argv[]) {
   std::cerr << "Flocking_SDL version " << Flocking_VERSION_MAJOR << "."
             << Flocking_VERSION_MINOR << "\n";
 
-  MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT);
+  World world;
+  MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT, world);
 
   if (!(main_window.has_correct_init() &&
-      main_window.load_media_bg("../data/bg.png") &&
-      main_window.load_texture("../data/bg.png"))) {
+        main_window.load_media_bg("../data/bg.png") &&
+        main_window.load_texture("../data/bg.png"))) {
     std::cerr << "Problem during window initalization !\n";
     return 1;
   }
 
   // Initialize time variables
   float frame_in_ms = 1000.0f / FRAMERATE;
-  World::set_time_step(frame_in_ms);
+  world.set_time_step(frame_in_ms);
 
   // Initialize game loop variables
   bool quit = false;
   SDL_Event e;
 
-  std::vector<Ant*> ant_list;
+  std::vector<Ant *> ant_list;
   for (int i = 0; i < ANT_COUNT; ++i) {
-    ant_list.push_back(new Ant(i, main_window));
+    ant_list.push_back(new Ant(i, main_window, world));
   }
 
   while (!quit) {

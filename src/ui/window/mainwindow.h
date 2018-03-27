@@ -25,7 +25,7 @@
 class MainWindow {
 public:
   // Default constructor has 2 parameters for the size of the window in pixels
-  MainWindow(int width, int height);
+  MainWindow(int width, int height, World& world);
   ~MainWindow();
 
   // Add a FillRect of given color to the renderer for the next frame
@@ -51,6 +51,8 @@ public:
   static SDL_Surface *g_bg_surface;
 
 protected:
+  // Pointer to the world associated to the window
+  World* displayed_world;
   // Window associated to the SDL app (soon deprecated ?)
   SDL_Window *gWindow;
   // Surface associated to the SDL app

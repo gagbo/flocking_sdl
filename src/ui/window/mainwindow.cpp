@@ -16,9 +16,10 @@
 
 SDL_Surface *MainWindow::g_bg_surface = NULL;
 
-MainWindow::MainWindow(int width, int height)
-    : gWindow(NULL), gScreenSurface(NULL), gRenderer(NULL),
-      gTexture(NULL), bg_render_color{0xFF, 0xFF, 0x00, 0xFF}, success(true) {
+MainWindow::MainWindow(int width, int height, World &world)
+    : displayed_world(&world), gWindow(NULL), gScreenSurface(NULL),
+      gRenderer(NULL), gTexture(NULL), bg_render_color{0xFF, 0xFF, 0x00, 0xFF},
+      success(true) {
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError()
@@ -138,8 +139,8 @@ void MainWindow::clear_and_draw_bg() {
   SDL_GetWindowSize(gWindow, &width, &height);
 
   // Set the px width and height accordingly to scale World properly
-  World::height_in_px = height;
-  World::width_in_px = width;
+  displayed_world->height_in_px = height;
+  displayed_world->width_in_px = width;
 
   int c_blue[4] = {0x22, 0x22, 0xFF, 0xFF};
   add_FillRect_to_renderer(width / 4, height / 4, width / 2, height / 2,
