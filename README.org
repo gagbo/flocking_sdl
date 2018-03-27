@@ -14,7 +14,7 @@ compare implementations.
   - [X] Consider using Eigen3 for the linear algebra
     - [X] Does SDL2 bring its accessible, wide-purposed linear algebra API ??
       - It does not look like it, so Eigen3 will be used
-  - [ ] Make the abstraction graph for ants and food
+  - [-] Make the abstraction graph for ants and food
     - The position will be an Eigen3 2d vector
     - These classes need to know the address of the MainWindow they'll draw
       to
@@ -26,10 +26,11 @@ compare implementations.
       - The time-step value in order to correctly update the velocity
   - [-] Draw one ant and one food
     - [X] Ant done
-    - [ ] Create a superclass to inherit update() from ?
+    - [X] Create a superclass to inherit update() from ?
     - [ ] How to 'store' the vision of each ant ? (Not interesting until
       behaviours are implemented)
   - [X] Implement movement (straight line) - test game loop updates
   - [X] Implement world wrapping... 
   - [ ] ... and zooming in/out
+  - [ ] Use Viewports to create a World zone and a status zone in the window
   - [ ] Implement behaviours for ants
