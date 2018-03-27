@@ -54,8 +54,13 @@ protected:
   float mass;
   // Maximum acceleration possible for Entity
   float max_acceleration;
+  // Coefficient of friction (drag)
+  float friction_factor;
   // Color used to display entity (in hex RGBA)
   int color[4];
+
+  // Compute a linear then quadratic friction acceleration
+  Eigen::Vector2d get_friction_acceleration();
 };
 
 #endif // ENTITY_ENTITY_H_

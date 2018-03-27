@@ -57,13 +57,19 @@ int main(int argc, char *argv[]) {
 
     // Update the canvas
     main_window.clear_and_draw_bg();
+    test_ant.decision();
+#ifndef NDEBUG
+    test_ant.print();
+#endif
     test_ant.update();
     main_window.update();
 
     // Limit Framerate
     float end_ms = SDL_GetTicks();
     float delay_ms = frame_in_ms - (end_ms - start_ms);
-    SDL_Delay(delay_ms);
+    if (delay_ms > 0) {
+      SDL_Delay(delay_ms);
+    }
   }
 
   return 0;

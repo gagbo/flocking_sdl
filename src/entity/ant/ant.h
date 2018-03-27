@@ -26,10 +26,14 @@ public:
   ~Ant();
 
   // Sets acceleration according to the decision of the ant
-  // TODO
   void decision();
 
 protected:
+  float vision_distance;
+  float vision_angle_degrees;
+
+  void cap_acceleration();
+  void cap_force(float max_force);
 };
 
 #endif // ENTITY_ANT_ANT_H_
