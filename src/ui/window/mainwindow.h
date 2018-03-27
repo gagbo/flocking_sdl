@@ -19,6 +19,8 @@
 #include <iostream>
 #include <string>
 
+#include "world/world.h"
+
 // Class that encapsulates SDL Renderer and display window
 class MainWindow {
 public:

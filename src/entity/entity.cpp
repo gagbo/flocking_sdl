@@ -15,13 +15,13 @@
 #include "entity.h"
 
 Entity::Entity()
-    : render_window(NULL), position(0, 0), velocity(0, 0), acceleration(0, 0),
+    : render_window(NULL), size(5,5), position(0, 0), velocity(0, 0), acceleration(0, 0),
       mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF} {}
 
 Entity::Entity(MainWindow &window)
-    : render_window(&window), position(0, 0), velocity(0.5, 0.25),
+    : render_window(&window), size(5,5), position(0, 0), velocity(0.5, 0.25),
       acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF} {
@@ -41,8 +41,9 @@ void Entity::update() {
 
   acceleration = Eigen::Vector2d(0, 0);
   Eigen::Vector2d screen_pos = World::convert(position);
-  render_window->add_FillRect_to_renderer(screen_pos(0), screen_pos(1), 5, 5,
-                                          color);
+  Eigen::Vector2d screen_size = World::convert(size);
+  render_window->add_FillRect_to_renderer(screen_pos(0), screen_pos(1), screen_size(0),
+                                          screen_size(0), color);
 }
 
 void Entity::print() {

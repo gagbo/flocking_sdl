@@ -20,8 +20,8 @@
 #include "ui/input/user_input.h"
 #include "ui/window/mainwindow.h"
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 960
 #define FRAMERATE 60
 
 int main(int argc, char *argv[]) {

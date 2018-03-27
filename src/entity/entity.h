@@ -42,6 +42,8 @@ public:
 protected:
   // Pointer to the MainWindow on which to draw
   MainWindow *render_window;
+  // Size of the bounding rect that represents Entity
+  Eigen::Vector2d size;
   // Position of the entity
   Eigen::Vector2d position;
   // Velocity of the entity
