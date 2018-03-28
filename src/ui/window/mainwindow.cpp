@@ -73,7 +73,7 @@ bool MainWindow::load_media_bg(std::string path) {
   } else {
     // Convert surface to screen format
     g_bg_surface =
-        SDL_ConvertSurface(loadedSurface, gScreenSurface->format, NULL);
+        SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
     if (g_bg_surface == NULL) {
       std::cerr << "Unable to optimize image " << path
                 << "! SDL Error: " << SDL_GetError() << "\n";
