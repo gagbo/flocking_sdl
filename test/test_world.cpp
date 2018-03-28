@@ -17,7 +17,7 @@
 #include <Eigen/Dense>
 
 TEST_CASE("World setting functions", "[world][set]") {
-  World world(34, 32, 1e-2);
+  World world;
   SECTION("Set world size") {
     world.set_world_size(420, 122);
     REQUIRE(world.width == Approx(420));
@@ -111,5 +111,55 @@ TEST_CASE("World wrapping functions", "[world][wrap]") {
 
     REQUIRE(pos3(0) == 127);
     REQUIRE(pos3(1) == 90);
+  }
+}
+
+TEST_CASE("World convert functions", "[world][convert]") {
+  World world(640, 480, 1e-2);
+  Eigen::Vector2d pos1(0, 0);
+  Eigen::Vector2d pos2(639, 479);
+  Eigen::Vector2d pos3(323, 197);
+  Eigen::Vector2d res;
+
+  SECTION("Convert -- unchanged scale") {
+    world.width_in_px = world.width;
+    world.height_in_px = world.height;
+    res = world.convert(pos1);
+    REQUIRE(res(0) == 0);
+    REQUIRE(res(1) == 0);
+    res = world.convert(pos2);
+    REQUIRE(res(0) == 639);
+    REQUIRE(res(1) == 479);
+    res = world.convert(pos3);
+    REQUIRE(res(0) == 323);
+    REQUIRE(res(1) == 197);
+  }
+
+  SECTION("Convert -- reduced scale") {
+    world.width_in_px = 67;
+    world.height_in_px = 95;
+    res = world.convert(pos1);
+    REQUIRE(res(0) == 0);
+    REQUIRE(res(1) == 0);
+    res = world.convert(pos2);
+    REQUIRE(res(0) == world.width_in_px - 1);
+    REQUIRE(res(1) == world.height_in_px - 1);
+    res = world.convert(pos3);
+    REQUIRE(res(0) == std::floor(pos3(0)/world.width*world.width_in_px));
+    REQUIRE(res(1) == std::floor(pos3(1)/world.height*world.height_in_px));
+  }
+
+  SECTION("Convert -- bigger scale") {
+    world.width_in_px = 1000;
+    world.height_in_px = 1000;
+    res = world.convert(pos1);
+    REQUIRE(res(0) == 0);
+    REQUIRE(res(1) == 0);
+    res = world.convert(pos2);
+    REQUIRE(res(0) == std::floor(pos2(0)/world.width*world.width_in_px));
+    REQUIRE(res(1) == std::floor(pos2(1)/world.height*world.height_in_px));
+    res = world.convert(pos3);
+    REQUIRE(res(0) == std::floor(pos3(0)/world.width*world.width_in_px));
+    REQUIRE(res(1) == std::floor(pos3(1)/world.height*world.height_in_px));
   }
 }
