@@ -20,16 +20,16 @@ std::string Entity::get_type() const { return type; }
 Entity::Entity()
     : ent_id(-1), render_window(NULL), parent_world(NULL), size(5, 5),
       position(0, 0), velocity(0, 0), acceleration(0, 0), mass(0),
+      friction_factor(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
-                                                                 0x44, 0xFF},
-      friction_factor(0) {}
+                                                                 0x44, 0xFF} {}
 
 Entity::Entity(int i, MainWindow &window, World &world)
     : ent_id(i), render_window(&window), parent_world(&world), size(5, 5),
       position(0, 0), velocity(0, 0), acceleration(0, 0), mass(0),
+      friction_factor(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
-                                                                 0x44, 0xFF},
-      friction_factor(0) {
+                                                                 0x44, 0xFF} {
   std::random_device r;
   std::default_random_engine e1(r());
   std::uniform_real_distribution<double> width_dist(0, world.width);
