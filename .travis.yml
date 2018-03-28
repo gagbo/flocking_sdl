@@ -27,8 +27,11 @@ before_install:
     - ./cmake-3.10.1-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license
 
 before_script:
+    # Trick to be able to work with graphical applications
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
+    # symlink the FindEigen3 from package to the repo module folder
+    - ln -s /usr/share/cmake-2.8/Modules/FindEigen3.cmake cmake/FindEigen3.cmake
     - sleep 3
 
 script:
