@@ -32,6 +32,8 @@ public:
 
   virtual ~Entity();
 
+  enum Type : int {NONE, ANT, FOOD};
+
   // update the position according to World::time_step and add shape to
   // renderer for next frame
   void update();
@@ -42,15 +44,15 @@ public:
   // Accessors
   inline const Eigen::Vector2d &get_pos() const { return position; }
   inline const Eigen::Vector2d &get_vel() const { return velocity; }
-  virtual std::string get_type() const;
   inline const Eigen::Vector2d &get_size() const { return size; }
   inline int id() const { return ent_id; }
   inline int* get_color() { return color; }
+  inline Type get_type() { return type; }
   std::string get_type_string() const;
 
 protected:
   // Type of the entity
-  static std::string type;
+  Type type;
   // Id of the entity
   int ent_id;
   // Pointer to the parent World

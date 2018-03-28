@@ -15,17 +15,15 @@
 #include "entity.h"
 #include "world/world.h"
 
-enum EntityType : int { NONE, ANT, FOOD };
-
 std::string Entity::get_type_string() const {
   switch (type) {
-  case (EntityType::ANT):
+  case (Type::ANT):
     return "Ant";
     break;
-  case (EntityType::FOOD):
+  case (Type::FOOD):
     return "Food";
     break;
-  case (EntityType::NONE):
+  case (Type::NONE):
   default:
     std::cerr << "The type has not been defined !!\n";
     return "";

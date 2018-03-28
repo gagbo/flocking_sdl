@@ -28,10 +28,7 @@ public:
   // Sets acceleration according to the decision of the ant
   void decision();
 
-  virtual std::string get_type() const;
-
 protected:
-  static std::string type;
   float vision_distance;
   float vision_angle_degrees;
 
