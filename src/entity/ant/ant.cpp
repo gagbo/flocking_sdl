@@ -13,14 +13,16 @@
  */
 
 #include "ant.h"
+std::string Ant::type = "Ant";
+std::string Ant::get_type() const { return type; }
 
-Ant::Ant() : Entity(), id(-1) {
+Ant::Ant() : Entity() {
   mass = 1;
   friction_factor = 1e-2;
 }
 
 Ant::Ant(int i, MainWindow &window, World &parent_world)
-    : Entity(window, parent_world), id(i) {
+    : Entity(i, window, parent_world) {
   mass = 1;
   friction_factor = 1e-2;
 }

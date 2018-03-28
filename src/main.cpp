@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
   std::vector<Ant *> ant_list;
   for (int i = 0; i < ANT_COUNT; ++i) {
     ant_list.push_back(new Ant(i, main_window, world));
+    std::cerr << "Created " << ant_list[i]->get_type() << " " <<
+        ant_list[i]->id() << "\n";
   }
 
   while (!quit) {

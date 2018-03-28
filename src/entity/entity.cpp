@@ -14,16 +14,19 @@
 
 #include "entity.h"
 
+std::string Entity::type = "";
+std::string Entity::get_type() const { return type; }
+
 Entity::Entity()
-    : render_window(NULL), parent_world(NULL), size(5, 5), position(0, 0),
-      velocity(0, 0), acceleration(0, 0), mass(0),
+    : ent_id(-1), render_window(NULL), parent_world(NULL), size(5, 5),
+      position(0, 0), velocity(0, 0), acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF},
       friction_factor(0) {}
 
-Entity::Entity(MainWindow &window, World &world)
-    : render_window(&window), parent_world(&world), size(5, 5), position(0, 0),
-      velocity(0, 0), acceleration(0, 0), mass(0),
+Entity::Entity(int i, MainWindow &window, World &world)
+    : ent_id(i), render_window(&window), parent_world(&world), size(5, 5),
+      position(0, 0), velocity(0, 0), acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()), color{0x44, 0x44,
                                                                  0x44, 0xFF},
       friction_factor(0) {
@@ -65,7 +68,7 @@ void Entity::update() {
       screen_pos(0), screen_pos(1), screen_size(0), screen_size(0), color);
 }
 
-void Entity::print() {
+void Entity::print() const {
   std::cout << "***********************************\n";
   std::cout << "Position : " << position(0) << "\t" << position(1) << "\n";
   std::cout << "Velocity : " << velocity(0) << "\t" << velocity(1) << "\n";
