@@ -42,7 +42,7 @@ discovering SDL capabilities
     - [ ] How to 'store' the vision of each ant ? (Not interesting until
       behaviours are implemented)
       - The World class is responsible for gathering neighbourhoods of
-      entities (this will most likely be the computational bottleneck)
+        entities (this will most likely be the computational bottleneck)
   - [X] Implement movement (straight line) - test game loop updates
   - [X] Implement world wrapping... 
   - [ ] ... and zooming in/out
