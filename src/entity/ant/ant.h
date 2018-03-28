@@ -20,8 +20,8 @@ class Ant : public Entity {
 public:
   // Default constructor
   Ant();
-  // Default constructor that sets the window to draw to
-  Ant(int i, MainWindow &window, World &parent_world);
+  // Default constructor that sets the world to live in
+  Ant(int i, World &parent_world);
 
   ~Ant();
 

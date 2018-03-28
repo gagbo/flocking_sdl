@@ -20,6 +20,7 @@
 #include "entity/ant/ant.h"
 #include "ui/input/user_input.h"
 #include "ui/window/mainwindow.h"
+#include "world/world.h"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 960
@@ -48,11 +49,8 @@ int main(int argc, char *argv[]) {
   bool quit = false;
   SDL_Event e;
 
-  std::vector<Ant *> ant_list;
   for (int i = 0; i < ANT_COUNT; ++i) {
-    ant_list.push_back(new Ant(i, main_window, world));
-    std::cerr << "Created " << ant_list[i]->get_type() << " " <<
-        ant_list[i]->id() << "\n";
+    world.add_ant();
   }
 
   while (!quit) {
@@ -65,10 +63,7 @@ int main(int argc, char *argv[]) {
 
     // Update the canvas
     main_window.clear_and_draw_bg();
-    for (auto ant : ant_list) {
-      ant->decision();
-      ant->update();
-    }
+    world.update();
     main_window.update();
 
     // Limit Framerate
@@ -79,8 +74,5 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  for (auto ant : ant_list) {
-    delete ant;
-  }
   return 0;
 }

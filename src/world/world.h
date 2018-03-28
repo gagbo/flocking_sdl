@@ -17,6 +17,13 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
+
+class Entity;
+// TODO: Use only entities in World
+class Ant;
+
+class MainWindow;
 
 // A public struct that contains world-related helpers/definitions
 class World {
@@ -36,6 +43,8 @@ public:
   // Time step for the physics engine
   float time_step;
 
+  // Setter for the MainWindow on which to draw
+  void set_render_window(MainWindow &window);
   // Setter for the world size
   void set_world_size(int w, int h);
   // Setter for the time step
@@ -43,12 +52,27 @@ public:
   // Translate position in place so the world wraps around edges
   void wrap_around(Eigen::Vector2d &position);
   // Translate arbitrary unit to pixels position for the renderer
-  Eigen::Vector2d convert(const Eigen::Vector2d &position);
+  Eigen::Vector2d convert(const Eigen::Vector2d &position) const;
   // Computes the vector to go from tail to head
   // This only work on 'wrapped_around' vectors, for which coord
   //   lie in [0 ; width] x [0 ; height]
   Eigen::Vector2d point_to(const Eigen::Vector2d &tail,
                            const Eigen::Vector2d &head);
+
+  // Adds an Ant to this world
+  void add_ant();
+
+  // Calls update on every entity and then send everything to renderer
+  void update();
+
+  // Accessors
+  MainWindow &get_mut_window();
+
+protected:
+  std::vector<Ant *> ant_list;
+  int ant_count;
+  // Pointer to the MainWindow on which to draw
+  MainWindow *render_window;
 };
 
 #endif // WORLD_WORLD_H_

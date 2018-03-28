@@ -20,8 +20,7 @@
 #include <random>
 #include <string>
 
-#include "ui/window/mainwindow.h"
-#include "world/world.h"
+class World;
 
 // Entity that lives in World and can move/should be displayed
 class Entity {
@@ -29,7 +28,7 @@ public:
   // Default constructor
   Entity();
   // Default constructor that points to the window to use to display
-  Entity(int i, MainWindow &window, World &world);
+  Entity(int i, World &world);
 
   virtual ~Entity();
 
@@ -44,15 +43,16 @@ public:
   inline const Eigen::Vector2d &get_pos() const { return position; }
   inline const Eigen::Vector2d &get_vel() const { return velocity; }
   virtual std::string get_type() const;
+  inline const Eigen::Vector2d &get_size() const { return size; }
   inline int id() const { return ent_id; }
+  inline int* get_color() { return color; }
+  std::string get_type_string() const;
 
 protected:
   // Type of the entity
   static std::string type;
   // Id of the entity
   int ent_id;
-  // Pointer to the MainWindow on which to draw
-  MainWindow *render_window;
   // Pointer to the parent World
   World *parent_world;
   // Size of the bounding rect that represents Entity

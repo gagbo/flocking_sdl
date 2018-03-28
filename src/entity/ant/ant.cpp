@@ -21,8 +21,8 @@ Ant::Ant() : Entity() {
   friction_factor = 1e-2;
 }
 
-Ant::Ant(int i, MainWindow &window, World &parent_world)
-    : Entity(i, window, parent_world) {
+Ant::Ant(int i, World &parent_world)
+    : Entity(i, parent_world) {
   mass = 1;
   friction_factor = 1e-2;
 }

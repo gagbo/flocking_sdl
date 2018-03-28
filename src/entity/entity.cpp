@@ -13,19 +13,34 @@
  */
 
 #include "entity.h"
+#include "world/world.h"
 
-std::string Entity::type = "";
-std::string Entity::get_type() const { return type; }
+enum EntityType : int { NONE, ANT, FOOD };
+
+std::string Entity::get_type_string() const {
+  switch (type) {
+  case (EntityType::ANT):
+    return "Ant";
+    break;
+  case (EntityType::FOOD):
+    return "Food";
+    break;
+  case (EntityType::NONE):
+  default:
+    std::cerr << "The type has not been defined !!\n";
+    return "";
+  }
+}
 
 Entity::Entity()
-    : ent_id(-1), render_window(NULL), parent_world(NULL), size(5, 5),
-      position(0, 0), velocity(0, 0), acceleration(0, 0), mass(0),
+    : ent_id(-1), parent_world(NULL), size(5, 5), position(0, 0),
+      velocity(0, 0), acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()),
       friction_factor(0), color{0x44, 0x44, 0x44, 0xFF} {}
 
-Entity::Entity(int i, MainWindow &window, World &world)
-    : ent_id(i), render_window(&window), parent_world(&world), size(5, 5),
-      position(0, 0), velocity(0, 0), acceleration(0, 0), mass(0),
+Entity::Entity(int i, World &world)
+    : ent_id(i), parent_world(&world), size(5, 5), position(0, 0),
+      velocity(0, 0), acceleration(0, 0), mass(0),
       max_acceleration(std::numeric_limits<float>::max()),
       friction_factor(0), color{0x44, 0x44, 0x44, 0xFF} {
   std::random_device r;
@@ -60,10 +75,6 @@ void Entity::update() {
   parent_world->wrap_around(position);
 
   acceleration << 0, 0;
-  Eigen::Vector2d screen_pos = parent_world->convert(position);
-  Eigen::Vector2d screen_size = parent_world->convert(size);
-  render_window->add_FillRect_to_renderer(
-      screen_pos(0), screen_pos(1), screen_size(0), screen_size(0), color);
 }
 
 void Entity::print() const {

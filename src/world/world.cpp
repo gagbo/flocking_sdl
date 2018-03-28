@@ -12,6 +12,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "entity/ant/ant.h"
+#include "ui/window/mainwindow.h"
 #include "world.h"
 
 #define DEFAULT_WORLD_WIDTH 640
@@ -22,11 +24,20 @@
 
 World::World()
     : width(DEFAULT_WORLD_WIDTH), height(DEFAULT_WORLD_HEIGHT),
-      time_step(DEFAULT_TIME_STEP) {}
+      time_step(DEFAULT_TIME_STEP), ant_list(), ant_count(0),
+      render_window(NULL) {}
 
-World::World(int w, int h, float dt) : width(w), height(h), time_step(dt) {}
+World::World(int w, int h, float dt)
+    : width(w), height(h), time_step(dt), ant_list(), ant_count(0),
+      render_window(NULL) {}
 
-World::~World() {}
+World::~World() {
+  for (auto entity : ant_list) {
+    delete entity;
+  }
+}
+
+void World::set_render_window(MainWindow &window) { render_window = &window; }
 
 void World::set_world_size(int w, int h) {
   width = w;
@@ -52,7 +63,7 @@ void World::wrap_around(Eigen::Vector2d &position) {
   }
 }
 
-Eigen::Vector2d World::convert(const Eigen::Vector2d &position) {
+Eigen::Vector2d World::convert(const Eigen::Vector2d &position) const {
   Eigen::Matrix2d transform;
   transform << static_cast<float>(width_in_px) / width, 0, 0,
       static_cast<float>(height_in_px) / height;
@@ -84,3 +95,19 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 
   return result;
 }
+
+MainWindow &World::get_mut_window() { return *render_window; }
+
+void World::update() {
+  for (auto entity : ant_list) {
+    entity->decision();
+    entity->update();
+    Eigen::Vector2d screen_pos = convert(entity->get_pos());
+    Eigen::Vector2d screen_size = convert(entity->get_size());
+    render_window->add_FillRect_to_renderer(screen_pos(0), screen_pos(1),
+                                            screen_size(0), screen_size(0),
+                                            entity->get_color());
+  }
+}
+
+void World::add_ant() { ant_list.push_back(new Ant(ant_count++, *this)); }

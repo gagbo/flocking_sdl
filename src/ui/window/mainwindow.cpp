@@ -13,6 +13,7 @@
  */
 
 #include "mainwindow.h"
+#include "world/world.h"
 
 SDL_Surface *MainWindow::g_bg_surface = NULL;
 
@@ -55,6 +56,8 @@ MainWindow::MainWindow(int width, int height, World &world)
         } else {
           // Get window surface
           gScreenSurface = SDL_GetWindowSurface(gWindow);
+          // Set This window as handling world
+          world.set_render_window(*this);
         }
       }
     }
