@@ -31,7 +31,7 @@ public:
   // Default constructor that points to the window to use to display
   Entity(int i, MainWindow &window, World &world);
 
-  ~Entity();
+  virtual ~Entity();
 
   // update the position according to World::time_step and add shape to
   // renderer for next frame
