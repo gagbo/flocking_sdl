@@ -15,10 +15,13 @@ pipeline I don't totally understand now. Also, it will provide an easy way to
 compare implementations.
 
 The project is still very "dirty" as I use this as a playground while
-discovering SDL capabilities
+discovering SDL capabilities. As such, for the time being issues and PR
+I did not author will be ignored, and pushes will be made to master until
+a working version of the project is reached (i.e. a working swarm of ants
+as in [[https://github.com/gagbo/Flocking][Flocking]] )
 
 * Dependencies
-  - Eigen3 for linear algebra operations
+  - Eigen3 for linear algebra
   - SDL2 for the renderer
   - SDL2_image
 
