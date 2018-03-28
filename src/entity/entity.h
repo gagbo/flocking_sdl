@@ -29,6 +29,9 @@ public:
   Entity();
   // Default constructor that points to the window to use to display
   Entity(int i, World &world);
+  // Constructor that allows placement of the entity
+  Entity(int i, World &world, float x, float y, float vx = 0, float vy = 0,
+         float ax=0, float ay=0);
 
   virtual ~Entity();
 

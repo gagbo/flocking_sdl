@@ -22,6 +22,9 @@ public:
   Ant();
   // Default constructor that sets the world to live in
   Ant(int i, World &parent_world);
+  // Constructor that allows placement of the entity
+  Ant(int i, World &world, float x, float y, float vx = 0, float vy = 0,
+         float ax=0, float ay=0);
 
   ~Ant();
 
