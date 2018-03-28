@@ -12,6 +12,7 @@ addons:
             - ubuntu-toolchain-r-test
         packages:
             - lcov
+            - libeigen3-dev
 
 before_install:
     # Install SDL2
