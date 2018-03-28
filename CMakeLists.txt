@@ -19,7 +19,7 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_CXX_FLAGS "-O2 -pipe \
 -Wall -Wextra -D_FORTIFY_SOURCE=2 -fexceptions")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_COVERAGE "-g -fprofile-arc -ftest-coverage")
+set(CMAKE_CXX_FLAGS_COVERAGE "-g -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_LINKER_FLAGS_DEBUG "-lasan")
 
 add_subdirectory(src)
