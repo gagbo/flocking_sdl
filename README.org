@@ -1,10 +1,26 @@
 #+TITLE: Autonomous agents in SDL
 
+#+CAPTION: Build Status
+#+NAME: travis-ci-build
+[[https://travis-ci.org/gagbo/flocking_sdl][https://travis-ci.org/gagbo/flocking_sdl.svg?branch=master]]
+#+CAPTION: Code Coverage
+#+NAME: codecov
+[[https://codecov.io/gh/gagbo/flocking_sdl][https://codecov.io/gh/gagbo/flocking_sdl/branch/master/graph/badge.svg]]
+
 * What is this ?
-This is a port of the Flocking project I started in Qt. For learning
+This is a port of the [[https://github.com/gagbo/Flocking][Flocking project]]
+I started in Qt. For learning
 purposes, I now feel like using SDL is better than using the Qt graphics
 pipeline I don't totally understand now. Also, it will provide an easy way to
 compare implementations.
+
+The project is still very "dirty" as I use this as a playground while
+discovering SDL capabilities
+
+* Dependencies
+  - Eigen3 for linear algebra operations
+  - SDL2 for the renderer
+  - SDL2_image
 
 * TODOs/Wishlist
   - [-] Create a skeleton game loop with generic callbacks implemented.
@@ -20,15 +36,13 @@ compare implementations.
       to
       - The MainWindow class provides add_XXX_to_renderer methods to actually
       ship the position to the renderer
-    - These classes need to work with the static World:: constants
-      - The width/height to know how to generate correct random values for
-      insertion
-      - The time-step value in order to correctly update the velocity
   - [-] Draw one ant and one food
     - [X] Ant done
     - [X] Create a superclass to inherit update() from ?
     - [ ] How to 'store' the vision of each ant ? (Not interesting until
       behaviours are implemented)
+      - The World class is responsible for gathering neighbourhoods of
+      entities (this will most likely be the computational bottleneck)
   - [X] Implement movement (straight line) - test game loop updates
   - [X] Implement world wrapping... 
   - [ ] ... and zooming in/out
