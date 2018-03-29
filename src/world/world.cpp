@@ -24,15 +24,15 @@
 
 World::World()
     : width(DEFAULT_WORLD_WIDTH), height(DEFAULT_WORLD_HEIGHT),
-      time_step(DEFAULT_TIME_STEP), ant_list(), ant_count(0),
+      time_step(DEFAULT_TIME_STEP), entity_list(), entity_count(),
       render_window(NULL) {}
 
 World::World(int w, int h, float dt)
-    : width(w), height(h), time_step(dt), ant_list(), ant_count(0),
+    : width(w), height(h), time_step(dt), entity_list(), entity_count(),
       render_window(NULL) {}
 
 World::~World() {
-  for (auto entity : ant_list) {
+  for (auto entity : entity_list) {
     delete entity;
   }
 }
@@ -99,7 +99,7 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 MainWindow &World::get_mut_window() { return *render_window; }
 
 void World::update() {
-  for (auto entity : ant_list) {
+  for (auto entity : entity_list) {
     entity->decision();
     entity->update();
     Eigen::Vector2d screen_pos = convert(entity->get_pos());
@@ -110,4 +110,20 @@ void World::update() {
   }
 }
 
-void World::add_ant() { ant_list.push_back(new Ant(ant_count++, *this)); }
+void World::add_entity(Entity::Type type, float x, float y) {
+  switch (type) {
+  case (Entity::Type::ANT):
+    int ant_count;
+    try {
+      ant_count = entity_count.at(Entity::Type::ANT);
+    } catch (const std::out_of_range &e) {
+      entity_count[Entity::Type::ANT] = 0;
+      ant_count = 0;
+    }
+    entity_list.push_back(new Ant(ant_count, *this));
+    entity_count[Entity::Type::ANT]++;
+    break;
+  default:
+    break;
+  }
+}

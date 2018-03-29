@@ -16,12 +16,13 @@
 #define WORLD_WORLD_H_
 #include <Eigen/Dense>
 #include <iostream>
+#include <map>
 #include <stdexcept>
 #include <vector>
 
+#include "entity/entity.h" // Necessary here to fully declare Entity::Type
+
 class Entity;
-// TODO: Use only entities in World
-class Ant;
 
 class MainWindow;
 
@@ -59,8 +60,10 @@ public:
   Eigen::Vector2d point_to(const Eigen::Vector2d &tail,
                            const Eigen::Vector2d &head);
 
-  // Adds an Ant to this world
-  void add_ant();
+  // Add a new entity to the world, with an optional location
+  // Location is expected to lie in [0;width] X [0;height]
+  // If it is not, location may be randomized back inside
+  void add_entity(Entity::Type type, float x = -1, float y = -1);
 
   // Calls update on every entity and then send everything to renderer
   void update();
@@ -69,8 +72,8 @@ public:
   MainWindow &get_mut_window();
 
 protected:
-  std::vector<Ant *> ant_list;
-  int ant_count;
+  std::vector<Entity *> entity_list;
+  std::map<Entity::Type, int> entity_count;
   // Pointer to the MainWindow on which to draw
   MainWindow *render_window;
 };

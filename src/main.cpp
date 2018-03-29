@@ -17,7 +17,7 @@
 #include <vector>
 
 #include "FlockingConfig.h"
-#include "entity/ant/ant.h"
+#include "entity/entity.h"
 #include "ui/input/user_input.h"
 #include "ui/window/mainwindow.h"
 #include "world/world.h"
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
   SDL_Event e;
 
   for (int i = 0; i < ANT_COUNT; ++i) {
-    world.add_ant();
+    world.add_entity(Entity::Type::ANT);
   }
 
   while (!quit) {

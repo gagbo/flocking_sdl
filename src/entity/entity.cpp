@@ -73,6 +73,8 @@ Eigen::Vector2d Entity::get_friction_acceleration() {
   return result;
 }
 
+void Entity::decision() { acceleration << 0, 0; }
+
 void Entity::update() {
   acceleration += get_friction_acceleration();
   velocity += parent_world->time_step * acceleration;
