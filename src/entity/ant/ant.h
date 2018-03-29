@@ -17,26 +17,26 @@
 #include "../entity.h"
 
 class Ant : public Entity {
-public:
-  // Default constructor
-  Ant();
-  // Default constructor that sets the world to live in
-  Ant(int i, World &parent_world);
-  // Constructor that allows placement of the entity
-  Ant(int i, World &world, float x, float y, float vx = 0, float vy = 0,
-         float ax=0, float ay=0);
+ public:
+    // Default constructor
+    Ant();
+    // Default constructor that sets the world to live in
+    Ant(int i, World &parent_world);
+    // Constructor that allows placement of the entity
+    Ant(int i, World &world, float x, float y, float vx = 0, float vy = 0,
+        float ax = 0, float ay = 0);
 
-  ~Ant();
+    ~Ant();
 
-  // Sets acceleration according to the decision of the ant
-  void decision();
+    // Sets acceleration according to the decision of the ant
+    void decision();
 
-protected:
-  float vision_distance;
-  float vision_angle_degrees;
+ protected:
+    float vision_distance;
+    float vision_angle_degrees;
 
-  void cap_acceleration();
-  void cap_force(float max_force);
+    void cap_acceleration();
+    void cap_force(float max_force);
 };
 
-#endif // ENTITY_ANT_ANT_H_
+#endif  // ENTITY_ANT_ANT_H_

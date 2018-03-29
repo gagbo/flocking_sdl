@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "entity/entity.h" // Necessary here to fully declare Entity::Type
+#include "entity/entity.h"  // Necessary here to fully declare Entity::Type
 
 class Entity;
 
@@ -28,54 +28,54 @@ class MainWindow;
 
 // A public struct that contains world-related helpers/definitions
 class World {
-public:
-  World();
-  World(int w, int h, float dt);
-  ~World();
+ public:
+    World();
+    World(int w, int h, float dt);
+    ~World();
 
-  // Width of the world in arbitrary unit
-  int width;
-  // Height of the world in arbitrary unit
-  int height;
-  // Width of the world in pixels
-  int width_in_px;
-  // Height of the world in pixels
-  int height_in_px;
-  // Time step for the physics engine
-  float time_step;
+    // Width of the world in arbitrary unit
+    int width;
+    // Height of the world in arbitrary unit
+    int height;
+    // Width of the world in pixels
+    int width_in_px;
+    // Height of the world in pixels
+    int height_in_px;
+    // Time step for the physics engine
+    float time_step;
 
-  // Setter for the MainWindow on which to draw
-  void set_render_window(MainWindow &window);
-  // Setter for the world size
-  void set_world_size(int w, int h);
-  // Setter for the time step
-  void set_time_step(float t);
-  // Translate position in place so the world wraps around edges
-  void wrap_around(Eigen::Vector2d &position);
-  // Translate arbitrary unit to pixels position for the renderer
-  Eigen::Vector2d convert(const Eigen::Vector2d &position) const;
-  // Computes the vector to go from tail to head
-  // This only work on 'wrapped_around' vectors, for which coord
-  //   lie in [0 ; width] x [0 ; height]
-  Eigen::Vector2d point_to(const Eigen::Vector2d &tail,
-                           const Eigen::Vector2d &head);
+    // Setter for the MainWindow on which to draw
+    void set_render_window(MainWindow &window);
+    // Setter for the world size
+    void set_world_size(int w, int h);
+    // Setter for the time step
+    void set_time_step(float t);
+    // Translate position in place so the world wraps around edges
+    void wrap_around(Eigen::Vector2d &position);
+    // Translate arbitrary unit to pixels position for the renderer
+    Eigen::Vector2d convert(const Eigen::Vector2d &position) const;
+    // Computes the vector to go from tail to head
+    // This only work on 'wrapped_around' vectors, for which coord
+    //   lie in [0 ; width] x [0 ; height]
+    Eigen::Vector2d point_to(const Eigen::Vector2d &tail,
+                             const Eigen::Vector2d &head);
 
-  // Add a new entity to the world, with an optional location
-  // Location is expected to lie in [0;width] X [0;height]
-  // If it is not, location may be randomized back inside
-  void add_entity(Entity::Type type, float x = -1, float y = -1);
+    // Add a new entity to the world, with an optional location
+    // Location is expected to lie in [0;width] X [0;height]
+    // If it is not, location may be randomized back inside
+    void add_entity(Entity::Type type, float x = -1, float y = -1);
 
-  // Calls update on every entity and then send everything to renderer
-  void update();
+    // Calls update on every entity and then send everything to renderer
+    void update();
 
-  // Accessors
-  MainWindow &get_mut_window();
+    // Accessors
+    MainWindow &get_mut_window();
 
-protected:
-  std::vector<Entity *> entity_list;
-  std::map<Entity::Type, int> entity_count;
-  // Pointer to the MainWindow on which to draw
-  MainWindow *render_window;
+ protected:
+    std::vector<Entity *> entity_list;
+    std::map<Entity::Type, int> entity_count;
+    // Pointer to the MainWindow on which to draw
+    MainWindow *render_window;
 };
 
-#endif // WORLD_WORLD_H_
+#endif  // WORLD_WORLD_H_

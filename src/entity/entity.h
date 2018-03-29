@@ -24,64 +24,64 @@ class World;
 
 // Entity that lives in World and can move/should be displayed
 class Entity {
-public:
-  // Default constructor
-  Entity();
-  // Default constructor that points to the window to use to display
-  Entity(int i, World &world);
-  // Constructor that allows placement of the entity
-  Entity(int i, World &world, float x, float y, float vx = 0, float vy = 0,
-         float ax = 0, float ay = 0);
+ public:
+    // Default constructor
+    Entity();
+    // Default constructor that points to the window to use to display
+    Entity(int i, World &world);
+    // Constructor that allows placement of the entity
+    Entity(int i, World &world, float x, float y, float vx = 0, float vy = 0,
+           float ax = 0, float ay = 0);
 
-  virtual ~Entity();
+    virtual ~Entity();
 
-  enum Type : int { NONE, ANT, FOOD };
+    enum Type : int { NONE, ANT, FOOD };
 
-  // decide where to go by setting acceleration accordingly
-  virtual void decision();
+    // decide where to go by setting acceleration accordingly
+    virtual void decision();
 
-  // update the position according to World::time_step and add shape to
-  // renderer for next frame
-  void update();
+    // update the position according to World::time_step and add shape to
+    // renderer for next frame
+    void update();
 
-  // Print debug info about the entity
-  void print() const;
+    // Print debug info about the entity
+    void print() const;
 
-  // Accessors
-  inline const Eigen::Vector2d &get_pos() const { return position; }
-  inline const Eigen::Vector2d &get_vel() const { return velocity; }
-  inline const Eigen::Vector2d &get_size() const { return size; }
-  inline int id() const { return ent_id; }
-  inline int *get_color() { return color; }
-  inline Type get_type() { return type; }
-  std::string get_type_string() const;
+    // Accessors
+    inline const Eigen::Vector2d &get_pos() const { return position; }
+    inline const Eigen::Vector2d &get_vel() const { return velocity; }
+    inline const Eigen::Vector2d &get_size() const { return size; }
+    inline int id() const { return ent_id; }
+    inline int *get_color() { return color; }
+    inline Type get_type() { return type; }
+    std::string get_type_string() const;
 
-protected:
-  // Type of the entity
-  Type type;
-  // Id of the entity
-  int ent_id;
-  // Pointer to the parent World
-  World *parent_world;
-  // Size of the bounding rect that represents Entity
-  Eigen::Vector2d size;
-  // Position of the entity
-  Eigen::Vector2d position;
-  // Velocity of the entity
-  Eigen::Vector2d velocity;
-  // Acceleration of the entity
-  Eigen::Vector2d acceleration;
-  // Mass of the entity
-  float mass;
-  // Maximum acceleration possible for Entity
-  float max_acceleration;
-  // Coefficient of friction (drag)
-  float friction_factor;
-  // Color used to display entity (in hex RGBA)
-  int color[4];
+ protected:
+    // Type of the entity
+    Type type;
+    // Id of the entity
+    int ent_id;
+    // Pointer to the parent World
+    World *parent_world;
+    // Size of the bounding rect that represents Entity
+    Eigen::Vector2d size;
+    // Position of the entity
+    Eigen::Vector2d position;
+    // Velocity of the entity
+    Eigen::Vector2d velocity;
+    // Acceleration of the entity
+    Eigen::Vector2d acceleration;
+    // Mass of the entity
+    float mass;
+    // Maximum acceleration possible for Entity
+    float max_acceleration;
+    // Coefficient of friction (drag)
+    float friction_factor;
+    // Color used to display entity (in hex RGBA)
+    int color[4];
 
-  // Compute a linear then quadratic friction acceleration
-  Eigen::Vector2d get_friction_acceleration();
+    // Compute a linear then quadratic friction acceleration
+    Eigen::Vector2d get_friction_acceleration();
 };
 
-#endif // ENTITY_ENTITY_H_
+#endif  // ENTITY_ENTITY_H_

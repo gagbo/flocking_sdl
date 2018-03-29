@@ -28,51 +28,51 @@
 #define FRAMERATE 60
 
 int main(int argc, char *argv[]) {
-  std::cerr << "Flocking_SDL version " << Flocking_VERSION_MAJOR << "."
-            << Flocking_VERSION_MINOR << "\n";
+    std::cerr << "Flocking_SDL version " << Flocking_VERSION_MAJOR << "."
+              << Flocking_VERSION_MINOR << "\n";
 
-  World world;
-  MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT, world);
+    World world;
+    MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT, world);
 
-  if (!(main_window.has_correct_init() &&
-        main_window.load_media_bg("../data/bg.png") &&
-        main_window.load_texture("../data/bg.png"))) {
-    std::cerr << "Problem during window initalization !\n";
-    return 1;
-  }
-
-  // Initialize time variables
-  float frame_in_ms = 1000.0f / FRAMERATE;
-  world.set_time_step(frame_in_ms);
-
-  // Initialize game loop variables
-  bool quit = false;
-  SDL_Event e;
-
-  for (int i = 0; i < ANT_COUNT; ++i) {
-    world.add_entity(Entity::Type::ANT);
-  }
-
-  while (!quit) {
-    float start_ms = SDL_GetTicks();
-    while (SDL_PollEvent(&e) != 0) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      }
+    if (!(main_window.has_correct_init() &&
+          main_window.load_media_bg("../data/bg.png") &&
+          main_window.load_texture("../data/bg.png"))) {
+        std::cerr << "Problem during window initalization !\n";
+        return 1;
     }
 
-    // Update the canvas
-    main_window.clear_and_draw_bg();
-    world.update();
-    main_window.update();
+    // Initialize time variables
+    float frame_in_ms = 1000.0f / FRAMERATE;
+    world.set_time_step(frame_in_ms);
 
-    // Limit Framerate
-    float end_ms = SDL_GetTicks();
-    float delay_ms = frame_in_ms - (end_ms - start_ms);
-    if (delay_ms > 0) {
-      SDL_Delay(delay_ms);
+    // Initialize game loop variables
+    bool quit = false;
+    SDL_Event e;
+
+    for (int i = 0; i < ANT_COUNT; ++i) {
+        world.add_entity(Entity::Type::ANT);
     }
-  }
 
-  return 0;
+    while (!quit) {
+        float start_ms = SDL_GetTicks();
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+
+        // Update the canvas
+        main_window.clear_and_draw_bg();
+        world.update();
+        main_window.update();
+
+        // Limit Framerate
+        float end_ms = SDL_GetTicks();
+        float delay_ms = frame_in_ms - (end_ms - start_ms);
+        if (delay_ms > 0) {
+            SDL_Delay(delay_ms);
+        }
+    }
+
+    return 0;
 }

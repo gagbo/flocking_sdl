@@ -15,41 +15,41 @@
 #include "ant.h"
 
 Ant::Ant() : Entity() {
-  type = Entity::Type::ANT;
-  mass = 1;
-  friction_factor = 1e-2;
+    type = Entity::Type::ANT;
+    mass = 1;
+    friction_factor = 1e-2;
 }
 
 Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
-  type = Entity::Type::ANT;
-  mass = 1;
-  friction_factor = 1e-2;
+    type = Entity::Type::ANT;
+    mass = 1;
+    friction_factor = 1e-2;
 }
 
 Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
          float ay)
     : Entity(i, world, x, y, vx, vy, ax, ay) {
-  type = Entity::Type::ANT;
-  mass = 1;
-  friction_factor = 1e-2;
+    type = Entity::Type::ANT;
+    mass = 1;
+    friction_factor = 1e-2;
 }
 
 void Ant::decision() {
-  acceleration << 0.5, -1;
-  cap_force(1e-3);
+    acceleration << 0.5, -1;
+    cap_force(1e-3);
 }
 
 void Ant::cap_acceleration() {
-  float norm = acceleration.norm();
-  if (norm > max_acceleration) {
-    acceleration.normalize();
-    acceleration = max_acceleration * acceleration;
-  }
+    float norm = acceleration.norm();
+    if (norm > max_acceleration) {
+        acceleration.normalize();
+        acceleration = max_acceleration * acceleration;
+    }
 }
 
 void Ant::cap_force(float max_force) {
-  max_acceleration = max_force / mass;
-  cap_acceleration();
+    max_acceleration = max_force / mass;
+    cap_acceleration();
 }
 
 Ant::~Ant() {}
