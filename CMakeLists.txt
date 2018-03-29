@@ -18,7 +18,7 @@ set(BUILD_SHARED_LIBS OFF)
 
 set(CMAKE_CXX_FLAGS "-O2 -pipe \
 -Wall -Wextra -D_FORTIFY_SOURCE=2 -fexceptions")
-set(CMAKE_CXX_FLAGS "-Wno-int-in-bool-context") # Will stay there until Eigen3 behaves
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-int-in-bool-context") # Will stay there until Eigen3 behaves
 set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_COVERAGE "-g -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_LINKER_FLAGS_DEBUG "-lasan")
