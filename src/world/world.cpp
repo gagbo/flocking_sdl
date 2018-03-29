@@ -12,9 +12,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "world.h"
 #include "entity/ant/ant.h"
 #include "ui/window/mainwindow.h"
+#include "world.h"
 
 #define DEFAULT_WORLD_WIDTH 640
 #define DEFAULT_WORLD_HEIGHT 480
@@ -123,14 +123,28 @@ void World::add_entity(Entity::Type type, float x, float y) {
         case (Entity::Type::ANT):
             int ant_count;
             try {
-                ant_count = entity_count.at(Entity::Type::ANT);
+                ant_count = entity_count.at(type);
             } catch (const std::out_of_range &e) {
-                entity_count[Entity::Type::ANT] = 0;
+                entity_count[type] = 0;
                 ant_count = 0;
             }
-            entity_list.push_back(new Ant(ant_count, *this));
-            entity_count[Entity::Type::ANT]++;
+
+            if (x < 0 || y < 0) {
+                entity_list.push_back(new Ant(ant_count, *this));
+            } else {
+                entity_list.push_back(new Ant(ant_count, *this, x, y));
+            }
+            entity_count[type]++;
             break;
+        case (Entity::Type::FOOD):
+            int food_count;
+            try {
+                food_count = entity_count.at(type);
+            } catch (const std::out_of_range &e) {
+                entity_count[type] = 0;
+                food_count = 0;
+            }
+            entity_count[type]++;
         default:
             break;
     }
