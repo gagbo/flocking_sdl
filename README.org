@@ -25,6 +25,17 @@ as in [[https://github.com/gagbo/Flocking][Flocking]] )
   - SDL2 for the renderer
   - SDL2_image
 
+* How to play with it
+The current CMake configuration overrides the default install location,
+so there are no system implications about making the install target.
+
+#+BEGIN_SRC bash
+mkdir build && cd build
+cmake ..
+make install
+./install/bin/flocks
+#+END_SRC
+
 * TODOs/Wishlist
   - [-] Create a skeleton game loop with generic callbacks implemented.
     Only the keyboard/mouse input is missing
