@@ -13,6 +13,7 @@
  */
 
 #include "entity/ant/ant.h"
+#include "entity/food/food.h"
 #include "ui/window/mainwindow.h"
 #include "world.h"
 
@@ -143,6 +144,12 @@ void World::add_entity(Entity::Type type, float x, float y) {
             } catch (const std::out_of_range &e) {
                 entity_count[type] = 0;
                 food_count = 0;
+            }
+
+            if (x < 0 || y < 0) {
+                entity_list.push_back(new Food(food_count, *this));
+            } else {
+                entity_list.push_back(new Food(food_count, *this, x, y));
             }
             entity_count[type]++;
         default:

@@ -169,3 +169,55 @@ TEST_CASE("World convert functions", "[world][convert]") {
                 std::floor(pos3(1) / world.height * world.height_in_px));
     }
 }
+
+TEST_CASE("World adds entities", "[world][add_entity]") {
+    World world(640, 480, 1e-2);
+
+    SECTION("Add random ant") {
+        world.add_entity(Entity::Type::ANT);
+        REQUIRE(world.get_entity_list().size() == 1);
+        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        REQUIRE(pos[0] < world.width);
+        REQUIRE(pos[0] >= 0);
+        REQUIRE(pos[1] < world.height);
+        REQUIRE(pos[1] >= 0);
+    }
+
+    SECTION("Add positioned ant") {
+        world.add_entity(Entity::Type::ANT, 23.9, 90);
+        REQUIRE(world.get_entity_list().size() == 1);
+        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        REQUIRE(pos[0] == Approx(23.9));
+        REQUIRE(pos[1] == Approx(90));
+    }
+
+    SECTION("Add random food") {
+        world.add_entity(Entity::Type::FOOD);
+        REQUIRE(world.get_entity_list().size() == 1);
+        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        REQUIRE(pos[0] < world.width);
+        REQUIRE(pos[0] >= 0);
+        REQUIRE(pos[1] < world.height);
+        REQUIRE(pos[1] >= 0);
+    }
+
+    SECTION("Add positioned food") {
+        world.add_entity(Entity::Type::FOOD, 23.9, 90);
+        REQUIRE(world.get_entity_list().size() == 1);
+        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        REQUIRE(pos[0] == Approx(23.9));
+        REQUIRE(pos[1] == Approx(90));
+    }
+
+    SECTION("Add multiple entities") {
+        world.add_entity(Entity::Type::FOOD);
+        world.add_entity(Entity::Type::ANT);
+        world.add_entity(Entity::Type::ANT);
+        world.add_entity(Entity::Type::FOOD);
+        REQUIRE(world.get_entity_list().size() == 4);
+        REQUIRE(world.get_entity_list()[0]->get_type_string() == "Food");
+        REQUIRE(world.get_entity_list()[1]->get_type_string() == "Ant");
+        REQUIRE(world.get_entity_list()[2]->get_type_string() == "Ant");
+        REQUIRE(world.get_entity_list()[3]->get_type_string() == "Food");
+    }
+}
