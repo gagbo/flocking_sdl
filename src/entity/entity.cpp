@@ -37,7 +37,7 @@ Entity::Entity()
       position(0, 0),
       velocity(0, 0),
       acceleration(0, 0),
-      mass(0),
+      mass(1),
       max_acceleration(std::numeric_limits<float>::max()),
       friction_factor(0),
       color{0x44, 0x44, 0x44, 0xFF} {}
@@ -49,7 +49,7 @@ Entity::Entity(int i, World &world)
       position(0, 0),
       velocity(0, 0),
       acceleration(0, 0),
-      mass(0),
+      mass(1),
       max_acceleration(std::numeric_limits<float>::max()),
       friction_factor(0),
       color{0x44, 0x44, 0x44, 0xFF} {
@@ -79,9 +79,7 @@ Eigen::Vector2d Entity::get_friction_acceleration() {
     Eigen::Vector2d result = -1 * velocity;
     result.normalize();
     float vel_norm = velocity.norm();
-    float scaling_factor = vel_norm;
-
-    scaling_factor = friction_factor * vel_norm;
+    float scaling_factor = friction_factor * vel_norm;
 
     if (scaling_factor >= mass * vel_norm / parent_world->time_step) {
         scaling_factor = vel_norm * mass / parent_world->time_step;
