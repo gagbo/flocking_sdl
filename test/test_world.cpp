@@ -176,7 +176,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
     SECTION("Add random ant") {
         world.add_entity(Entity::Type::ANT);
         REQUIRE(world.get_entity_list().size() == 1);
-        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        auto it = world.get_entity_list().begin();
+        Eigen::Vector2d pos = (*it)->get_pos();
         REQUIRE(pos[0] < world.width);
         REQUIRE(pos[0] >= 0);
         REQUIRE(pos[1] < world.height);
@@ -186,7 +187,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
     SECTION("Add positioned ant") {
         world.add_entity(Entity::Type::ANT, 23.9, 90);
         REQUIRE(world.get_entity_list().size() == 1);
-        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        auto it = world.get_entity_list().begin();
+        Eigen::Vector2d pos = (*it)->get_pos();
         REQUIRE(pos[0] == Approx(23.9));
         REQUIRE(pos[1] == Approx(90));
     }
@@ -194,7 +196,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
     SECTION("Add random food") {
         world.add_entity(Entity::Type::FOOD);
         REQUIRE(world.get_entity_list().size() == 1);
-        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        auto it = world.get_entity_list().begin();
+        Eigen::Vector2d pos = (*it)->get_pos();
         REQUIRE(pos[0] < world.width);
         REQUIRE(pos[0] >= 0);
         REQUIRE(pos[1] < world.height);
@@ -204,7 +207,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
     SECTION("Add positioned food") {
         world.add_entity(Entity::Type::FOOD, 23.9, 90);
         REQUIRE(world.get_entity_list().size() == 1);
-        Eigen::Vector2d pos = world.get_entity_list()[0]->get_pos();
+        auto it = world.get_entity_list().begin();
+        Eigen::Vector2d pos = (*it)->get_pos();
         REQUIRE(pos[0] == Approx(23.9));
         REQUIRE(pos[1] == Approx(90));
     }
@@ -215,9 +219,13 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::ANT);
         world.add_entity(Entity::Type::FOOD);
         REQUIRE(world.get_entity_list().size() == 4);
-        REQUIRE(world.get_entity_list()[0]->get_type_string() == "Food");
-        REQUIRE(world.get_entity_list()[1]->get_type_string() == "Ant");
-        REQUIRE(world.get_entity_list()[2]->get_type_string() == "Ant");
-        REQUIRE(world.get_entity_list()[3]->get_type_string() == "Food");
+        auto it = world.get_entity_list().begin();
+        REQUIRE((*it)->get_type_string() == "Food");
+        it = std::next(it);
+        REQUIRE((*it)->get_type_string() == "Ant");
+        it = std::next(it);
+        REQUIRE((*it)->get_type_string() == "Ant");
+        it = std::next(it);
+        REQUIRE((*it)->get_type_string() == "Food");
     }
 }
