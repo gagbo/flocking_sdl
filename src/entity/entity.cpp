@@ -12,6 +12,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "entity/ant/ant.h"
+#include "entity/food/food.h"
 #include "entity.h"
 #include "world/world.h"
 
@@ -109,3 +111,4 @@ void Entity::print() const {
 }
 
 Entity::~Entity() {}
+

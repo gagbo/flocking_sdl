@@ -17,12 +17,11 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
 #include "entity/entity.h"  // Necessary here to fully declare Entity::Type
-
-class Entity;
 
 class MainWindow;
 
@@ -70,12 +69,11 @@ class World {
 
     // Accessors
     MainWindow &get_mut_window();
-    inline const std::vector<Entity *>& get_entity_list() const {
-        return entity_list;
-    }
+    inline const auto &get_entity_list() const { return entity_list; }
 
  protected:
-    std::vector<Entity *> entity_list;
+    std::vector<std::unique_ptr<Entity, std::function<void(Entity *)>>>
+        entity_list;
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
     MainWindow *render_window;

@@ -12,6 +12,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Since World will instantiate all makeEntity templates, we need fully defined
+// Entity Derived Classes
 #include "entity/ant/ant.h"
 #include "entity/food/food.h"
 #include "ui/window/mainwindow.h"
@@ -40,9 +42,9 @@ World::World(int w, int h, float dt)
       render_window(NULL) {}
 
 World::~World() {
-    for (auto entity : entity_list) {
-        delete entity;
-    }
+    // for (auto &&entity : entity_list) {
+    //     delete entity;
+    // }
 }
 
 void World::set_render_window(MainWindow &window) { render_window = &window; }
@@ -108,7 +110,7 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 MainWindow &World::get_mut_window() { return *render_window; }
 
 void World::update() {
-    for (auto entity : entity_list) {
+    for (auto &&entity : entity_list) {
         entity->decision();
         entity->update();
         Eigen::Vector2d screen_pos = convert(entity->get_pos());
@@ -120,39 +122,20 @@ void World::update() {
 }
 
 void World::add_entity(Entity::Type type, float x, float y) {
-    switch (type) {
-        case (Entity::Type::ANT):
-            int ant_count;
-            try {
-                ant_count = entity_count.at(type);
-            } catch (const std::out_of_range &e) {
-                entity_count[type] = 0;
-                ant_count = 0;
-            }
-
-            if (x < 0 || y < 0) {
-                entity_list.push_back(new Ant(ant_count, *this));
-            } else {
-                entity_list.push_back(new Ant(ant_count, *this, x, y));
-            }
-            entity_count[type]++;
-            break;
-        case (Entity::Type::FOOD):
-            int food_count;
-            try {
-                food_count = entity_count.at(type);
-            } catch (const std::out_of_range &e) {
-                entity_count[type] = 0;
-                food_count = 0;
-            }
-
-            if (x < 0 || y < 0) {
-                entity_list.push_back(new Food(food_count, *this));
-            } else {
-                entity_list.push_back(new Food(food_count, *this, x, y));
-            }
-            entity_count[type]++;
-        default:
-            break;
+    int next_id;
+    try {
+        next_id = entity_count.at(type);
+    } catch (const std::out_of_range &e) {
+        entity_count[type] = 0;
+        next_id = 0;
     }
+
+    if (x < 0 || y < 0) {
+        auto p_newEnt = Entity::makeEntity(type, next_id, *this);
+        entity_list.push_back(std::move(p_newEnt));
+    } else {
+        auto p_newEnt = Entity::makeEntity(type, next_id, *this, x, y);
+        entity_list.push_back(std::move(p_newEnt));
+    }
+    entity_count[type]++;
 }

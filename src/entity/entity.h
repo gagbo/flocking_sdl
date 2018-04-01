@@ -17,14 +17,19 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <random>
 #include <string>
 
 class World;
+class Ant;
+class Food;
 
 // Entity that lives in World and can move/should be displayed
 class Entity {
  public:
+    enum Type : int { NONE, ANT, FOOD };
+
     // Default constructor
     Entity();
     // Default constructor that points to the window to use to display
@@ -33,9 +38,28 @@ class Entity {
     Entity(int i, World &world, float x, float y, float vx = 0, float vy = 0,
            float ax = 0, float ay = 0);
 
-    virtual ~Entity();
+    // Has to be defined in header to allow auto resolution for World
+    template <typename... Ts>
+    static auto makeEntity(Type type, Ts &&... params) {
+        auto delEntity = [](Entity *pEntity) { delete pEntity; };
 
-    enum Type : int { NONE, ANT, FOOD };
+        std::unique_ptr<Entity, decltype(delEntity)> pEnt(nullptr, delEntity);
+
+        switch (type) {
+            case (Entity::Type::ANT):
+                pEnt.reset(new Ant(std::forward<Ts>(params)...));
+                break;
+            case (Entity::Type::FOOD):
+                pEnt.reset(new Food(std::forward<Ts>(params)...));
+                break;
+            default:
+                break;
+        }
+
+        return pEnt;
+    }
+
+    virtual ~Entity();
 
     // decide where to go by setting acceleration accordingly
     virtual void decision();
@@ -64,19 +88,19 @@ class Entity {
     // Pointer to the parent World
     World *parent_world;
     // Size of the bounding rect that represents Entity
-    Eigen::Vector2d size;
+    Eigen::Vector2d size{5};
     // Position of the entity
     Eigen::Vector2d position;
     // Velocity of the entity
-    Eigen::Vector2d velocity;
+    Eigen::Vector2d velocity{0, 0};
     // Acceleration of the entity
-    Eigen::Vector2d acceleration;
+    Eigen::Vector2d acceleration{0, 0};
     // Mass of the entity
-    float mass;
+    float mass{1.0};
     // Maximum acceleration possible for Entity
-    float max_acceleration;
+    float max_acceleration{std::numeric_limits<float>::max()};
     // Coefficient of friction (drag)
-    float friction_factor;
+    float friction_factor{0};
     // Color used to display entity (in hex RGBA)
     int color[4];
 
