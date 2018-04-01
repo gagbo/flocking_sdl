@@ -41,11 +41,7 @@ World::World(int w, int h, float dt)
       entity_count(),
       render_window(NULL) {}
 
-World::~World() {
-    // for (auto &&entity : entity_list) {
-    //     delete entity;
-    // }
-}
+World::~World() {}
 
 void World::set_render_window(MainWindow &window) { render_window = &window; }
 

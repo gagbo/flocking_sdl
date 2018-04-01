@@ -41,7 +41,11 @@ class Entity {
     // Has to be defined in header to allow auto resolution for World
     template <typename... Ts>
     static auto makeEntity(Type type, Ts &&... params) {
-        auto delEntity = [](Entity *pEntity) { delete pEntity; };
+        auto delEntity = [](Entity *pEntity) {
+            std::cerr << "Deleting " << pEntity->get_type_string() << " "
+                      << pEntity->ent_id << "\n";
+            delete pEntity;
+        };
 
         std::unique_ptr<Entity, decltype(delEntity)> pEnt(nullptr, delEntity);
 
