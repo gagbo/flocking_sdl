@@ -5,25 +5,19 @@ branches:
     only:
         - master
 
-matrix:
-    include:
-        - os: linux
-          addons:
-              # Install lcov for codecoverage
-              apt:
-                  sources:
-                      - ubuntu-toolchain-r-test
-                  packages:
-                      - lcov
-                      - libeigen3-dev
-                      - g++-7
-              env:
-                  - MATRIX_EVAL = "CC=gcc-7 && CXX=g++-7"
+addons:
+    # Install lcov for codecoverage
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - lcov
+            - libeigen3-dev
+            - g++-7
 
 before_install:
     # Force compilers
-    - eval "${MATRIX_EVAL}"
-    - echo "${MATRIX_EVAL}"
+    - eval "CC=gcc-7 && CXX=g++-7"
     - echo "CC = $CC"
     - echo "CXX = $CXX"
     # Install SDL2
