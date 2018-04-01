@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 set(CMAKE_CXX_STANDARD 14)
-project(Flocking_SDL)
+project(flocks_sdl)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -11,6 +11,8 @@ find_package(Eigen3 REQUIRED QUIET)
 enable_testing()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+include_directories(${PROJECT_SOURCE_DIR}/src)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
 

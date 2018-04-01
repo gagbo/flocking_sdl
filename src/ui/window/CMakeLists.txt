@@ -1,9 +1,7 @@
-add_library(mainwindow mainwindow.cpp)
+add_library(${PROJECT_NAME}_mainwindow mainwindow.cpp)
 
-target_link_libraries(mainwindow SDL2 SDL2_image)
-target_link_libraries(mainwindow world)
+target_link_libraries(${PROJECT_NAME}_mainwindow SDL2 SDL2_image)
+target_link_libraries(${PROJECT_NAME}_mainwindow ${PROJECT_NAME}_world)
 
-target_include_directories(mainwindow PUBLIC ${PROJECT_SOURCE_DIR})
-
-install(TARGETS mainwindow DESTINATION lib)
-install(FILES mainwindow.h DESTINATION include)
+install(TARGETS ${PROJECT_NAME}_mainwindow DESTINATION lib)
+install(FILES mainwindow.h DESTINATION include/ui/window)
