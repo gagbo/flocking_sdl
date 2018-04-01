@@ -72,8 +72,7 @@ class World {
     inline const auto &get_entity_list() const { return entity_list; }
 
  protected:
-    std::vector<std::unique_ptr<Entity, std::function<void(Entity *)>>>
-        entity_list;
+    std::vector<std::shared_ptr<Entity>> entity_list;
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
     MainWindow *render_window;
