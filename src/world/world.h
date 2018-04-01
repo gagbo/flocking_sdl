@@ -70,7 +70,7 @@ class World {
 
     // Accessors
     MainWindow &get_mut_window();
-    inline const std::vector<Entity *> get_entity_list() const {
+    inline const std::vector<Entity *>& get_entity_list() const {
         return entity_list;
     }
 
