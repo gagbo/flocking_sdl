@@ -20,6 +20,9 @@ addons:
 before_install:
     # Force compilers
     - eval "${MATRIX_EVAL}"
+    - echo "${MATRIX_EVAL}"
+    - echo "CC = $CC"
+    - echo "CXX = $CXX"
     # Install SDL2
     - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
     - sudo apt-get update -qq
@@ -38,6 +41,8 @@ before_script:
     # symlink the FindEigen3 from package to the repo module folder
     - ln -s /usr/share/cmake-2.8/Modules/FindEigen3.cmake cmake/FindEigen3.cmake
     - sleep 3
+    - echo "CC = $CC"
+    - echo "CXX = $CXX"
 
 script:
     - mkdir build
