@@ -22,8 +22,10 @@
 #include <vector>
 
 #include "entity/entity.h"  // Necessary here to fully declare Entity::Type
+#include "kdtree.h"
 
 class MainWindow;
+template class KDTree<Entity>;
 
 // A public struct that contains world-related helpers/definitions
 class World {
@@ -73,6 +75,7 @@ class World {
 
  protected:
     std::vector<std::shared_ptr<Entity>> entity_list;
+    KDTree<Entity> entity_tree;
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
     MainWindow *render_window;
