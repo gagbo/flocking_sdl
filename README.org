@@ -57,6 +57,8 @@ make install
       behaviours are implemented)
       - The World class is responsible for gathering neighbourhoods of
         entities (this will most likely be the computational bottleneck)
+      - Write tests for the k-d tree implementation
+      - Complete k-d tree implementation
   - [X] Implement movement (straight line) - test game loop updates
   - [X] Implement world wrapping... 
   - [ ] ... and zooming in/out
