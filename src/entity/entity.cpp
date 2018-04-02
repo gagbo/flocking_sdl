@@ -12,9 +12,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "entity.h"
 #include "entity/ant/ant.h"
 #include "entity/food/food.h"
-#include "entity.h"
 #include "world/world.h"
 
 std::string Entity::get_type_string() const {
