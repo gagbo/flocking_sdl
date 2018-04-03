@@ -24,6 +24,8 @@ class Food : public Entity {
     Food(int i, World &parent_world);
     // Constructor that allows placement of the entity
     Food(int i, World &world, float x, float y);
+    // Constructor that allows World-less food
+    Food(float x, float y);
 
     ~Food();
 

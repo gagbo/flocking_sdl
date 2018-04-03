@@ -25,6 +25,9 @@ class Ant : public Entity {
     // Constructor that allows placement of the entity
     Ant(int i, World &world, float x, float y, float vx = 0, float vy = 0,
         float ax = 0, float ay = 0);
+    // Constructor that allows World-less Ant
+    Ant(float x, float y, float vx = 0, float vy = 0, float ax = 0,
+        float ay = 0);
 
     ~Ant();
 

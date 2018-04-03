@@ -37,6 +37,9 @@ class Entity {
     // Constructor that allows placement of the entity
     Entity(int i, World &world, float x, float y, float vx = 0, float vy = 0,
            float ax = 0, float ay = 0);
+    // Constructor that allows World-less entity
+    Entity(float x, float y, float vx = 0, float vy = 0, float ax = 0,
+           float ay = 0);
 
     // Has to be defined in header to allow auto resolution for World
     template <typename... Ts>
@@ -88,7 +91,7 @@ class Entity {
     // Type of the entity
     Type type;
     // Id of the entity
-    int ent_id;
+    int ent_id{-1};
     // Pointer to the parent World
     World *parent_world;
     // Size of the bounding rect that represents Entity
@@ -106,7 +109,7 @@ class Entity {
     // Coefficient of friction (drag)
     float friction_factor{0};
     // Color used to display entity (in hex RGBA)
-    int color[4];
+    int color[4]{0x44, 0x44, 0x44, 0xFF};
 
     // Compute a linear then quadratic friction acceleration
     Eigen::Vector2d get_friction_acceleration();

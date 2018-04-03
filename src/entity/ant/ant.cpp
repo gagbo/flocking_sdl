@@ -34,6 +34,13 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     friction_factor = 1e-2;
 }
 
+Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
+    : Entity(x, y, vx, vy, ax, ay) {
+    type = Entity::Type::ANT;
+    mass = 1;
+    friction_factor = 1e-2;
+}
+
 void Ant::decision() {
     acceleration << 0.5, -1;
     cap_force(1e-3);

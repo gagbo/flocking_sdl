@@ -77,6 +77,18 @@ Entity::Entity(int i, World &world, float x, float y, float vx, float vy,
       friction_factor(0),
       color{0x44, 0x44, 0x44, 0xFF} {}
 
+Entity::Entity(float x, float y, float vx, float vy, float ax, float ay)
+    : ent_id(),
+      parent_world(),
+      size(5, 5),
+      position(x, y),
+      velocity(vx, vy),
+      acceleration(ax, ay),
+      mass(0),
+      max_acceleration(std::numeric_limits<float>::max()),
+      friction_factor(0),
+      color{0x44, 0x44, 0x44, 0xFF} {}
+
 Eigen::Vector2d Entity::get_friction_acceleration() {
     Eigen::Vector2d result = -1 * velocity;
     result.normalize();
@@ -111,4 +123,3 @@ void Entity::print() const {
 }
 
 Entity::~Entity() {}
-

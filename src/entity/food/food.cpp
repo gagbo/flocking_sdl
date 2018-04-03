@@ -30,4 +30,9 @@ Food::Food(int i, World &world, float x, float y)
     mass = 1;
 }
 
+Food::Food(float x, float y) : Entity(x, y, 0, 0, 0, 0) {
+    type = Entity::Type::FOOD;
+    mass = 1;
+}
+
 Food::~Food() {}
