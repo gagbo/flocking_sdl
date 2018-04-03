@@ -1,6 +1,6 @@
 include(CTest)
 
-add_executable(test_flocks main_tests.cpp test_world.cpp)
+add_executable(test_flocks main_tests.cpp test_world.cpp test_kdtree.cpp)
 
 target_link_libraries(test_flocks gcov)
 target_link_libraries(test_flocks SDL2 SDL2_image)

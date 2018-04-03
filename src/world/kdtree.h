@@ -21,6 +21,7 @@
 #include <memory>
 #include <vector>
 
+// A 2 dimensional templated k-d tree
 template <typename T>  // T has a get_pos method that returns a Vector
                        // implementing operator()
 class KDTree {
@@ -49,6 +50,7 @@ class KDTree {
         KDNode* right{nullptr};
         KDNode() = default;
         KDNode(const std::shared_ptr<T>& x) { data = x; }
+        inline auto get_data() { return data; }
         inline auto x() { return data->get_pos()(0); }
         inline auto y() { return data->get_pos()(1); }
         inline auto go_left() { return left; }
