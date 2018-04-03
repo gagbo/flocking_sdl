@@ -1,4 +1,4 @@
-add_library(${PROJECT_NAME}_world world.cpp kdtree.cpp)
+add_library(${PROJECT_NAME}_world world.cpp)
 
 target_link_libraries(${PROJECT_NAME}_world ${PROJECT_NAME}_mainwindow)
 target_link_libraries(${PROJECT_NAME}_world ${PROJECT_NAME}_entity)
