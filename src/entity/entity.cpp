@@ -32,29 +32,7 @@ std::string Entity::get_type_string() const {
     }
 }
 
-Entity::Entity()
-    : ent_id(-1),
-      parent_world(NULL),
-      size(5, 5),
-      position(0, 0),
-      velocity(0, 0),
-      acceleration(0, 0),
-      mass(1),
-      max_acceleration(std::numeric_limits<float>::max()),
-      friction_factor(0),
-      color{0x44, 0x44, 0x44, 0xFF} {}
-
-Entity::Entity(int i, World &world)
-    : ent_id(i),
-      parent_world(&world),
-      size(5, 5),
-      position(0, 0),
-      velocity(0, 0),
-      acceleration(0, 0),
-      mass(1),
-      max_acceleration(std::numeric_limits<float>::max()),
-      friction_factor(0),
-      color{0x44, 0x44, 0x44, 0xFF} {
+Entity::Entity(int i, World &world) : ent_id(i), parent_world(&world) {
     std::random_device r;
     std::default_random_engine e1(r());
     std::uniform_real_distribution<double> width_dist(0, world.width);
@@ -68,26 +46,12 @@ Entity::Entity(int i, World &world, float x, float y, float vx, float vy,
                float ax, float ay)
     : ent_id(i),
       parent_world(&world),
-      size(5, 5),
       position(x, y),
       velocity(vx, vy),
-      acceleration(ax, ay),
-      mass(0),
-      max_acceleration(std::numeric_limits<float>::max()),
-      friction_factor(0),
-      color{0x44, 0x44, 0x44, 0xFF} {}
+      acceleration(ax, ay) {}
 
 Entity::Entity(float x, float y, float vx, float vy, float ax, float ay)
-    : ent_id(),
-      parent_world(),
-      size(5, 5),
-      position(x, y),
-      velocity(vx, vy),
-      acceleration(ax, ay),
-      mass(0),
-      max_acceleration(std::numeric_limits<float>::max()),
-      friction_factor(0),
-      color{0x44, 0x44, 0x44, 0xFF} {}
+    : position(x, y), velocity(vx, vy), acceleration(ax, ay) {}
 
 Eigen::Vector2d Entity::get_friction_acceleration() {
     Eigen::Vector2d result = -1 * velocity;

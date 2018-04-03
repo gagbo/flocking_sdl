@@ -14,16 +14,20 @@
 
 #include "ant.h"
 
+int Ant::default_color[4] = {0x22, 0xA0, 0x22, 0xFF};
+
 Ant::Ant() : Entity() {
     type = Entity::Type::ANT;
     mass = 1;
     friction_factor = 1e-2;
+    set_color(default_color);
 }
 
 Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
     type = Entity::Type::ANT;
     mass = 1;
     friction_factor = 1e-2;
+    set_color(default_color);
 }
 
 Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
@@ -32,6 +36,7 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     type = Entity::Type::ANT;
     mass = 1;
     friction_factor = 1e-2;
+    set_color(default_color);
 }
 
 Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
@@ -39,6 +44,7 @@ Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
     type = Entity::Type::ANT;
     mass = 1;
     friction_factor = 1e-2;
+    set_color(default_color);
 }
 
 void Ant::decision() {

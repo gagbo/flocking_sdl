@@ -34,6 +34,8 @@ class Ant : public Entity {
     // Sets acceleration according to the decision of the ant
     void decision();
 
+    static int default_color[4];
+
  protected:
     float vision_distance;
     float vision_angle_degrees;

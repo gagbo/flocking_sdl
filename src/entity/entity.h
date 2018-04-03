@@ -31,7 +31,7 @@ class Entity {
     enum Type : int { NONE, ANT, FOOD };
 
     // Default constructor
-    Entity();
+    Entity() = default;
     // Default constructor that points to the window to use to display
     Entity(int i, World &world);
     // Constructor that allows placement of the entity
@@ -46,7 +46,9 @@ class Entity {
     static auto makeEntity(Type type, Ts &&... params) {
         auto delEntity = [](Entity *pEntity) {
             std::cerr << "Deleting " << pEntity->get_type_string() << " "
-                      << pEntity->ent_id << "\n";
+                      << pEntity->ent_id << " (" <<
+                      pEntity->position(0) << ", " <<
+                      pEntity->position(1) << ")\n";
             delete pEntity;
         };
 
@@ -78,6 +80,18 @@ class Entity {
     // Print debug info about the entity
     void print() const;
 
+    // Setters
+    inline void set_color(unsigned char r, unsigned char g, unsigned char b,
+                          unsigned char a) {
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+        color[3] = a;
+    }
+    inline void set_color(int arg_color[4]) {
+        set_color(arg_color[0], arg_color[1], arg_color[2], arg_color[3]);
+    }
+
     // Accessors
     inline const Eigen::Vector2d &get_pos() const { return position; }
     inline const Eigen::Vector2d &get_vel() const { return velocity; }
@@ -89,15 +103,15 @@ class Entity {
 
  protected:
     // Type of the entity
-    Type type;
+    Type type{Type::NONE};
     // Id of the entity
     int ent_id{-1};
     // Pointer to the parent World
-    World *parent_world;
+    World *parent_world{nullptr};
     // Size of the bounding rect that represents Entity
-    Eigen::Vector2d size{5};
+    Eigen::Vector2d size{5, 5};
     // Position of the entity
-    Eigen::Vector2d position;
+    Eigen::Vector2d position{0, 0};
     // Velocity of the entity
     Eigen::Vector2d velocity{0, 0};
     // Acceleration of the entity
