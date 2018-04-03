@@ -34,14 +34,10 @@ class KDTree {
 
     inline auto get_root() const { return root; }
 
-    /**
-     * Print items satisfying
-     * low[ 0 ] <= x[ 0 ] <= high[ 0 ] and
-     * low[ 1 ] <= x[ 1 ] <= high[ 1 ]
-     */
-    // inline void printRange(const T& low, const T& high) const {
-    //     printRange(low, high, root, KD_DIM_1);
-    // }
+    inline std::vector<std::shared_ptr<T>> norm1_range_query(
+        const T& center, float radius) const {
+        return norm1_range_query(center, radius, root, KD_DIM_1);
+    }
 
  private:
     struct KDNode {
@@ -67,6 +63,13 @@ class KDTree {
         } else {
             insert(x, current->right, 1 - split_direction);
         }
+    }
+
+    std::vector<std::shared_ptr<T>> norm1_range_query(
+        const T& center, float radius, const KDNode*&& current,
+        int split_direction) const {
+        std::vector<std::shared_ptr<T>> result;
+        return result;
     }
 
  protected:
