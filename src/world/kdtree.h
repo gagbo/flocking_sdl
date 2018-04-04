@@ -15,6 +15,7 @@
 #ifndef WORLD_KDTREE_H_
 #define WORLD_KDTREE_H_
 
+#define KD_TOT_DIM 2
 #define KD_DIM_1 0
 #define KD_DIM_2 1
 
@@ -59,9 +60,9 @@ class KDTree {
             current = new KDNode(x);
         } else if (x->get_pos()(split_direction) <
                    current->data->get_pos()(split_direction)) {
-            insert(x, current->left, 1 - split_direction);
+            insert(x, current->left, (split_direction + 1) % KD_TOT_DIM);
         } else {
-            insert(x, current->right, 1 - split_direction);
+            insert(x, current->right, (split_direction + 1) % KD_TOT_DIM);
         }
     }
 
