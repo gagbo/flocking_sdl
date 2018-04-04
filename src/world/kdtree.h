@@ -58,6 +58,11 @@ class KDTree {
         inline auto y() { return data->get_pos()(1); }
         inline auto go_left() { return left; }
         inline auto go_right() { return right; }
+        ~KDNode() {
+            delete left;
+            delete right;
+            data.reset();
+        }
     };
 
     void insert(const std::shared_ptr<T>& x, KDNode*& current,
