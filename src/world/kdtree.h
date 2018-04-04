@@ -19,6 +19,7 @@
 #define KD_DIM_1 0
 #define KD_DIM_2 1
 
+#include <Eigen/Dense>
 #include <memory>
 #include <vector>
 
@@ -37,6 +38,11 @@ class KDTree {
 
     inline std::vector<std::shared_ptr<T>> norm1_range_query(
         const T& center, float radius) const {
+        return norm1_range_query(center.get_pos(), radius);
+    }
+
+    inline std::vector<std::shared_ptr<T>> norm1_range_query(
+        const Eigen::Vector2d& center, float radius) const {
         return norm1_range_query(center, radius, root, KD_DIM_1);
     }
 
@@ -67,9 +73,12 @@ class KDTree {
     }
 
     std::vector<std::shared_ptr<T>> norm1_range_query(
-        const T& center, float radius, const KDNode*&& current,
+        const Eigen::Vector2d& center, float radius, const KDNode*&& current,
         int split_direction) const {
         std::vector<std::shared_ptr<T>> result;
+        // We want to find all points so that
+        // center(0) - radius <= x <= center(0) + radius
+        // center(1) - radius <= y <= center(1) + radius
         return result;
     }
 
