@@ -67,8 +67,11 @@ int main(int argc, char *argv[]) {
         main_window.update();
 
         // Limit Framerate
-        float end_ms = SDL_GetTicks();
-        float delay_ms = frame_in_ms - (end_ms - start_ms);
+        float dura_ms = SDL_GetTicks() - start_ms;
+#ifndef NDEBUG
+        std::cerr << "Duration : " << dura_ms << "\n";
+#endif  // NDEBUG
+        float delay_ms = frame_in_ms - dura_ms;
         if (delay_ms > 0) {
             SDL_Delay(delay_ms);
         }
