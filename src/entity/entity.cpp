@@ -86,4 +86,8 @@ void Entity::print() const {
               << "\n";
 }
 
-Entity::~Entity() {}
+Entity::~Entity() {
+    for (auto &&neighbour : neighbours) {
+        neighbour.reset();
+    }
+}
