@@ -64,7 +64,7 @@ void Ant::decision() {
         decided_velocity += separation_weight * decision_separation_velocity();
 
         acceleration = accel_towards(decided_velocity);
-        cap_force(1e-2);
+        cap_acceleration();
     }
 }
 
@@ -184,11 +184,6 @@ void Ant::cap_acceleration() {
         acceleration.normalize();
         acceleration = max_acceleration * acceleration;
     }
-}
-
-void Ant::cap_force(float max_force) {
-    max_acceleration = max_force / mass;
-    cap_acceleration();
 }
 
 Ant::~Ant() {}

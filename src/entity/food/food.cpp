@@ -24,13 +24,13 @@ Food::Food(int i, World &parent_world) : Entity(i, parent_world) {
     mass = 1;
 }
 
-Food::Food(int i, World &world, float x, float y)
-    : Entity(i, world, x, y, 0, 0, 0, 0) {
+Food::Food(int i, World &world, float x, float y, float vx, float vy)
+    : Entity(i, world, x, y, vx, vy, 0, 0) {
     type = Entity::Type::FOOD;
     mass = 1;
 }
 
-Food::Food(float x, float y) : Entity(x, y, 0, 0, 0, 0) {
+Food::Food(float x, float y, float vx, float vy) : Entity(x, y, vx, vy, 0, 0) {
     type = Entity::Type::FOOD;
     mass = 1;
 }

@@ -142,14 +142,17 @@ void World::update_entity_and_renderer() {
         entity->update();
         Eigen::Vector2d screen_pos = convert(entity->get_pos());
         Eigen::Vector2d screen_size = convert(entity->get_size());
-        render_window->add_FillRect_to_renderer(screen_pos(0), screen_pos(1),
-                                                screen_size(0), screen_size(0),
-                                                entity->get_color());
+        if (render_window != nullptr) {
+            render_window->add_FillRect_to_renderer(
+                screen_pos(0), screen_pos(1), screen_size(0), screen_size(0),
+                entity->get_color());
+        }
     }
 }
 
-void World::add_entity(Entity::Type type, float x, float y) {
+std::weak_ptr<Entity> World::add_entity(Entity::Type type, float x, float y) {
     int next_id;
+    std::weak_ptr<Entity> result;
     try {
         next_id = entity_count.at(type);
     } catch (const std::out_of_range &e) {
@@ -160,9 +163,30 @@ void World::add_entity(Entity::Type type, float x, float y) {
     if (x < 0 || y < 0) {
         auto p_newEnt = Entity::makeEntity(type, next_id, *this);
         entity_list.push_back(std::move(p_newEnt));
+        result = entity_list.back();
     } else {
         auto p_newEnt = Entity::makeEntity(type, next_id, *this, x, y);
         entity_list.push_back(std::move(p_newEnt));
+        result = entity_list.back();
     }
     entity_count[type]++;
+    return result;
+}
+
+std::weak_ptr<Entity> World::add_entity(Entity::Type type, float x, float y,
+                                        float vx, float vy) {
+    int next_id;
+    std::weak_ptr<Entity> result;
+    try {
+        next_id = entity_count.at(type);
+    } catch (const std::out_of_range &e) {
+        entity_count[type] = 0;
+        next_id = 0;
+    }
+
+    auto p_newEnt = Entity::makeEntity(type, next_id, *this, x, y, vx, vy);
+    entity_list.push_back(std::move(p_newEnt));
+    result = entity_list.back();
+    entity_count[type]++;
+    return result;
 }

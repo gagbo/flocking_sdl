@@ -64,10 +64,22 @@ class World {
     // Add a new entity to the world, with an optional location
     // Location is expected to lie in [0;width] X [0;height]
     // If it is not, location may be randomized back inside
-    void add_entity(Entity::Type type, float x = -1, float y = -1);
+    std::weak_ptr<Entity> add_entity(Entity::Type type, float x = -1, float y = -1);
+    // Overload to specify velocity
+    std::weak_ptr<Entity> add_entity(Entity::Type type, float x, float y,
+                                     float vx, float vy);
 
     // Calls update on every entity and then send everything to renderer
     void update();
+    // Update the k-d tree
+    void update_tree();
+    // Compute the neighbourhoods of each entity
+    void update_entity_neighbourhoods();
+    // Call the decision method of each entity (alone in its loop because
+    // Entity::update changes position while we're looping
+    void call_entity_decision();
+    // Update each entity
+    void update_entity_and_renderer();
 
     // Accessors
     MainWindow &get_mut_window();
@@ -79,17 +91,7 @@ class World {
     KDTree<Entity> entity_tree;
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
-    MainWindow *render_window;
-
-    // Update the k-d tree
-    void update_tree();
-    // Compute the neighbourhoods of each entity
-    void update_entity_neighbourhoods();
-    // Call the decision method of each entity (alone in its loop because
-    // Entity::update changes position while we're looping
-    void call_entity_decision();
-    // Update each entity
-    void update_entity_and_renderer();
+    MainWindow *render_window{nullptr};
 };
 
 #endif  // WORLD_WORLD_H_

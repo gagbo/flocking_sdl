@@ -39,14 +39,27 @@ class Ant : public Entity {
     inline void set_cohesion_weight(float wt) { cohesion_weight = wt; }
     inline void set_alignment_weight(float wt) { alignment_weight = wt; }
     inline void set_separation_weight(float wt) { separation_weight = wt; }
+    inline void set_max_force(float max_force) {
+        max_acceleration = max_force / mass;
+    }
+
+    inline float get_cruise_speed() const { return cruise_speed; }
+    inline float get_max_force() const { return mass * max_acceleration; }
 
     // Sets acceleration according to the decision of the ant
     void decision();
+    Eigen::Vector2d decision_cohesion_velocity() const;
+    Eigen::Vector2d decision_alignment_velocity() const;
+    Eigen::Vector2d decision_separation_velocity() const;
     // Filter the neighbour list so only visible ones remain
     void filter_neighbours();
     // Return true if vec is in the triangle that is vision_angle_degrees on
     // each side of velocity, with length <= vision_distance;
     bool is_in_vision_triangle(const Eigen::Vector2d &vec) const;
+
+    int default_color[4]{0x22, 0xA0, 0x22, 0xFF};
+    int blind_color[4]{0xA0, 0x22, 0x22, 0xFF};
+    int capped_force_color[4]{0xA0, 0x22, 0xA0, 0xFF};
 
  protected:
     float vision_angle_degrees{60};
@@ -57,19 +70,11 @@ class Ant : public Entity {
     float alignment_weight{0.6};
     float separation_weight{0.3};
 
-    int default_color[4]{0x22, 0xA0, 0x22, 0xFF};
-    int blind_color[4]{0xA0, 0x22, 0x22, 0xFF};
-    int capped_force_color[4]{0xA0, 0x22, 0xA0, 0xFF};
-
     void cap_acceleration();
     void cap_force(float max_force);
 
     void filter_neighbours_standing();
     void filter_neighbours_moving();
-
-    Eigen::Vector2d decision_cohesion_velocity() const;
-    Eigen::Vector2d decision_alignment_velocity() const;
-    Eigen::Vector2d decision_separation_velocity() const;
 };
 
 #endif  // ENTITY_ANT_ANT_H_

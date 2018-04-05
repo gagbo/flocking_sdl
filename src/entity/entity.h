@@ -104,10 +104,20 @@ class Entity {
 
     inline auto &get_neighbourhood() { return neighbours; }
 
+    inline void set_size(float sx, float sy) { size << sx, sy; }
+    inline void set_mass(float m) { mass = m;}
+    inline void set_max_acceleration(float m_a) { max_acceleration = m_a; }
+    inline void set_friction_factor(float f) { friction_factor = f;}
+
     // Accessors
     inline const Eigen::Vector2d &get_pos() const { return position; }
     inline const Eigen::Vector2d &get_vel() const { return velocity; }
     inline const Eigen::Vector2d &get_size() const { return size; }
+    inline const float &get_mass() const { return mass; }
+    inline const float &get_max_acceleration() const {
+        return max_acceleration;
+    }
+    inline const float &get_friction_factor() const { return friction_factor; }
     inline int id() const { return ent_id; }
     inline int *get_color() { return color; }
     inline Type get_type() { return type; }

@@ -58,6 +58,19 @@ TEST_CASE("Insertion into a tree", "[kdtree][insert]") {
     }
 }
 
+TEST_CASE("Tree cleanup", "[kdtree][clean]") {
+    KDTree<Entity> tree;
+    std::shared_ptr<Entity> ent_1(
+        std::move(Entity::makeEntity(Entity::Type::ANT, 50.0, 50.1)));
+    tree.insert(ent_1);
+
+    SECTION("Correct cleaning up of k-d tree") {
+      REQUIRE(tree.get_root() != nullptr);
+      tree.clean();
+      REQUIRE(tree.get_root() == nullptr);
+    }
+}
+
 TEST_CASE("Range Query in the kdtree", "[kdtree][range_query]") {
     KDTree<Entity> tree;
     std::shared_ptr<Entity> ent_1(
@@ -121,6 +134,48 @@ TEST_CASE("Range Query in the kdtree", "[kdtree][range_query]") {
                              [&](const auto& arg) -> bool {
                                  return arg.lock() == ent_7;
                              }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_8;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_9;
+                             }) == result.end());
+    }
+
+    SECTION("Test a successful range query calling from an entity") {
+        float radius = 1.0;
+        auto result = tree.norm1_range_query(*ent_7.get(), radius);
+
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_1;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_2;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_3;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_4;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_5;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_6;
+                             }) == result.end());
+        REQUIRE(std::find_if(result.begin(), result.end(),
+                             [&](const auto& arg) -> bool {
+                                 return arg.lock() == ent_7;
+                             }) != result.end());
         REQUIRE(std::find_if(result.begin(), result.end(),
                              [&](const auto& arg) -> bool {
                                  return arg.lock() == ent_8;
