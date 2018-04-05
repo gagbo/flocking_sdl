@@ -22,6 +22,12 @@
 #include "ui/window/mainwindow.h"
 #include "world/world.h"
 
+#ifndef NDEBUG
+#include <iomanip>
+#include <map>
+#include <string>
+#endif
+
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 960
 #define ANT_COUNT 60
@@ -33,6 +39,9 @@ int main(int argc, char *argv[]) {
 
     World world;
     MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT, world);
+#ifndef NDEBUG
+    std::map<int, int> hist;
+#endif  // NDEBUG
 
     if (!(main_window.has_correct_init() &&
           main_window.load_media_bg("../data/bg.png") &&
@@ -70,12 +79,22 @@ int main(int argc, char *argv[]) {
         float dura_ms = SDL_GetTicks() - start_ms;
 #ifndef NDEBUG
         std::cerr << "Duration : " << dura_ms << "\n";
+        ++hist[std::floor(dura_ms)];
 #endif  // NDEBUG
         float delay_ms = frame_in_ms - dura_ms;
         if (delay_ms > 0) {
             SDL_Delay(delay_ms);
         }
     }
+#ifndef NDEBUG
+    int hist_scale(100);
+    std::cerr << "Each star is " << hist_scale << " frames\n";
+    for (auto p : hist) {
+        std::cerr << std::fixed << std::setprecision(1) << std::setw(2)
+                  << p.first << ' ' << std::string(p.second / hist_scale, '*')
+                  << '\n';
+    }
+#endif  // NDEBUG
 
     return 0;
 }
