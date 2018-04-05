@@ -31,8 +31,14 @@ class Ant : public Entity {
 
     ~Ant();
 
-
     inline void set_vision_angle_deg(float d) { vision_angle_degrees = d; }
+    inline void set_cruise_speed(float cs) { cruise_speed = cs; }
+    inline void set_separation_exp(float exp) {
+        separation_potential_exp = exp;
+    }
+    inline void set_cohesion_weight(float wt) { cohesion_weight = wt; }
+    inline void set_alignment_weight(float wt) { alignment_weight = wt; }
+    inline void set_separation_weight(float wt) { separation_weight = wt; }
 
     // Sets acceleration according to the decision of the ant
     void decision();
@@ -42,10 +48,18 @@ class Ant : public Entity {
     // each side of velocity, with length <= vision_distance;
     bool is_in_vision_triangle(const Eigen::Vector2d &vec) const;
 
-    static int default_color[4];
-
  protected:
-    float vision_angle_degrees;
+    float vision_angle_degrees{60};
+    float cruise_speed{10};
+    float separation_potential_exp{0.5};
+
+    float cohesion_weight{0.1};
+    float alignment_weight{0.6};
+    float separation_weight{0.3};
+
+    int default_color[4]{0x22, 0xA0, 0x22, 0xFF};
+    int blind_color[4]{0xA0, 0x22, 0x22, 0xFF};
+    int capped_force_color[4]{0xA0, 0x22, 0xA0, 0xFF};
 
     void cap_acceleration();
     void cap_force(float max_force);

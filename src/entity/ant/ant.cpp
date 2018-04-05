@@ -16,20 +16,12 @@
 #include "ant.h"
 #include "world/world.h"
 
-#define CRUISE_SPEED 5.0
-#define SEPARATION_POTENTIAL_EXP 0.5
-
-int Ant::default_color[4] = {0x22, 0xA0, 0x22, 0xFF};
-int blind_color[4] = {0xA0, 0x22, 0x22, 0xFF};
-int capped_force_color[4] = {0xA0, 0x22, 0xA0, 0xFF};
-
 Ant::Ant() : Entity() {
     type = Entity::Type::ANT;
     mass = 1;
     friction_factor = 0;
     set_color(default_color);
     vision_distance = 125;
-    vision_angle_degrees = 60;
 }
 
 Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
@@ -38,7 +30,6 @@ Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
     friction_factor = 0;
     set_color(default_color);
     vision_distance = 125;
-    vision_angle_degrees = 60;
 }
 
 Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
@@ -49,7 +40,6 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     friction_factor = 0;
     set_color(default_color);
     vision_distance = 125;
-    vision_angle_degrees = 60;
 }
 
 Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
@@ -59,7 +49,6 @@ Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
     friction_factor = 0;
     set_color(default_color);
     vision_distance = 125;
-    vision_angle_degrees = 60;
 }
 
 void Ant::decision() {
@@ -70,9 +59,9 @@ void Ant::decision() {
     } else {
         set_color(default_color);
         Eigen::Vector2d decided_velocity(0.0, 0.0);
-        decided_velocity = 0.1 * decision_cohesion_velocity();
-        decided_velocity += 0.6 * decision_alignment_velocity();
-        decided_velocity += 0.3 * decision_separation_velocity();
+        decided_velocity = cohesion_weight * decision_cohesion_velocity();
+        decided_velocity += alignment_weight * decision_alignment_velocity();
+        decided_velocity += separation_weight * decision_separation_velocity();
 
         acceleration = accel_towards(decided_velocity);
         cap_force(1e-2);
@@ -142,12 +131,12 @@ Eigen::Vector2d Ant::decision_separation_velocity() const {
             float dist = weighted_diff.norm();
             weighted_diff.normalize();
             weighted_diff /=
-                pow((dist + vision_distance / 4.0), SEPARATION_POTENTIAL_EXP);
+                pow((dist + vision_distance / 4.0), separation_potential_exp);
             desired += weighted_diff;
         }
     }
     desired.normalize();
-    desired *= CRUISE_SPEED / parent_world->get_time_step();
+    desired *= cruise_speed / parent_world->get_time_step();
 
     return desired;
 }
@@ -168,7 +157,7 @@ Eigen::Vector2d Ant::decision_alignment_velocity() const {
     }
 
     desired.normalize();
-    desired *= CRUISE_SPEED / parent_world->get_time_step();
+    desired *= cruise_speed / parent_world->get_time_step();
 
     return desired;
 }
@@ -183,7 +172,7 @@ Eigen::Vector2d Ant::decision_cohesion_velocity() const {
     }
 
     desired.normalize();
-    desired *= CRUISE_SPEED / parent_world->get_time_step();
+    desired *= cruise_speed / parent_world->get_time_step();
 
     return desired;
 }
