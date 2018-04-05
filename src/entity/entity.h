@@ -124,6 +124,10 @@ class Entity {
     float friction_factor{0};
     // Color used to display entity (in hex RGBA)
     int color[4]{0x44, 0x44, 0x44, 0xFF};
+    // Maximum radius of vision (0 means the object will see nothing)
+    float vision_distance{0};
+    // List of neighbors that we MAY see within vision_distance
+    std::vector<std::shared_ptr<Entity>> neighbours{};
 
     // Compute a linear then quadratic friction acceleration
     Eigen::Vector2d get_friction_acceleration();

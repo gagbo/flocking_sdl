@@ -21,6 +21,7 @@ Ant::Ant() : Entity() {
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
+    vision_distance = 25;
 }
 
 Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
@@ -28,6 +29,7 @@ Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
+    vision_distance = 25;
 }
 
 Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
@@ -37,6 +39,7 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
+    vision_distance = 25;
 }
 
 Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
@@ -45,6 +48,7 @@ Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
+    vision_distance = 25;
 }
 
 void Ant::decision() {

@@ -37,7 +37,6 @@ class Ant : public Entity {
     static int default_color[4];
 
  protected:
-    float vision_distance;
     float vision_angle_degrees;
 
     void cap_acceleration();
