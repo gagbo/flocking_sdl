@@ -82,9 +82,43 @@ class KDTree {
         const Eigen::Vector2d& center, float radius, const KDNode*&& current,
         int split_direction) const {
         std::vector<std::shared_ptr<T>> result;
-        // We want to find all points so that
-        // center(0) - radius <= x <= center(0) + radius
-        // center(1) - radius <= y <= center(1) + radius
+        float pos_rad = std::abs(radius);
+
+        if (current != nullptr && radius != 0) {
+            // We want to find all points so that
+            // center(0) - radius <= x <= center(0) + radius
+            // center(1) - radius <= y <= center(1) + radius
+            double x(current->data->get_pos()(0));
+            double y(current->data->get_pos()(1));
+            double min[KD_TOT_DIM] = {center(0) - pos_rad, center(1) - pos_rad};
+            double max[KD_TOT_DIM] = {center(0) + pos_rad, center(1) + pos_rad};
+
+            // Check if current point is in range
+            if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1]) {
+                result.push_back(current->data);
+            }
+
+            // Recursively check left children if there may be points there
+            if (min[split_direction] <=
+                current->data->get_pos()(split_direction)) {
+                auto left_result =
+                    norm1_range_query(center, radius, current->left,
+                                      (split_direction + 1) % KD_TOT_DIM);
+                result.insert(result.end(), left_result.begin(),
+                              left_result.end());
+            }
+
+            // Recursively check right children if there may be points there
+            if (max[split_direction] >=
+                current->data->get_pos()(split_direction)) {
+                auto right_result =
+                    norm1_range_query(center, radius, current->right,
+                                      (split_direction + 1) % KD_TOT_DIM);
+                result.insert(result.end(), right_result.begin(),
+                              right_result.end());
+            }
+        }
+
         return result;
     }
 

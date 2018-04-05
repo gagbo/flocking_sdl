@@ -93,8 +93,8 @@ TEST_CASE("Range Query in the kdtree", "[kdtree][range_query]") {
 
         REQUIRE(std::find(result.begin(), result.end(), ent_1) == result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_2) == result.end());
-        // REQUIRE(std::find(result.begin(), result.end(), ent_3) != result.end());
-        // REQUIRE(std::find(result.begin(), result.end(), ent_4) != result.end());
+        REQUIRE(std::find(result.begin(), result.end(), ent_3) != result.end());
+        REQUIRE(std::find(result.begin(), result.end(), ent_4) != result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_5) == result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_6) == result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_7) == result.end());
@@ -112,10 +112,10 @@ TEST_CASE("Range Query in the kdtree", "[kdtree][range_query]") {
         REQUIRE(std::find(result.begin(), result.end(), ent_3) == result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_4) == result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_5) == result.end());
-        // REQUIRE(std::find(result.begin(), result.end(), ent_6) != result.end());
+        REQUIRE(std::find(result.begin(), result.end(), ent_6) != result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_7) == result.end());
         REQUIRE(std::find(result.begin(), result.end(), ent_8) == result.end());
-        // REQUIRE(std::find(result.begin(), result.end(), ent_9) != result.end());
+        REQUIRE(std::find(result.begin(), result.end(), ent_9) != result.end());
     }
 
     SECTION("Test an empty range query") {
