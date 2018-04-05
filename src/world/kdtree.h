@@ -29,6 +29,7 @@ template <typename T>  // T has a get_pos method that returns a Vector
 class KDTree {
  public:
     KDTree() = default;
+    ~KDTree() { delete root; }
 
     inline void insert(const std::shared_ptr<T> x) {
         insert(x, root, KD_DIM_1);
