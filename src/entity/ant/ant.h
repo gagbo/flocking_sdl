@@ -63,7 +63,7 @@ class Ant : public Entity {
 
  protected:
     float vision_angle_degrees{60};
-    float cruise_speed{10};
+    float cruise_speed{5};
     float separation_potential_exp{0.5};
 
     float cohesion_weight{0.1};

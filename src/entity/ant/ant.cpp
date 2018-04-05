@@ -55,7 +55,7 @@ void Ant::decision() {
     filter_neighbours();
     if (neighbours.size() <= 1) {
         set_color(blind_color);
-        acceleration = accel_towards(velocity);
+        acceleration << 0, 0;
     } else {
         set_color(default_color);
         Eigen::Vector2d decided_velocity(0.0, 0.0);
