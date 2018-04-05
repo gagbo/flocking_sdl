@@ -142,6 +142,8 @@ class Entity {
 
     // Compute a linear then quadratic friction acceleration
     Eigen::Vector2d get_friction_acceleration();
+
+    Eigen::Vector2d accel_towards(const Eigen::Vector2d &target_velocity);
 };
 
 #endif  // ENTITY_ENTITY_H_

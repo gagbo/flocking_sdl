@@ -12,7 +12,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include "ant.h"
+#include "world/world.h"
+
+#define CRUISE_SPEED 40.0
+#define SEPARATION_POTENTIAL_EXP 0.5
 
 int Ant::default_color[4] = {0x22, 0xA0, 0x22, 0xFF};
 
@@ -21,7 +26,8 @@ Ant::Ant() : Entity() {
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
-    vision_distance = 25;
+    vision_distance = 40;
+    vision_angle_degrees = 60;
 }
 
 Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
@@ -29,7 +35,8 @@ Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
-    vision_distance = 25;
+    vision_distance = 40;
+    vision_angle_degrees = 60;
 }
 
 Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
@@ -39,7 +46,8 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
-    vision_distance = 25;
+    vision_distance = 40;
+    vision_angle_degrees = 60;
 }
 
 Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
@@ -48,12 +56,127 @@ Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
     mass = 1;
     friction_factor = 1e-2;
     set_color(default_color);
-    vision_distance = 25;
+    vision_distance = 40;
+    vision_angle_degrees = 60;
 }
 
 void Ant::decision() {
-    acceleration << 0.5, -1;
-    cap_force(1e-3);
+    filter_neighbours();
+    Eigen::Vector2d decided_velocity(0.0, 0.0);
+    decided_velocity = 0.125 * decision_cohesion_velocity();
+    decided_velocity += 0.5 * decision_alignment_velocity();
+    decided_velocity += 0.375 * decision_separation_velocity();
+
+    acceleration = accel_towards(decided_velocity);
+    cap_force(1e-2);
+}
+
+void Ant::filter_neighbours() {
+    if (velocity.norm() == 0) {
+        filter_neighbours_standing();
+    } else {
+        filter_neighbours_moving();
+    }
+}
+
+void Ant::filter_neighbours_standing() {
+    neighbours.erase(
+        std::remove_if(neighbours.begin(), neighbours.end(),
+                       [&](std::weak_ptr<Entity> &neigh) -> bool {
+                           if (auto spt = neigh.lock()) {
+                               Eigen::Vector2d vec = spt->get_pos() - position;
+                               return vec.squaredNorm() >
+                                      vision_distance * vision_distance * 4;
+                           } else {
+                               return true;
+                           }
+                       }),
+        neighbours.end());
+}
+
+void Ant::filter_neighbours_moving() {
+    neighbours.erase(std::remove_if(neighbours.begin(), neighbours.end(),
+                                    [&](std::weak_ptr<Entity> &neigh) -> bool {
+                                        if (auto spt = neigh.lock()) {
+                                            Eigen::Vector2d vec =
+                                                spt->get_pos() - position;
+                                            return !is_in_vision_triangle(vec);
+                                        } else {
+                                            return true;
+                                        }
+                                    }),
+                     neighbours.end());
+}
+
+bool Ant::is_in_vision_triangle(const Eigen::Vector2d &vec) const {
+    if (vec.squaredNorm() > vision_distance * vision_distance) {
+        return false;
+    }
+    float cos_theta = (vec.dot(velocity)) / (vec.norm() * velocity.norm());
+
+    return std::acos(cos_theta) < (vision_angle_degrees * M_PI / 180.0);
+}
+
+Eigen::Vector2d Ant::decision_separation_velocity() const {
+    // Choose a distance at which boids start avoiding each other
+    Eigen::Vector2d desired(0, 0);
+
+    for (auto &&item : neighbours) {
+        if (auto spt = item.lock()) {
+            if (spt.get() == this) {
+                continue;
+            }
+            Eigen::Vector2d to_rival =
+                parent_world->point_to(position, spt->get_pos());
+            Eigen::Vector2d weighted_diff = -1 * to_rival;
+            float dist = weighted_diff.norm();
+            weighted_diff.normalize();
+            weighted_diff /=
+                pow((dist + vision_distance / 4.0) / vision_angle_degrees,
+                    SEPARATION_POTENTIAL_EXP);
+            desired += weighted_diff;
+        }
+    }
+    desired.normalize();
+    desired *= CRUISE_SPEED / parent_world->get_time_step();
+
+    return desired;
+}
+
+Eigen::Vector2d Ant::decision_alignment_velocity() const {
+    Eigen::Vector2d desired(0, 0);
+
+    int considered_neigbours = 0;
+    for (auto &&item : neighbours) {
+        if (auto spt = item.lock()) {
+            ++considered_neigbours;
+            desired += spt->get_vel();
+        }
+    }
+
+    if (considered_neigbours > 0) {
+        desired /= considered_neigbours;
+    }
+
+    desired.normalize();
+    desired *= CRUISE_SPEED / parent_world->get_time_step();
+
+    return desired;
+}
+
+Eigen::Vector2d Ant::decision_cohesion_velocity() const {
+    Eigen::Vector2d desired(0, 0);
+
+    for (auto &&item : neighbours) {
+        if (auto spt = item.lock()) {
+            desired += parent_world->point_to(position, spt->get_pos());
+        }
+    }
+
+    desired.normalize();
+    desired *= CRUISE_SPEED / parent_world->get_time_step();
+
+    return desired;
 }
 
 void Ant::cap_acceleration() {

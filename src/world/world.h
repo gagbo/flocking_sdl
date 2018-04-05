@@ -72,6 +72,7 @@ class World {
     // Accessors
     MainWindow &get_mut_window();
     inline const auto &get_entity_list() const { return entity_list; }
+    inline float get_time_step() const { return time_step; }
 
  protected:
     std::vector<std::shared_ptr<Entity>> entity_list;

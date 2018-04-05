@@ -91,3 +91,11 @@ Entity::~Entity() {
         neighbour.reset();
     }
 }
+
+Eigen::Vector2d Entity::accel_towards(const Eigen::Vector2d &target_velocity) {
+    float dt =
+        parent_world->get_time_step();
+    Eigen::Vector2d result = target_velocity - velocity;
+    result /= dt;
+    return result;
+}

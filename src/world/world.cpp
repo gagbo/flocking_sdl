@@ -14,10 +14,10 @@
 
 // Since World will instantiate all makeEntity templates, we need fully defined
 // Entity Derived Classes
-#include "world.h"
 #include "entity/ant/ant.h"
 #include "entity/food/food.h"
 #include "ui/window/mainwindow.h"
+#include "world.h"
 
 #define DEFAULT_WORLD_WIDTH 640
 #define DEFAULT_WORLD_HEIGHT 480
@@ -132,6 +132,7 @@ void World::update_entity_neighbourhoods() {
 
 void World::call_entity_decision() {
     for (auto &&entity : entity_list) {
+        // Update the timestep of the Entity, necessary for computation
         entity->decision();
     }
 }

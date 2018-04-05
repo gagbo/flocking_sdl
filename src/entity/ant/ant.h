@@ -34,6 +34,9 @@ class Ant : public Entity {
     // Sets acceleration according to the decision of the ant
     void decision();
 
+    // Filter the neighbour list so only visible ones remain
+    void filter_neighbours();
+
     static int default_color[4];
 
  protected:
@@ -41,6 +44,16 @@ class Ant : public Entity {
 
     void cap_acceleration();
     void cap_force(float max_force);
+
+    void filter_neighbours_standing();
+    void filter_neighbours_moving();
+    // Return true if vec is in the triangle that is vision_angle_degrees on
+    // each side of velocity, with length <= vision_distance;
+    bool is_in_vision_triangle(const Eigen::Vector2d &vec) const;
+
+    Eigen::Vector2d decision_cohesion_velocity() const;
+    Eigen::Vector2d decision_alignment_velocity() const;
+    Eigen::Vector2d decision_separation_velocity() const;
 };
 
 #endif  // ENTITY_ANT_ANT_H_
