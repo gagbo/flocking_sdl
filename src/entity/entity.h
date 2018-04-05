@@ -92,6 +92,8 @@ class Entity {
         set_color(arg_color[0], arg_color[1], arg_color[2], arg_color[3]);
     }
 
+    inline void set_vision_distance(float d) { vision_distance = d; }
+
     inline void clear_neighbours() {
         // is neighbours.clear(); enough ?
         for (auto &&neigh : neighbours) {
