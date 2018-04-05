@@ -106,8 +106,38 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 MainWindow &World::get_mut_window() { return *render_window; }
 
 void World::update() {
+    update_tree();
+    update_entity_neighbourhoods();
+    call_entity_decision();
+    update_entity_and_renderer();
+}
+
+void World::update_tree() {
+    entity_tree.clean();
+    for (auto &&entity : entity_list) {
+        entity_tree.insert(entity);
+    }
+}
+
+void World::update_entity_neighbourhoods() {
+    for (auto &&entity : entity_list) {
+        entity->clear_neighbours();
+        auto ent_neighbours = entity_tree.norm1_range_query(
+            *entity, entity->get_vision_distance());
+        entity->get_neighbourhood().insert(entity->get_neighbourhood().end(),
+                                           ent_neighbours.begin(),
+                                           ent_neighbours.end());
+    }
+}
+
+void World::call_entity_decision() {
     for (auto &&entity : entity_list) {
         entity->decision();
+    }
+}
+
+void World::update_entity_and_renderer() {
+    for (auto &&entity : entity_list) {
         entity->update();
         Eigen::Vector2d screen_pos = convert(entity->get_pos());
         Eigen::Vector2d screen_size = convert(entity->get_size());

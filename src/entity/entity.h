@@ -87,9 +87,20 @@ class Entity {
         color[2] = b;
         color[3] = a;
     }
+
     inline void set_color(int arg_color[4]) {
         set_color(arg_color[0], arg_color[1], arg_color[2], arg_color[3]);
     }
+
+    inline void clear_neighbours() {
+        // is neighbours.clear(); enough ?
+        for (auto &&neigh : neighbours) {
+            neigh.reset();
+        }
+        neighbours.clear();
+    }
+
+    inline auto &get_neighbourhood() { return neighbours; }
 
     // Accessors
     inline const Eigen::Vector2d &get_pos() const { return position; }
@@ -99,6 +110,7 @@ class Entity {
     inline int *get_color() { return color; }
     inline Type get_type() { return type; }
     std::string get_type_string() const;
+    inline float get_vision_distance() const { return vision_distance; }
 
  protected:
     // Type of the entity

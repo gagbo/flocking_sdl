@@ -79,6 +79,16 @@ class World {
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
     MainWindow *render_window;
+
+    // Update the k-d tree
+    void update_tree();
+    // Compute the neighbourhoods of each entity
+    void update_entity_neighbourhoods();
+    // Call the decision method of each entity (alone in its loop because
+    // Entity::update changes position while we're looping
+    void call_entity_decision();
+    // Update each entity
+    void update_entity_and_renderer();
 };
 
 #endif  // WORLD_WORLD_H_
