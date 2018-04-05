@@ -120,6 +120,9 @@ bool Ant::is_in_vision_triangle(const Eigen::Vector2d &vec) const {
     if (vec.squaredNorm() > vision_distance * vision_distance) {
         return false;
     }
+    if (vec.squaredNorm() == 0) {
+        return true;
+    }
     float cos_theta = (vec.dot(velocity)) / (vec.norm() * velocity.norm());
 
     return std::acos(cos_theta) < (vision_angle_degrees * M_PI / 180.0);
