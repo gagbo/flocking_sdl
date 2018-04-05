@@ -37,26 +37,43 @@ class KDTree {
 
     inline auto get_root() const { return root; }
 
-    inline std::vector<std::shared_ptr<T>> norm1_range_query(
-        const T& center, float radius) const {
+    inline std::vector<std::weak_ptr<T>> norm1_range_query(const T& center,
+                                                           float radius) const {
         return norm1_range_query(center.get_pos(), radius);
     }
 
-    inline std::vector<std::shared_ptr<T>> norm1_range_query(
+    inline std::vector<std::weak_ptr<T>> norm1_range_query(
         const Eigen::Vector2d& center, float radius) const {
         return norm1_range_query(center, radius, root, KD_DIM_1);
     }
 
+    inline void clean() {
+        delete root;
+        root = nullptr;
+    }
+
  private:
     struct KDNode {
-        std::shared_ptr<T> data{};
+        std::weak_ptr<T> data{};
         KDNode* left{nullptr};
         KDNode* right{nullptr};
         KDNode() = default;
-        KDNode(const std::shared_ptr<T>& x) { data = x; }
+        KDNode(const std::shared_ptr<T>& x) : data(x) {}
         inline auto get_data() { return data; }
-        inline auto x() { return data->get_pos()(0); }
-        inline auto y() { return data->get_pos()(1); }
+        auto x() {
+            if (auto spt = data.lock()) {
+                return spt->get_pos()(0);
+            } else {
+                return -1.0;
+            }
+        }
+        auto y() {
+            if (auto spt = data.lock()) {
+                return spt->get_pos()(1);
+            } else {
+                return -1.0;
+            }
+        }
         inline auto go_left() { return left; }
         inline auto go_right() { return right; }
         ~KDNode() {
@@ -71,51 +88,53 @@ class KDTree {
         if (current == nullptr) {
             current = new KDNode(x);
         } else if (x->get_pos()(split_direction) <
-                   current->data->get_pos()(split_direction)) {
+                   current->data.lock()->get_pos()(split_direction)) {
             insert(x, current->left, (split_direction + 1) % KD_TOT_DIM);
         } else {
             insert(x, current->right, (split_direction + 1) % KD_TOT_DIM);
         }
     }
 
-    std::vector<std::shared_ptr<T>> norm1_range_query(
+    std::vector<std::weak_ptr<T>> norm1_range_query(
         const Eigen::Vector2d& center, float radius, const KDNode*&& current,
         int split_direction) const {
-        std::vector<std::shared_ptr<T>> result;
+        std::vector<std::weak_ptr<T>> result;
         float pos_rad = std::abs(radius);
 
         if (current != nullptr && radius != 0) {
-            // We want to find all points so that
-            // center(0) - radius <= x <= center(0) + radius
-            // center(1) - radius <= y <= center(1) + radius
-            double x(current->data->get_pos()(0));
-            double y(current->data->get_pos()(1));
-            double min[KD_TOT_DIM] = {center(0) - pos_rad, center(1) - pos_rad};
-            double max[KD_TOT_DIM] = {center(0) + pos_rad, center(1) + pos_rad};
+            if (auto spt = current->data.lock()) {
+                // We want to find all points so that
+                // center(0) - radius <= x <= center(0) + radius
+                // center(1) - radius <= y <= center(1) + radius
+                double x(spt->get_pos()(0));
+                double y(spt->get_pos()(1));
+                double min[KD_TOT_DIM] = {center(0) - pos_rad,
+                                          center(1) - pos_rad};
+                double max[KD_TOT_DIM] = {center(0) + pos_rad,
+                                          center(1) + pos_rad};
 
-            // Check if current point is in range
-            if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1]) {
-                result.push_back(current->data);
-            }
+                // Check if current point is in range
+                if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1]) {
+                    result.push_back(current->data);
+                }
 
-            // Recursively check left children if there may be points there
-            if (min[split_direction] <=
-                current->data->get_pos()(split_direction)) {
-                auto left_result =
-                    norm1_range_query(center, radius, current->left,
-                                      (split_direction + 1) % KD_TOT_DIM);
-                result.insert(result.end(), left_result.begin(),
-                              left_result.end());
-            }
+                // Recursively check left children if there may be points there
+                if (min[split_direction] <= spt->get_pos()(split_direction)) {
+                    auto left_result =
+                        norm1_range_query(center, radius, current->left,
+                                          (split_direction + 1) % KD_TOT_DIM);
+                    result.insert(result.end(), left_result.begin(),
+                                  left_result.end());
+                }
 
-            // Recursively check right children if there may be points there
-            if (max[split_direction] >=
-                current->data->get_pos()(split_direction)) {
-                auto right_result =
-                    norm1_range_query(center, radius, current->right,
-                                      (split_direction + 1) % KD_TOT_DIM);
-                result.insert(result.end(), right_result.begin(),
-                              right_result.end());
+                // Recursively check right children if there may be points there
+                if (max[split_direction] >= spt->get_pos()(split_direction)) {
+                    auto right_result =
+                        norm1_range_query(center, radius, current->right,
+                                          (split_direction + 1) % KD_TOT_DIM);
+                    result.insert(result.end(), right_result.begin(),
+                                  right_result.end());
+                }
             }
         }
 

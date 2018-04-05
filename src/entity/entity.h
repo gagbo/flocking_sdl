@@ -127,7 +127,7 @@ class Entity {
     // Maximum radius of vision (0 means the object will see nothing)
     float vision_distance{0};
     // List of neighbors that we MAY see within vision_distance
-    std::vector<std::shared_ptr<Entity>> neighbours{};
+    std::vector<std::weak_ptr<Entity>> neighbours{};
 
     // Compute a linear then quadratic friction acceleration
     Eigen::Vector2d get_friction_acceleration();
