@@ -46,9 +46,8 @@ class Entity {
     static auto makeEntity(Type type, Ts &&... params) {
         auto delEntity = [](Entity *pEntity) {
             std::cerr << "Deleting " << pEntity->get_type_string() << " "
-                      << pEntity->ent_id << " (" <<
-                      pEntity->position(0) << ", " <<
-                      pEntity->position(1) << ")\n";
+                      << pEntity->ent_id << " (" << pEntity->position(0) << ", "
+                      << pEntity->position(1) << ")\n";
             delete pEntity;
         };
 
