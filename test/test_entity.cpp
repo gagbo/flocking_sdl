@@ -39,6 +39,12 @@ TEST_CASE("Ant setters", "[ant][set]") {
     CHECK(ant_1.get_mass() == Approx(2.3));
     CHECK(ant_1.get_max_acceleration() == Approx(25.7));
     CHECK(ant_1.get_cruise_speed() == Approx(20));
+
+    CHECK(ant_1.get_max_force() == Approx(2.3 * 25.7));
+    ant_1.set_max_force(1.0e30);
+    CHECK(ant_1.get_max_force() == Approx(1e30));
+    CHECK(ant_1.get_max_acceleration() == Approx(1e30/2.3));
+
 }
 
 TEST_CASE("Ant vision", "[ant][vision]") {
