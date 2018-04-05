@@ -16,26 +16,28 @@
 #include "ant.h"
 #include "world/world.h"
 
-#define CRUISE_SPEED 40.0
+#define CRUISE_SPEED 5.0
 #define SEPARATION_POTENTIAL_EXP 0.5
 
 int Ant::default_color[4] = {0x22, 0xA0, 0x22, 0xFF};
+int blind_color[4] = {0xA0, 0x22, 0x22, 0xFF};
+int capped_force_color[4] = {0xA0, 0x22, 0xA0, 0xFF};
 
 Ant::Ant() : Entity() {
     type = Entity::Type::ANT;
     mass = 1;
-    friction_factor = 1e-2;
+    friction_factor = 0;
     set_color(default_color);
-    vision_distance = 40;
+    vision_distance = 125;
     vision_angle_degrees = 60;
 }
 
 Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
     type = Entity::Type::ANT;
     mass = 1;
-    friction_factor = 1e-2;
+    friction_factor = 0;
     set_color(default_color);
-    vision_distance = 40;
+    vision_distance = 125;
     vision_angle_degrees = 60;
 }
 
@@ -44,9 +46,9 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     : Entity(i, world, x, y, vx, vy, ax, ay) {
     type = Entity::Type::ANT;
     mass = 1;
-    friction_factor = 1e-2;
+    friction_factor = 0;
     set_color(default_color);
-    vision_distance = 40;
+    vision_distance = 125;
     vision_angle_degrees = 60;
 }
 
@@ -54,21 +56,27 @@ Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
     : Entity(x, y, vx, vy, ax, ay) {
     type = Entity::Type::ANT;
     mass = 1;
-    friction_factor = 1e-2;
+    friction_factor = 0;
     set_color(default_color);
-    vision_distance = 40;
+    vision_distance = 125;
     vision_angle_degrees = 60;
 }
 
 void Ant::decision() {
     filter_neighbours();
-    Eigen::Vector2d decided_velocity(0.0, 0.0);
-    decided_velocity = 0.125 * decision_cohesion_velocity();
-    decided_velocity += 0.5 * decision_alignment_velocity();
-    decided_velocity += 0.375 * decision_separation_velocity();
+    if (neighbours.size() <= 1) {
+        set_color(blind_color);
+        acceleration = accel_towards(velocity);
+    } else {
+        set_color(default_color);
+        Eigen::Vector2d decided_velocity(0.0, 0.0);
+        decided_velocity = 0.1 * decision_cohesion_velocity();
+        decided_velocity += 0.6 * decision_alignment_velocity();
+        decided_velocity += 0.3 * decision_separation_velocity();
 
-    acceleration = accel_towards(decided_velocity);
-    cap_force(1e-2);
+        acceleration = accel_towards(decided_velocity);
+        cap_force(1e-2);
+    }
 }
 
 void Ant::filter_neighbours() {
@@ -118,7 +126,6 @@ bool Ant::is_in_vision_triangle(const Eigen::Vector2d &vec) const {
 }
 
 Eigen::Vector2d Ant::decision_separation_velocity() const {
-    // Choose a distance at which boids start avoiding each other
     Eigen::Vector2d desired(0, 0);
 
     for (auto &&item : neighbours) {
@@ -132,8 +139,7 @@ Eigen::Vector2d Ant::decision_separation_velocity() const {
             float dist = weighted_diff.norm();
             weighted_diff.normalize();
             weighted_diff /=
-                pow((dist + vision_distance / 4.0) / vision_angle_degrees,
-                    SEPARATION_POTENTIAL_EXP);
+                pow((dist + vision_distance / 4.0), SEPARATION_POTENTIAL_EXP);
             desired += weighted_diff;
         }
     }
@@ -182,6 +188,7 @@ Eigen::Vector2d Ant::decision_cohesion_velocity() const {
 void Ant::cap_acceleration() {
     float norm = acceleration.norm();
     if (norm > max_acceleration) {
+        set_color(capped_force_color);
         acceleration.normalize();
         acceleration = max_acceleration * acceleration;
     }
