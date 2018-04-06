@@ -79,6 +79,8 @@ class Entity {
     // Print debug info about the entity
     void print() const;
 
+    bool operator<(const Entity &rhs) const;
+
     // Setters
     inline void set_color(unsigned char r, unsigned char g, unsigned char b,
                           unsigned char a) {
@@ -105,9 +107,9 @@ class Entity {
     inline auto &get_neighbourhood() { return neighbours; }
 
     inline void set_size(float sx, float sy) { size << sx, sy; }
-    inline void set_mass(float m) { mass = m;}
+    inline void set_mass(float m) { mass = m; }
     inline void set_max_acceleration(float m_a) { max_acceleration = m_a; }
-    inline void set_friction_factor(float f) { friction_factor = f;}
+    inline void set_friction_factor(float f) { friction_factor = f; }
 
     // Accessors
     inline const Eigen::Vector2d &get_pos() const { return position; }
@@ -157,5 +159,10 @@ class Entity {
 
     Eigen::Vector2d accel_towards(const Eigen::Vector2d &target_velocity);
 };
+
+bool operator<(const std::weak_ptr<Entity> &lhs,
+               const std::weak_ptr<Entity> &rhs);
+bool operator==(const std::weak_ptr<Entity> &lhs,
+               const std::weak_ptr<Entity> &rhs);
 
 #endif  // ENTITY_ENTITY_H_

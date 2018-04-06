@@ -122,11 +122,95 @@ void World::update_tree() {
 void World::update_entity_neighbourhoods() {
     for (auto &&entity : entity_list) {
         entity->clear_neighbours();
+        // Base case, get all neighbours inside
         auto ent_neighbours = entity_tree.norm1_range_query(
             *entity, entity->get_vision_distance());
+        // Add the neighbours from the edges in case of wrapping around
+        float x = entity->get_pos()(0);
+        float y = entity->get_pos()(1);
+        float radius = entity->get_vision_distance();
+        if (x - radius < 0) {
+            Eigen::Vector2d fictive_position(x + width, y);
+            float fictive_radius(radius - x);
+            auto add_neighbours =
+                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+            ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
+                                  add_neighbours.end());
+            if (y - radius < 0) {
+                Eigen::Vector2d fictive_position2(x + width, y + height);
+                float fictive_radius2(radius - y);
+                auto add_neighbours2 = entity_tree.norm1_range_query(
+                    fictive_position2,
+                    std::max(fictive_radius, fictive_radius2));
+                ent_neighbours.insert(ent_neighbours.end(),
+                                      add_neighbours2.begin(),
+                                      add_neighbours2.end());
+            }
+            if (y + radius > height) {
+                Eigen::Vector2d fictive_position2(x + width, y - height);
+                float fictive_radius2(radius - (height - y));
+                auto add_neighbours2 = entity_tree.norm1_range_query(
+                    fictive_position2,
+                    std::max(fictive_radius, fictive_radius2));
+                ent_neighbours.insert(ent_neighbours.end(),
+                                      add_neighbours2.begin(),
+                                      add_neighbours2.end());
+            }
+        }
+        if (x + radius > width) {
+            Eigen::Vector2d fictive_position(x - width, y);
+            float fictive_radius(radius - (width - x));
+            auto add_neighbours =
+                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+            ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
+                                  add_neighbours.end());
+            if (y - radius < 0) {
+                Eigen::Vector2d fictive_position2(x - width, y + height);
+                float fictive_radius2(radius - y);
+                auto add_neighbours2 = entity_tree.norm1_range_query(
+                    fictive_position2,
+                    std::max(fictive_radius, fictive_radius2));
+                ent_neighbours.insert(ent_neighbours.end(),
+                                      add_neighbours2.begin(),
+                                      add_neighbours2.end());
+            }
+            if (y + radius > height) {
+                Eigen::Vector2d fictive_position2(x - width, y - height);
+                float fictive_radius2(radius - (height - y));
+                auto add_neighbours2 = entity_tree.norm1_range_query(
+                    fictive_position2,
+                    std::max(fictive_radius, fictive_radius2));
+                ent_neighbours.insert(ent_neighbours.end(),
+                                      add_neighbours2.begin(),
+                                      add_neighbours2.end());
+            }
+        }
+        if (y - radius < 0) {
+            Eigen::Vector2d fictive_position(x, y + height);
+            float fictive_radius(radius - y);
+            auto add_neighbours =
+                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+            ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
+                                  add_neighbours.end());
+        }
+        if (y + radius > height) {
+            Eigen::Vector2d fictive_position(x, y - height);
+            float fictive_radius(radius - (height - y));
+            auto add_neighbours =
+                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+            ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
+                                  add_neighbours.end());
+        }
         entity->get_neighbourhood().insert(entity->get_neighbourhood().end(),
                                            ent_neighbours.begin(),
                                            ent_neighbours.end());
+        // Keep only unique references
+        std::sort(entity->get_neighbourhood().begin(),
+                  entity->get_neighbourhood().end());
+        entity->get_neighbourhood().erase(
+            std::unique(entity->get_neighbourhood().begin(),
+                        entity->get_neighbourhood().end()),
+            entity->get_neighbourhood().end());
     }
 }
 

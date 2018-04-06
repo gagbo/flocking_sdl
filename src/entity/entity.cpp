@@ -93,9 +93,25 @@ Entity::~Entity() {
 }
 
 Eigen::Vector2d Entity::accel_towards(const Eigen::Vector2d &target_velocity) {
-    float dt =
-        parent_world->get_time_step();
+    float dt = parent_world->get_time_step();
     Eigen::Vector2d result = target_velocity - velocity;
     result /= dt;
     return result;
+}
+
+bool Entity::operator<(const Entity &rhs) const {
+    if (type < rhs.type) {
+        return true;
+    }
+    return ent_id < rhs.ent_id;
+}
+
+bool operator<(const std::weak_ptr<Entity> &lhs,
+               const std::weak_ptr<Entity> &rhs) {
+    return lhs.lock().get() < rhs.lock().get();
+}
+
+bool operator==(const std::weak_ptr<Entity> &lhs,
+               const std::weak_ptr<Entity> &rhs) {
+    return lhs.lock().get() == rhs.lock().get();
 }

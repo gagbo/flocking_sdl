@@ -14,6 +14,7 @@
 
 #include <Eigen/Dense>
 #include "catch.hpp"
+#include "entity/ant/ant.h"
 #include "world/world.h"
 
 TEST_CASE("World setting functions", "[world][set]") {
@@ -227,5 +228,37 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         REQUIRE((*it)->get_type_string() == "Ant");
         it = std::next(it);
         REQUIRE((*it)->get_type_string() == "Food");
+    }
+}
+
+TEST_CASE("World computes good neighbourhoods for entities",
+          "[world][neighbour_computation]") {
+    World world(640, 480, 1e-2);
+    Ant* inside_see_all = dynamic_cast<Ant*>(
+        world.add_entity(Entity::Type::ANT, 320.0, 240.0).lock().get());
+    inside_see_all->set_vision_distance(340.0);
+    Ant* corner_see_all = dynamic_cast<Ant*>(
+        world.add_entity(Entity::Type::ANT, 40.0, 40.0).lock().get());
+    corner_see_all->set_vision_distance(600.0);
+    Ant* corner_2 = dynamic_cast<Ant*>(
+        world.add_entity(Entity::Type::ANT, 600.0, 40.0).lock().get());
+    corner_2->set_vision_distance(90.0);
+    Ant* corner_3 = dynamic_cast<Ant*>(
+        world.add_entity(Entity::Type::ANT, 600.0, 440.0).lock().get());
+    corner_3->set_vision_distance(90.0);
+    Ant* corner_4 = dynamic_cast<Ant*>(
+        world.add_entity(Entity::Type::ANT, 40.0, 440.0).lock().get());
+    corner_4->set_vision_distance(90.0);
+
+    world.update_tree();
+    world.update_entity_neighbourhoods();
+    SECTION("Entities are seen only once") {
+        auto inside_neigh = inside_see_all->get_neighbourhood();
+        CHECK(inside_neigh.size() == 5);
+        inside_see_all->set_vision_distance(8000.0);
+        world.update_tree();
+        world.update_entity_neighbourhoods();  // Invalidates inside_neigh
+        inside_neigh = inside_see_all->get_neighbourhood();
+        CHECK(inside_neigh.size() == 5);
     }
 }
