@@ -88,18 +88,18 @@ TEST_CASE("Ant json writing", "[ant][json]") {
     CHECK(ant_json["cruise_speed"].asDouble() == Approx(20));
     CHECK(ant_json["vision"]["angle_degrees"].asDouble() == Approx(45.0));
 
-    CHECK(ant_json["colors"]["default"]["red"] == 0x22);
-    CHECK(ant_json["colors"]["default"]["blue"] == 0xA0);
-    CHECK(ant_json["colors"]["default"]["green"] == 0x22);
-    CHECK(ant_json["colors"]["default"]["alpha"] == 0xFF);
-    CHECK(ant_json["colors"]["blind"]["red"] == 0xA0);
-    CHECK(ant_json["colors"]["blind"]["blue"] == 0x22);
-    CHECK(ant_json["colors"]["blind"]["green"] == 0x22);
-    CHECK(ant_json["colors"]["blind"]["alpha"] == 0xFF);
-    CHECK(ant_json["colors"]["capped_force"]["red"] == 0xA0);
-    CHECK(ant_json["colors"]["capped_force"]["blue"] == 0x22);
-    CHECK(ant_json["colors"]["capped_force"]["green"] == 0xA0);
-    CHECK(ant_json["colors"]["capped_force"]["alpha"] == 0xFF);
+    CHECK(ant_json["colors"]["default"][0] == 0x22);
+    CHECK(ant_json["colors"]["default"][1] == 0xA0);
+    CHECK(ant_json["colors"]["default"][2] == 0x22);
+    CHECK(ant_json["colors"]["default"][3] == 0xFF);
+    CHECK(ant_json["colors"]["blind"][0] == 0xA0);
+    CHECK(ant_json["colors"]["blind"][1] == 0x22);
+    CHECK(ant_json["colors"]["blind"][2] == 0x22);
+    CHECK(ant_json["colors"]["blind"][3] == 0xFF);
+    CHECK(ant_json["colors"]["capped_force"][0] == 0xA0);
+    CHECK(ant_json["colors"]["capped_force"][1] == 0x22);
+    CHECK(ant_json["colors"]["capped_force"][2] == 0xA0);
+    CHECK(ant_json["colors"]["capped_force"][3] == 0xFF);
 }
 
 TEST_CASE("Ant vision", "[ant][vision]") {
