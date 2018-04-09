@@ -115,3 +115,20 @@ bool operator==(const std::weak_ptr<Entity> &lhs,
                const std::weak_ptr<Entity> &rhs) {
     return lhs.lock().get() == rhs.lock().get();
 }
+
+void Entity::update_json() const {
+    json_root["type"] = get_type_string();
+    json_root["id"] = ent_id;
+    json_root["vision"]["distance"] = vision_distance;
+    json_root["size"]["X"] = size(0);
+    json_root["size"]["Y"] = size(1);
+    json_root["world_situation"]["position"]["X"] = position(0);
+    json_root["world_situation"]["position"]["Y"] = position(1);
+    json_root["world_situation"]["velocity"]["X"] = velocity(0);
+    json_root["world_situation"]["velocity"]["Y"] = velocity(1);
+    json_root["world_situation"]["acceleration"]["X"] = acceleration(0);
+    json_root["world_situation"]["acceleration"]["Y"] = acceleration(1);
+    json_root["mass"] = mass;
+    json_root["max_acceleration"] = max_acceleration;
+    json_root["friction_factor"] = friction_factor;
+}

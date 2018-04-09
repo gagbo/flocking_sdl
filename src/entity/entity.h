@@ -20,6 +20,7 @@
 #include <memory>
 #include <random>
 #include <string>
+#include "jsoncpp/json/json.h"
 
 class World;
 class Ant;
@@ -126,6 +127,8 @@ class Entity {
     std::string get_type_string() const;
     inline float get_vision_distance() const { return vision_distance; }
 
+    virtual void update_json() const;
+
  protected:
     // Type of the entity
     Type type{Type::NONE};
@@ -153,6 +156,8 @@ class Entity {
     float vision_distance{0};
     // List of neighbors that we MAY see within vision_distance
     std::vector<std::weak_ptr<Entity>> neighbours{};
+    // Root of JSON for IO
+    mutable Json::Value json_root;
 
     // Compute a linear then quadratic friction acceleration
     Eigen::Vector2d get_friction_acceleration();

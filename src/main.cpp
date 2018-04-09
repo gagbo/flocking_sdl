@@ -33,12 +33,12 @@
 #define ANT_COUNT 60
 #define FRAMERATE 60
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     std::cerr << "Flocking_SDL version " << Flocking_VERSION_MAJOR << "."
               << Flocking_VERSION_MINOR << "\n";
 
     std::cerr << argc << " argument(s) -> ";
-    for (int i = 0; i < argc ; ++i) {
+    for (int i = 0; i < argc; ++i) {
         std::cerr << argv[i] << " ";
     }
     std::cerr << std::endl;
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     SDL_Event e;
 
     for (int i = 0; i < ANT_COUNT; ++i) {
-        world.add_entity(Entity::Type::ANT);
+        world.add_entity(Entity::Type::ANT).lock().get();
     }
 
     while (!quit) {

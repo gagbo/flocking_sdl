@@ -4,6 +4,7 @@ add_subdirectory(ant)
 add_subdirectory(food)
 
 target_link_libraries(${PROJECT_NAME}_entity ${PROJECT_NAME}_ant ${PROJECT_NAME}_food)
+target_link_libraries(${PROJECT_NAME}_entity ${PROJECT_NAME}_json)
 
 target_include_directories(${PROJECT_NAME}_entity PUBLIC ${EIGEN3_INCLUDE_DIR})
 

@@ -1,0 +1,63 @@
+{
+   "type" : "Ant",
+   "size" :
+   {
+      "X" : 5.0,
+      "Y" : 5.0
+   },
+   "friction_factor" : 0.0,
+   "mass" : 1.0,
+   "max_acceleration" : 0.0005,
+   "cruise_speed" : 5.0,
+   "vision" :
+   {
+      "angle_degrees" : 60.0,
+      "distance" : 125.0
+   },
+   "decision_weights" :
+   {
+      "alignment" : 0.60000002384185791,
+      "cohesion" : 0.10000000149011612,
+      "separation" : 0.30000001192092896
+   },
+   "separation_potential_exponent" : 0.5,
+   "world_situation" :
+   {
+      "acceleration" :
+      {
+         "X" : 0.0,
+         "Y" : 0.0
+      },
+      "position" :
+      {
+         "X" : 252.03352180301297,
+         "Y" : 381.54048984341028
+      },
+      "velocity" :
+      {
+         "X" : 0.0,
+         "Y" : 0.0
+      }
+   },
+   "colors" :
+   {
+      "blind" :
+      {
+         "red" : 160,
+         "blue" : 34,
+         "green" : 34
+      },
+      "capped_force" :
+      {
+         "red" : 160,
+         "blue" : 34,
+         "green" : 160
+      },
+      "default" :
+      {
+         "red" : 34,
+         "blue" : 160,
+         "green" : 34
+      }
+   }
+}

@@ -15,6 +15,7 @@
 #ifndef ENTITY_ANT_ANT_H_
 #define ENTITY_ANT_ANT_H_
 #include "../entity.h"
+#include "jsoncpp/json/json.h"
 
 class Ant : public Entity {
  public:
@@ -56,6 +57,16 @@ class Ant : public Entity {
     // Return true if vec is in the triangle that is vision_angle_degrees on
     // each side of velocity, with length <= vision_distance;
     bool is_in_vision_triangle(const Eigen::Vector2d &vec) const;
+
+    // Update the json object for writing
+    void update_json() const;
+    // Write json to given ostream
+    inline void write_json(std::ostream &out) const {
+        update_json();
+        Json::StreamWriterBuilder wbuilder;
+        wbuilder["indentation"] = "   ";
+        out << Json::writeString(wbuilder, json_root);
+    }
 
     int default_color[4]{0x22, 0xA0, 0x22, 0xFF};
     int blind_color[4]{0xA0, 0x22, 0x22, 0xFF};
