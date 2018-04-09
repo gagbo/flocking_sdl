@@ -15,11 +15,13 @@ include_directories ("${PROJECT_BINARY_DIR}/src")
 add_subdirectory(ui)
 add_subdirectory(entity)
 add_subdirectory(world)
+add_subdirectory(jsoncpp)
 
 add_executable (flocks main.cpp)
 # Maybe linking SDL2 is not necessary since it should be ui
 target_link_libraries (flocks SDL2)
 target_link_libraries (flocks ${PROJECT_NAME}_mainwindow ${PROJECT_NAME}_input ${PROJECT_NAME}_entity ${PROJECT_NAME}_world)
+target_link_libraries (flocks ${PROJECT_NAME}_json)
 
 install (TARGETS flocks DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/src/FlockingConfig.h"
