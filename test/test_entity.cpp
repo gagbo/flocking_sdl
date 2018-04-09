@@ -17,6 +17,7 @@
 #include "entity/ant/ant.h"
 #include "entity/entity.h"
 #include "entity/food/food.h"
+#include "jsoncpp/json/json.h"
 #include "world/world.h"
 
 TEST_CASE("Ant setters", "[ant][set]") {
@@ -43,8 +44,62 @@ TEST_CASE("Ant setters", "[ant][set]") {
     CHECK(ant_1.get_max_force() == Approx(2.3 * 25.7));
     ant_1.set_max_force(1.0e30);
     CHECK(ant_1.get_max_force() == Approx(1e30));
-    CHECK(ant_1.get_max_acceleration() == Approx(1e30/2.3));
+    CHECK(ant_1.get_max_acceleration() == Approx(1e30 / 2.3));
+}
 
+TEST_CASE("Ant json writing", "[ant][json]") {
+    World world(640, 480, 1);
+    Ant ant_1(1, world, 50.0, 31.0, 0.8, -0.5, -32.1, 1e-10);
+    ant_1.set_vision_distance(10.0);
+    ant_1.set_vision_angle_deg(45.0);
+    ant_1.set_size(8, 7.9);
+    ant_1.set_mass(2.3);
+    ant_1.set_max_acceleration(25.7);
+    ant_1.set_cruise_speed(20);
+    ant_1.update_json();
+    Json::Value ant_json = ant_1.json();
+
+    CHECK(ant_json["type"] == "Ant");
+    CHECK(ant_json["id"] == 1);
+    CHECK(ant_json["vision"]["distance"].asDouble() == Approx(10.0));
+    CHECK(ant_json["size"]["X"].asDouble() == Approx(8));
+    CHECK(ant_json["size"]["Y"].asDouble() == Approx(7.9));
+    CHECK(ant_json["world_situation"]["position"]["X"].asDouble() ==
+          Approx(50.0));
+    CHECK(ant_json["world_situation"]["position"]["Y"].asDouble() ==
+          Approx(31.0));
+    CHECK(ant_json["world_situation"]["velocity"]["X"].asDouble() ==
+          Approx(0.8));
+    CHECK(ant_json["world_situation"]["velocity"]["Y"].asDouble() ==
+          Approx(-0.5));
+    CHECK(ant_json["world_situation"]["acceleration"]["X"].asDouble() ==
+          Approx(-32.1));
+    CHECK(ant_json["world_situation"]["acceleration"]["Y"].asDouble() ==
+          Approx(1e-10));
+    CHECK(ant_json["mass"].asDouble() == Approx(2.3));
+    CHECK(ant_json["max_acceleration"].asDouble() == Approx(25.7));
+    CHECK(ant_json["friction_factor"].asDouble() == Approx(0.0));
+
+    CHECK(ant_json["decision_weights"]["cohesion"].asDouble() == Approx(0.1));
+    CHECK(ant_json["decision_weights"]["alignment"].asDouble() == Approx(0.6));
+    CHECK(ant_json["decision_weights"]["separation"].asDouble() == Approx(0.3));
+    CHECK(ant_json["separation_potential_exponent"].asDouble() == Approx(0.5));
+
+    CHECK(ant_json["cruise_speed"].asDouble() == Approx(20));
+    CHECK(ant_json["vision"]["angle_degrees"].asDouble() == Approx(45.0));
+
+    CHECK(ant_json["colors"]["default"]["red"] == 0x22);
+    CHECK(ant_json["colors"]["default"]["blue"] == 0xA0);
+    CHECK(ant_json["colors"]["default"]["green"] == 0x22);
+    CHECK(ant_json["colors"]["default"]["alpha"] == 0xFF);
+    CHECK(ant_json["colors"]["blind"]["red"] == 0xA0);
+    CHECK(ant_json["colors"]["blind"]["blue"] == 0x22);
+    CHECK(ant_json["colors"]["blind"]["green"] == 0x22);
+    CHECK(ant_json["colors"]["blind"]["alpha"] == 0xFF);
+    CHECK(ant_json["colors"]["capped_force"]["red"] == 0xA0);
+    CHECK(ant_json["colors"]["capped_force"]["blue"] == 0x22);
+    CHECK(ant_json["colors"]["capped_force"]["green"] == 0xA0);
+    CHECK(ant_json["colors"]["capped_force"]["alpha"] == 0xFF);
 }
 
 TEST_CASE("Ant vision", "[ant][vision]") {
@@ -125,10 +180,8 @@ TEST_CASE("Ant decision", "[ant][decision]") {
         ant_1->set_cohesion_weight(1);
         world.update_tree();
         world.update_entity_neighbourhoods();
-        REQUIRE(ant_1->decision_cohesion_velocity()(0) ==
-                Approx(std::sqrt(2)));
-        REQUIRE(ant_1->decision_cohesion_velocity()(1) ==
-                Approx(std::sqrt(2)));
+        REQUIRE(ant_1->decision_cohesion_velocity()(0) == Approx(std::sqrt(2)));
+        REQUIRE(ant_1->decision_cohesion_velocity()(1) == Approx(std::sqrt(2)));
         world.call_entity_decision();
         world.update_entity_and_renderer();
         REQUIRE(ant_1->get_neighbourhood().size() == 2);

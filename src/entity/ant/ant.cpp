@@ -193,12 +193,15 @@ void Ant::update_json() const {
     json_root["colors"]["default"]["red"] = default_color[0];
     json_root["colors"]["default"]["blue"] = default_color[1];
     json_root["colors"]["default"]["green"] = default_color[2];
+    json_root["colors"]["default"]["alpha"] = default_color[3];
     json_root["colors"]["blind"]["red"] = blind_color[0];
     json_root["colors"]["blind"]["blue"] = blind_color[1];
     json_root["colors"]["blind"]["green"] = blind_color[2];
+    json_root["colors"]["blind"]["alpha"] = blind_color[3];
     json_root["colors"]["capped_force"]["red"] = capped_force_color[0];
     json_root["colors"]["capped_force"]["blue"] = capped_force_color[1];
     json_root["colors"]["capped_force"]["green"] = capped_force_color[2];
+    json_root["colors"]["capped_force"]["alpha"] = capped_force_color[3];
     json_root["decision_weights"]["cohesion"] = cohesion_weight;
     json_root["decision_weights"]["alignment"] = alignment_weight;
     json_root["decision_weights"]["separation"] = separation_weight;

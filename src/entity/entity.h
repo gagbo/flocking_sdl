@@ -126,6 +126,7 @@ class Entity {
     inline Type get_type() { return type; }
     std::string get_type_string() const;
     inline float get_vision_distance() const { return vision_distance; }
+    inline Json::Value json() const { return json_root; }
 
     virtual void update_json() const;
 
@@ -168,6 +169,6 @@ class Entity {
 bool operator<(const std::weak_ptr<Entity> &lhs,
                const std::weak_ptr<Entity> &rhs);
 bool operator==(const std::weak_ptr<Entity> &lhs,
-               const std::weak_ptr<Entity> &rhs);
+                const std::weak_ptr<Entity> &rhs);
 
 #endif  // ENTITY_ENTITY_H_
