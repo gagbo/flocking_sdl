@@ -58,4 +58,4 @@ after_success:
         - lcov --remove coverage.info 'json*' --output-file coverage.info # filter out Jsoncpp amalgamated sources from the count
         - lcov --list coverage.info #debug info
         # Uploading report to CodeCov
-        - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
+        - bash <(curl -s https://codecov.io/bash) -a "-g catch.hpp" -a "-g test_" -a "-g json" || echo "Codecov did not collect coverage reports"
