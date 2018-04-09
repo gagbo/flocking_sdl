@@ -37,6 +37,12 @@ int main(int argc, char *argv[]) {
     std::cerr << "Flocking_SDL version " << Flocking_VERSION_MAJOR << "."
               << Flocking_VERSION_MINOR << "\n";
 
+    std::cerr << argc << " argument(s) -> ";
+    for (int i = 0; i < argc ; ++i) {
+        std::cerr << argv[i] << " ";
+    }
+    std::cerr << std::endl;
+
     World world;
     MainWindow main_window(WINDOW_WIDTH, WINDOW_HEIGHT, world);
 #ifndef NDEBUG
