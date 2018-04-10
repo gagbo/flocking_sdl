@@ -182,7 +182,6 @@
         "vision",
         "decision_weights",
         "separation_potential_exponent",
-        "world_situation",
         "colors"
     ]
 }
