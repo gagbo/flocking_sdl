@@ -1,0 +1,182 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Ant",
+    "description": "An ant agent",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "Describe the type of Entity",
+            "type": "string"
+        },
+        "size": {
+            "description": "Size of the Ant in world units",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+        },
+        "friction_factor": {
+            "description": "Friction factor with floor",
+            "type": "number",
+            "minimum": 0
+        },
+        "mass": {
+            "description": "Mass of the ant",
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "max_acceleration": {
+            "description": "Maximum acceleration sustainable by agent",
+            "type": "number",
+            "minimum": 0
+        },
+        "cruise_speed": {
+            "description": "Cruise speed the agent wants to be at",
+            "type": "number",
+            "minimum": 0
+        },
+        "vision": {
+            "description": "Describes the vision of the agent",
+            "type": "object",
+            "properties": {
+                "angle_degrees": {
+                    "description": "Half-angle of vision in degrees",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "distance": {
+                    "description": "Vision range in world units",
+                    "type": "number",
+                    "minimum": 0
+                }
+            },
+            "required": [
+                "angle_degrees",
+                "distance"
+            ]
+        },
+        "decision_weights": {
+            "description": "Coefficients of the decisions of the agent",
+            "type": "object",
+            "properties": {
+                "alignment": {
+                    "description": "Have the same speed as everyone in sight",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "cohesion": {
+                    "description": "Go where all other ants are",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "separation": {
+                    "description": "Go away from other ants",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            },
+            "required": [
+                "alignment",
+                "cohesion",
+                "separation"
+            ]
+        },
+        "separation_potential_exponent": {
+            "description": "Exponent for the separation potential between 2 agents",
+            "type": "number",
+            "minimum": 0
+        },
+        "world_situation": {
+            "description": "Geographical situation of the agent",
+            "type": "object",
+            "properties": {
+                "acceleration": {
+                    "description": "Acceleration",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                },
+                "position": {
+                    "description": "Position",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                },
+                "velocity": {
+                    "description": "Velocity",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                }
+            },
+            "required": [
+                "position"
+            ]
+        },
+        "colors": {
+            "description": "Colors to paint the agent",
+            "type": "object",
+            "properties": {
+                "blind": {
+                    "description": "Color to use when no agent is in sight",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                },
+                "capped_force": {
+                    "description": "Color to use when the agent is at max force",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                },
+                "default": {
+                    "description": "Default color",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                }
+            },
+            "required": [
+                "default",
+                "capped_force",
+                "blind"
+            ]
+        }
+    },
+    "required": [
+        "mass",
+        "friction_factor",
+        "max_acceleration",
+        "size",
+        "type",
+        "cruise_speed",
+        "vision",
+        "decision_weights",
+        "separation_potential_exponent",
+        "world_situation",
+        "colors"
+    ]
+}
