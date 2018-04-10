@@ -135,7 +135,9 @@
                     "description": "Color to use when no agent is in sight",
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
                     },
                     "minItems": 4,
                     "maxItems": 4
@@ -144,7 +146,9 @@
                     "description": "Color to use when the agent is at max force",
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
                     },
                     "minItems": 4,
                     "maxItems": 4
@@ -153,7 +157,9 @@
                     "description": "Default color",
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
                     },
                     "minItems": 4,
                     "maxItems": 4
