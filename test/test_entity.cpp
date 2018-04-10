@@ -62,19 +62,19 @@ TEST_CASE("Ant json writing", "[ant][json]") {
     CHECK(ant_json["type"] == "Ant");
     CHECK(ant_json["id"] == 1);
     CHECK(ant_json["vision"]["distance"].asDouble() == Approx(10.0));
-    CHECK(ant_json["size"]["X"].asDouble() == Approx(8));
-    CHECK(ant_json["size"]["Y"].asDouble() == Approx(7.9));
-    CHECK(ant_json["world_situation"]["position"]["X"].asDouble() ==
+    CHECK(ant_json["size"][0].asDouble() == Approx(8));
+    CHECK(ant_json["size"][1].asDouble() == Approx(7.9));
+    CHECK(ant_json["world_situation"]["position"][0].asDouble() ==
           Approx(50.0));
-    CHECK(ant_json["world_situation"]["position"]["Y"].asDouble() ==
+    CHECK(ant_json["world_situation"]["position"][1].asDouble() ==
           Approx(31.0));
-    CHECK(ant_json["world_situation"]["velocity"]["X"].asDouble() ==
+    CHECK(ant_json["world_situation"]["velocity"][0].asDouble() ==
           Approx(0.8));
-    CHECK(ant_json["world_situation"]["velocity"]["Y"].asDouble() ==
+    CHECK(ant_json["world_situation"]["velocity"][1].asDouble() ==
           Approx(-0.5));
-    CHECK(ant_json["world_situation"]["acceleration"]["X"].asDouble() ==
+    CHECK(ant_json["world_situation"]["acceleration"][0].asDouble() ==
           Approx(-32.1));
-    CHECK(ant_json["world_situation"]["acceleration"]["Y"].asDouble() ==
+    CHECK(ant_json["world_situation"]["acceleration"][1].asDouble() ==
           Approx(1e-10));
     CHECK(ant_json["mass"].asDouble() == Approx(2.3));
     CHECK(ant_json["max_acceleration"].asDouble() == Approx(25.7));
