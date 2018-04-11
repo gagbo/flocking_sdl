@@ -1,5 +1,6 @@
 {
    "type" : "Ant",
+   "sub_type": "Explorer",
    "size" :
    [
        5.0,

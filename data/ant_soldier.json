@@ -1,5 +1,6 @@
 {
    "type" : "Ant",
+   "sub_type": "Soldier",
    "size" :
    [
        5.0,

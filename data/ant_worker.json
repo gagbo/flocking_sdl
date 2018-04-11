@@ -1,5 +1,6 @@
 {
    "type" : "Ant",
+   "sub_type": "Worker",
    "size" :
    [
        5.0,
