@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     SDL_Event e;
 
     for (int i = 0; i < ANT_COUNT; ++i) {
-        world.add_entity(Entity::Type::ANT).lock().get();
+        world.add_entity(Entity::Type::ANT);
     }
 
     while (!quit) {
