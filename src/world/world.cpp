@@ -14,8 +14,11 @@
 
 // Since World will instantiate all makeEntity templates, we need fully defined
 // Entity Derived Classes
+#include <fstream>
+#include "FlockingConfig.h"
 #include "entity/ant/ant.h"
 #include "entity/food/food.h"
+#include "jsoncpp/json/json.h"
 #include "ui/window/mainwindow.h"
 #include "world.h"
 
@@ -273,4 +276,50 @@ std::weak_ptr<Entity> World::add_entity(Entity::Type type, float x, float y,
     result = entity_list.back();
     entity_count[type]++;
     return result;
+}
+
+std::weak_ptr<Entity> World::add_entity(std::string json_name, float x, float y,
+                                        float vx, float vy) {
+    std::weak_ptr<Entity> result;
+    std::string full_path = std::string(DATA_DIR) + "entity/" + json_name;
+    std::fstream fs;
+    fs.open(full_path, std::ios::in);
+    if (!fs.is_open()) {
+        return result;
+    } else {
+        Json::Value json_root;
+        fs >> json_root;
+
+        Entity::Type entity_type;
+        std::string entity_type_string = json_root.get("type", "").asString();
+        if (entity_type_string == "Ant") {
+            entity_type = Entity::Type::ANT;
+        } else if (entity_type_string == "Food") {
+            entity_type = Entity::Type::FOOD;
+        } else {
+            entity_type = Entity::Type::NONE;
+        }
+
+        int next_id;
+        try {
+            next_id = entity_count.at(entity_type);
+        } catch (const std::out_of_range &e) {
+            entity_count[entity_type] = 0;
+            next_id = 0;
+        }
+
+        if (x < 0 || y < 0) {
+            auto p_newEnt =
+                Entity::makeEntity(entity_type, next_id, *this, json_root);
+            entity_list.push_back(std::move(p_newEnt));
+            result = entity_list.back();
+        } else {
+            auto p_newEnt = Entity::makeEntity(entity_type, next_id, *this,
+                                               json_root, x, y, vx, vy);
+            entity_list.push_back(std::move(p_newEnt));
+            result = entity_list.back();
+        }
+        entity_count[entity_type]++;
+        return result;
+    }
 }

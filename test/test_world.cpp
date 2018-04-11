@@ -13,9 +13,14 @@
  */
 
 #include <Eigen/Dense>
+#include <fstream>
+#include <string>
+#include <memory>
 #include "catch.hpp"
 #include "entity/ant/ant.h"
+#include "jsoncpp/json/json.h"
 #include "world/world.h"
+#include "FlockingConfig.h"
 
 TEST_CASE("World setting functions", "[world][set]") {
     World world;
@@ -228,6 +233,37 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         REQUIRE((*it)->get_type_string() == "Ant");
         it = std::next(it);
         REQUIRE((*it)->get_type_string() == "Food");
+    }
+
+    SECTION("Add json ant") {
+        Json::Value soldier_root;
+        std::fstream soldier_file;
+        soldier_file.open(std::string(DATA_DIR) + "entity/ant_soldier.json", std::ios::in);
+        REQUIRE(soldier_file.is_open());
+
+        soldier_file >> soldier_root;
+        world.add_entity("ant_soldier.json");
+        REQUIRE(world.get_entity_list().size() == 1);
+        auto it = world.get_entity_list().begin();
+        auto pAnt = std::dynamic_pointer_cast<Ant>(*it);
+        CHECK(pAnt->get_cruise_speed() == Approx(soldier_root["cruise_speed"].asFloat()));
+    }
+
+    SECTION("Add positionned json ant") {
+        Json::Value worker_root;
+        std::fstream worker_file;
+        worker_file.open(std::string(DATA_DIR) + "entity/ant_worker.json", std::ios::in);
+        REQUIRE(worker_file.is_open());
+
+        worker_file >> worker_root;
+        world.add_entity("ant_worker.json", 23.9, 90);
+        REQUIRE(world.get_entity_list().size() == 1);
+        auto it = world.get_entity_list().begin();
+        auto pAnt = std::dynamic_pointer_cast<Ant>(*it);
+        Eigen::Vector2d pos = pAnt->get_pos();
+        CHECK(pos[0] == Approx(23.9));
+        CHECK(pos[1] == Approx(90));
+        CHECK(pAnt->get_cruise_speed() == Approx(worker_root["cruise_speed"].asFloat()));
     }
 }
 

@@ -32,6 +32,11 @@ Ant::Ant(int i, World &parent_world) : Entity(i, parent_world) {
     vision_distance = 125;
 }
 
+Ant::Ant(int i, World &parent_world, Json::Value &root)
+    : Entity(i, parent_world, std::move(root)) {
+    read_from_json();
+}
+
 Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
          float ay)
     : Entity(i, world, x, y, vx, vy, ax, ay) {
@@ -40,6 +45,12 @@ Ant::Ant(int i, World &world, float x, float y, float vx, float vy, float ax,
     friction_factor = 0;
     set_color(default_color);
     vision_distance = 125;
+}
+
+Ant::Ant(int i, World &world, Json::Value &root, float x, float y, float vx,
+         float vy, float ax, float ay)
+    : Entity(i, world, std::move(root), x, y, vx, vy, ax, ay) {
+    read_from_json();
 }
 
 Ant::Ant(float x, float y, float vx, float vy, float ax, float ay)
@@ -208,5 +219,29 @@ void Ant::update_json() const {
     json_root["separation_potential_exponent"] = separation_potential_exp;
     json_root["cruise_speed"] = cruise_speed;
     json_root["vision"]["angle_degrees"] = vision_angle_degrees;
+    return;
+}
+
+void Ant::read_from_json() {
+    Entity::read_from_json();
+    default_color[0] = json_root["colors"]["default"][0].asInt();
+    default_color[1] = json_root["colors"]["default"][1].asInt();
+    default_color[2] = json_root["colors"]["default"][2].asInt();
+    default_color[3] = json_root["colors"]["default"][3].asInt();
+    blind_color[0] = json_root["colors"]["blind"][0].asInt();
+    blind_color[1] = json_root["colors"]["blind"][1].asInt();
+    blind_color[2] = json_root["colors"]["blind"][2].asInt();
+    blind_color[3] = json_root["colors"]["blind"][3].asInt();
+    capped_force_color[0] = json_root["colors"]["capped_force"][0].asInt();
+    capped_force_color[1] = json_root["colors"]["capped_force"][1].asInt();
+    capped_force_color[2] = json_root["colors"]["capped_force"][2].asInt();
+    capped_force_color[3] = json_root["colors"]["capped_force"][3].asInt();
+    cohesion_weight = json_root["decision_weights"]["cohesion"].asFloat();
+    alignment_weight = json_root["decision_weights"]["alignment"].asFloat();
+    separation_weight = json_root["decision_weights"]["separation"].asFloat();
+    separation_potential_exp =
+        json_root["separation_potential_exponent"].asFloat();
+    cruise_speed = json_root["cruise_speed"].asFloat();
+    vision_angle_degrees = json_root["vision"]["angle_degrees"].asFloat();
     return;
 }

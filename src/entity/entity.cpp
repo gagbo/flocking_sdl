@@ -42,6 +42,11 @@ Entity::Entity(int i, World &world) : ent_id(i), parent_world(&world) {
     position(1) = height_dist(e1);
 }
 
+Entity::Entity(int i, World &world, Json::Value &&root) : Entity(i, world) {
+    json_root = std::move(root);
+    read_from_json();
+}
+
 Entity::Entity(int i, World &world, float x, float y, float vx, float vy,
                float ax, float ay)
     : ent_id(i),
@@ -49,6 +54,13 @@ Entity::Entity(int i, World &world, float x, float y, float vx, float vy,
       position(x, y),
       velocity(vx, vy),
       acceleration(ax, ay) {}
+
+Entity::Entity(int i, World &world, Json::Value &&root, float x, float y,
+               float vx, float vy, float ax, float ay)
+    : Entity(i, world, x, y, vx, vy, ax, ay) {
+    json_root = std::move(root);
+    read_from_json();
+}
 
 Entity::Entity(float x, float y, float vx, float vy, float ax, float ay)
     : position(x, y), velocity(vx, vy), acceleration(ax, ay) {}
@@ -112,7 +124,7 @@ bool operator<(const std::weak_ptr<Entity> &lhs,
 }
 
 bool operator==(const std::weak_ptr<Entity> &lhs,
-               const std::weak_ptr<Entity> &rhs) {
+                const std::weak_ptr<Entity> &rhs) {
     return lhs.lock().get() == rhs.lock().get();
 }
 
@@ -131,4 +143,29 @@ void Entity::update_json() const {
     json_root["mass"] = mass;
     json_root["max_acceleration"] = max_acceleration;
     json_root["friction_factor"] = friction_factor;
+}
+
+void Entity::read_from_json() {
+    if (json_root["type"] == "Food") {
+        type = Type::FOOD;
+    } else if (json_root["type"] == "Ant") {
+        type = Type::ANT;
+    } else {
+        type = Type::NONE;
+    }
+    // ent_id = json_root["id"].asInt();
+    vision_distance = json_root["vision"]["distance"].asFloat();
+    size(0) = json_root["size"][0].asDouble();
+    size(1) = json_root["size"][1].asDouble();
+    // position(0) = json_root["world_situation"]["position"][0].asDouble();
+    // position(1) = json_root["world_situation"]["position"][1].asDouble();
+    // velocity(0) = json_root["world_situation"]["velocity"][0].asDouble();
+    // velocity(1) = json_root["world_situation"]["velocity"][1].asDouble();
+    // acceleration(0) =
+    // json_root["world_situation"]["acceleration"][0].asDouble();
+    // acceleration(1) =
+    // json_root["world_situation"]["acceleration"][1].asDouble();
+    mass = json_root["mass"].asFloat();
+    max_acceleration = json_root["max_acceleration"].asFloat();
+    friction_factor = json_root["friction_factor"].asFloat();
 }

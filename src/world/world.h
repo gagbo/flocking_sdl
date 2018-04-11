@@ -20,6 +20,7 @@
 #include <memory>
 #include <stdexcept>
 #include <vector>
+#include <string>
 
 #include "entity/entity.h"  // Necessary here to fully declare Entity::Type
 #include "kdtree.h"
@@ -68,6 +69,11 @@ class World {
     // Overload to specify velocity
     std::weak_ptr<Entity> add_entity(Entity::Type type, float x, float y,
                                      float vx, float vy);
+    // Add a new entity to the world by naming a json_template
+    // Location is expected to lie in [0;width] X [0;height]
+    // If it is not, location may be randomized back inside
+    std::weak_ptr<Entity> add_entity(std::string json_name, float x = -1, float y = -1,
+                                     float vx = 0, float vy = 0);
 
     // Calls update on every entity and then send everything to renderer
     void update();

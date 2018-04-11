@@ -15,6 +15,7 @@
 #ifndef ENTITY_FOOD_FOOD_H_
 #define ENTITY_FOOD_FOOD_H_
 #include "../entity.h"
+#include "jsoncpp/json/json.h"
 
 class Food : public Entity {
  public:
@@ -24,6 +25,11 @@ class Food : public Entity {
     Food(int i, World &parent_world);
     // Constructor that allows placement of the entity
     Food(int i, World &world, float x, float y, float vx = 0, float vy = 0);
+    // Default constructor that sets the world to live in
+    Food(int i, World &parent_world, Json::Value &root);
+    // Constructor that allows placement of the entity
+    Food(int i, World &world, Json::Value &root, float x, float y,
+         float vx = 0, float vy = 0);
     // Constructor that allows World-less food
     Food(float x, float y, float vx = 0, float vy = 0);
 

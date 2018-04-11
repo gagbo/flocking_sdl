@@ -26,6 +26,11 @@ class Ant : public Entity {
     // Constructor that allows placement of the entity
     Ant(int i, World &world, float x, float y, float vx = 0, float vy = 0,
         float ax = 0, float ay = 0);
+    // Default constructor that sets the world to live in
+    Ant(int i, World &parent_world, Json::Value &root);
+    // Constructor that allows placement of the entity
+    Ant(int i, World &world, Json::Value &root, float x, float y, float vx = 0,
+        float vy = 0, float ax = 0, float ay = 0);
     // Constructor that allows World-less Ant
     Ant(float x, float y, float vx = 0, float vy = 0, float ax = 0,
         float ay = 0);
@@ -67,6 +72,8 @@ class Ant : public Entity {
         wbuilder["indentation"] = "   ";
         out << Json::writeString(wbuilder, json_root);
     }
+    // Read from the json to update the object
+    void read_from_json();
 
     int default_color[4]{0x22, 0xA0, 0x22, 0xFF};
     int blind_color[4]{0xA0, 0x22, 0x22, 0xFF};

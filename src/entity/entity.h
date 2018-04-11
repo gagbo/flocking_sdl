@@ -38,6 +38,11 @@ class Entity {
     // Constructor that allows placement of the entity
     Entity(int i, World &world, float x, float y, float vx = 0, float vy = 0,
            float ax = 0, float ay = 0);
+    // Default constructor that points to the window to use to display
+    Entity(int i, World &world, Json::Value &&root);
+    // Constructor that allows placement of the entity
+    Entity(int i, World &world, Json::Value &&root, float x, float y,
+           float vx = 0, float vy = 0, float ax = 0, float ay = 0);
     // Constructor that allows World-less entity
     Entity(float x, float y, float vx = 0, float vy = 0, float ax = 0,
            float ay = 0);
@@ -129,6 +134,7 @@ class Entity {
     inline Json::Value json() const { return json_root; }
 
     virtual void update_json() const;
+    virtual void read_from_json();
 
  protected:
     // Type of the entity
@@ -158,7 +164,7 @@ class Entity {
     // List of neighbors that we MAY see within vision_distance
     std::vector<std::weak_ptr<Entity>> neighbours{};
     // Root of JSON for IO
-    mutable Json::Value json_root;
+    mutable Json::Value json_root{};
 
     // Compute a linear then quadratic friction acceleration
     Eigen::Vector2d get_friction_acceleration();
