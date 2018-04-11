@@ -50,8 +50,8 @@ int main(int argc, char* argv[]) {
 #endif  // NDEBUG
 
     if (!(main_window.has_correct_init() &&
-          main_window.load_media_bg("../data/bg.png") &&
-          main_window.load_texture("../data/bg.png"))) {
+          main_window.load_media_bg(DATA_DIR "bg.png") &&
+          main_window.load_texture(DATA_DIR "bg.png"))) {
         std::cerr << "Problem during window initalization !\n";
         return 1;
     }
