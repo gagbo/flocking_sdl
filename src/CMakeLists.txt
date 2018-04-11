@@ -25,5 +25,5 @@ target_link_libraries (flocks ${PROJECT_NAME}_mainwindow ${PROJECT_NAME}_input $
 target_link_libraries (flocks ${PROJECT_NAME}_json)
 
 install (TARGETS flocks DESTINATION bin)
-install (FILES "${PROJECT_BINARY_DIR}/src/FlockingConfig.h"
+install (FILES "${PROJECT_SOURCE_DIR}/src/FlockingConfig.h"
              DESTINATION include)
