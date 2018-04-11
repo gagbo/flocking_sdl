@@ -1,3 +1,8 @@
-// the configured options and settings for Tutorial
+#ifndef _FLOCKING_CONFIG_H_
+#define _FLOCKING_CONFIG_H_
+
 #define Flocking_VERSION_MAJOR @Flocking_VERSION_MAJOR@
 #define Flocking_VERSION_MINOR @Flocking_VERSION_MINOR@
+#define DATA_DIR @Install_data_dir@
+
+#endif

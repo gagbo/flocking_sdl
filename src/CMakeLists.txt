@@ -1,11 +1,12 @@
 set (Flocking_VERSION_MAJOR 0)
 set (Flocking_VERSION_MINOR 2)
+set (Install_data_dir "\"${CMAKE_INSTALL_PREFIX}/data/\"")
 
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
     "${PROJECT_SOURCE_DIR}/src/FlockingConfig.h.in"
-    "${PROJECT_BINARY_DIR}/src/FlockingConfig.h"
+    "${PROJECT_SOURCE_DIR}/src/FlockingConfig.h"
     )
 
 # add the binary tree to the search path for include files
