@@ -36,31 +36,21 @@ make install
 ./install/bin/flocks
 #+END_SRC
 
-* TODOs/Wishlist
-  - [-] Create a skeleton game loop with generic callbacks implemented.
-    Only the keyboard/mouse input is missing
-  - [ ] Fix the issue with shipping data with binaries (will probably be
-    hell)
-  - [X] Consider using Eigen3 for the linear algebra
-    - [X] Does SDL2 bring its accessible, wide-purposed linear algebra API ??
-      - It does not look like it, so Eigen3 will be used
-  - [-] Make the abstraction graph for ants and food
-    - The position will be an Eigen3 2d vector
-    - These classes need to know the address of the MainWindow they'll draw
-      to
-      - The MainWindow class provides add_XXX_to_renderer methods to actually
-      ship the position to the renderer
-  - [-] Draw one ant and one food
-    - [X] Ant done
-    - [X] Create a superclass to inherit update() from ?
-    - [ ] How to 'store' the vision of each ant ? (Not interesting until
-      behaviours are implemented)
-      - The World class is responsible for gathering neighbourhoods of
-        entities (this will most likely be the computational bottleneck)
-      - Write tests for the k-d tree implementation
-      - Complete k-d tree implementation
-  - [X] Implement movement (straight line) - test game loop updates
-  - [X] Implement world wrapping... 
-  - [ ] ... and zooming in/out
-  - [ ] Use Viewports to create a World zone and a status zone in the window
-  - [ ] Implement behaviours for ants
+** Add new ant templates
+   See the templates already done (either in =data= directory from the sources, or
+   in =install_directory/data/entity= for the installed ones). Currently you can use
+   schema_ant.json to validate a template so the code will not bug when trying to read it.
+
+   Currently the only way to access these json is to hard-code them in the main function (calling
+   #+BEGIN_SRC cpp
+   World::add_entity(json_name.json, pos_x = random, pos_y = random, vel_x = 0, vel_y = 0);
+   #+END_SRC
+   The objective is to eventually replace the =json_name.json= argument by something read from
+   another JSON file, describing "World events" (when read by the program from stdin / file),
+   or simply from a menu (Although menus and clickable UIs are much better done in Qt, so I
+   will probably only implement a JSON interface through command-line arguments for this
+   project).
+
+   TODO : Use JSON to give an event list to the World so we can add/destroy agents as we want. (in
+   =user_input/json_events=)
+   TODO : Add Food json schema and default types
