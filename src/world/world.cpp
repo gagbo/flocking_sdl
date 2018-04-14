@@ -22,27 +22,7 @@
 #include "ui/window/mainwindow.h"
 #include "world.h"
 
-#define DEFAULT_WORLD_WIDTH 640
-#define DEFAULT_WORLD_HEIGHT 480
-#define DEFAULT_PIX_WIDTH 640
-#define DEFAULT_PIX_HEIGHT 480
-#define DEFAULT_TIME_STEP 1.0
-
-World::World()
-    : width(DEFAULT_WORLD_WIDTH),
-      height(DEFAULT_WORLD_HEIGHT),
-      time_step(DEFAULT_TIME_STEP),
-      entity_list(),
-      entity_count(),
-      render_window(NULL) {}
-
-World::World(int w, int h, float dt)
-    : width(w),
-      height(h),
-      time_step(dt),
-      entity_list(),
-      entity_count(),
-      render_window(NULL) {}
+World::World(int w, int h, float dt) : width(w), height(h), time_step(dt) {}
 
 World::~World() {}
 
@@ -109,6 +89,7 @@ Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
 MainWindow &World::get_mut_window() { return *render_window; }
 
 void World::update() {
+    _time += time_step;
     update_tree();
     update_entity_neighbourhoods();
     call_entity_decision();

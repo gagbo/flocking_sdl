@@ -19,11 +19,17 @@
 #include <map>
 #include <memory>
 #include <stdexcept>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "entity/entity.h"  // Necessary here to fully declare Entity::Type
 #include "kdtree.h"
+
+#define DEFAULT_WORLD_WIDTH 640
+#define DEFAULT_WORLD_HEIGHT 480
+#define DEFAULT_PIX_WIDTH 640
+#define DEFAULT_PIX_HEIGHT 480
+#define DEFAULT_TIME_STEP 1.0
 
 class MainWindow;
 template class KDTree<Entity>;
@@ -31,20 +37,20 @@ template class KDTree<Entity>;
 // A public struct that contains world-related helpers/definitions
 class World {
  public:
-    World();
+    World() = default;
     World(int w, int h, float dt);
     ~World();
 
     // Width of the world in arbitrary unit
-    int width;
+    int width{DEFAULT_WORLD_WIDTH};
     // Height of the world in arbitrary unit
-    int height;
+    int height{DEFAULT_WORLD_HEIGHT};
     // Width of the world in pixels
-    int width_in_px;
+    int width_in_px{DEFAULT_PIX_WIDTH};
     // Height of the world in pixels
-    int height_in_px;
+    int height_in_px{DEFAULT_PIX_HEIGHT};
     // Time step for the physics engine
-    float time_step;
+    float time_step{DEFAULT_TIME_STEP};
 
     // Setter for the MainWindow on which to draw
     void set_render_window(MainWindow &window);
@@ -65,15 +71,16 @@ class World {
     // Add a new entity to the world, with an optional location
     // Location is expected to lie in [0;width] X [0;height]
     // If it is not, location may be randomized back inside
-    std::weak_ptr<Entity> add_entity(Entity::Type type, float x = -1, float y = -1);
+    std::weak_ptr<Entity> add_entity(Entity::Type type, float x = -1,
+                                     float y = -1);
     // Overload to specify velocity
     std::weak_ptr<Entity> add_entity(Entity::Type type, float x, float y,
                                      float vx, float vy);
     // Add a new entity to the world by naming a json_template
     // Location is expected to lie in [0;width] X [0;height]
     // If it is not, location may be randomized back inside
-    std::weak_ptr<Entity> add_entity(std::string json_name, float x = -1, float y = -1,
-                                     float vx = 0, float vy = 0);
+    std::weak_ptr<Entity> add_entity(std::string json_name, float x = -1,
+                                     float y = -1, float vx = 0, float vy = 0);
 
     // Calls update on every entity and then send everything to renderer
     void update();
@@ -91,13 +98,16 @@ class World {
     MainWindow &get_mut_window();
     inline const auto &get_entity_list() const { return entity_list; }
     inline float get_time_step() const { return time_step; }
+    inline double time() const { return _time; }
 
  protected:
-    std::vector<std::shared_ptr<Entity>> entity_list;
-    KDTree<Entity> entity_tree;
+    std::vector<std::shared_ptr<Entity>> entity_list{};
+    KDTree<Entity> entity_tree{};
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
     MainWindow *render_window{nullptr};
+    // Elapsed time
+    double _time{0};
 };
 
 #endif  // WORLD_WORLD_H_
