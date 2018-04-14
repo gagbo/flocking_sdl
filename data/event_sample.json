@@ -1,0 +1,33 @@
+{
+    "events": [
+        {
+            "time_stamp": 2.5,
+            "creation": {
+                "type": "ant_soldier.json",
+                "world_situation": {
+                    "position": [
+                        25.2,
+                        43.4
+                    ],
+                    "velocity": [
+                        2.3,
+                        4.0
+                    ]
+                }
+            }
+        },
+        {
+            "time_stamp": 3,
+            "creation": {
+                "type": "ant_worker.json"
+            }
+        },
+        {
+            "time_stamp": 3.0,
+            "destruction": {
+                "type": "ant",
+                "id": 1
+            }
+        }
+    ]
+}
