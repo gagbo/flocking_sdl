@@ -55,7 +55,7 @@ after_success:
         - lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter out system
         - lcov --remove coverage.info 'catch.hpp' --output-file coverage.info # filter out Catch2 header
         - lcov --remove coverage.info 'test_*' --output-file coverage.info # filter out Test implementation files
-        - lcov --remove coverage.info 'json*' --output-file coverage.info # filter out Jsoncpp amalgamated sources from the count
+        - lcov --remove coverage.info 'jsoncpp/*' --output-file coverage.info # filter out Jsoncpp amalgamated sources from the count
         - lcov --list coverage.info #debug info
         # Uploading report to CodeCov
-        - bash <(curl -s https://codecov.io/bash) -a "-g catch.hpp" -a "-g test_" -a "-g json" || echo "Codecov did not collect coverage reports"
+        - bash <(curl -s https://codecov.io/bash) -a "-g catch.hpp" -a "-g test_" -a "-g json.h" -a "-g jsoncpp.cpp" -a "-g json-forwards.h" || echo "Codecov did not collect coverage reports"
