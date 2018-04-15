@@ -24,6 +24,7 @@
 
 #include "entity/entity.h"  // Necessary here to fully declare Entity::Type
 #include "kdtree.h"
+#include "ui/input/json_event.h"
 
 #define DEFAULT_WORLD_WIDTH 640
 #define DEFAULT_WORLD_HEIGHT 480
@@ -82,8 +83,16 @@ class World {
     std::weak_ptr<Entity> add_entity(std::string json_name, float x = -1,
                                      float y = -1, float vx = 0, float vy = 0);
 
+    // Add events from json input stream, with default behaviour of overwriting
+    // current event list
+    inline void add_events(std::istream &in, bool append = false) {
+        events.read_istream(in, append);
+    }
+
     // Calls update on every entity and then send everything to renderer
     void update();
+    // Find and serve all new json events that happened
+    void find_and_serve_new_events();
     // Update the k-d tree
     void update_tree();
     // Compute the neighbourhoods of each entity
@@ -94,6 +103,9 @@ class World {
     // Update each entity
     void update_entity_and_renderer();
 
+    // Serve a pointed-to event
+    void serve_json_event(std::weak_ptr<WorldEvent> event);
+
     // Accessors
     MainWindow &get_mut_window();
     inline const auto &get_entity_list() const { return entity_list; }
@@ -103,6 +115,7 @@ class World {
  protected:
     std::vector<std::shared_ptr<Entity>> entity_list{};
     KDTree<Entity> entity_tree{};
+    WorldEventsList events{};
     std::map<Entity::Type, int> entity_count;
     // Pointer to the MainWindow on which to draw
     MainWindow *render_window{nullptr};

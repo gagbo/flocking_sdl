@@ -90,10 +90,20 @@ MainWindow &World::get_mut_window() { return *render_window; }
 
 void World::update() {
     _time += time_step;
+    find_and_serve_new_events();
     update_tree();
     update_entity_neighbourhoods();
     call_entity_decision();
     update_entity_and_renderer();
+}
+
+void World::find_and_serve_new_events() {
+    auto new_events_to_serve =
+        events.events_in_time_frame(_time - time_step, _time);
+
+    for (auto &&event : new_events_to_serve) {
+        serve_json_event(event);
+    }
 }
 
 void World::update_tree() {
@@ -302,5 +312,39 @@ std::weak_ptr<Entity> World::add_entity(std::string json_name, float x, float y,
         }
         entity_count[entity_type]++;
         return result;
+    }
+}
+
+void World::serve_json_event(std::weak_ptr<WorldEvent> event) {
+    auto p_event = event.lock();
+    if (!p_event) {
+        std::cerr << "World::serve_json_event : Event cannot be served as it "
+                     "is not accessible anymore\n";
+        return;
+    }
+
+    if (p_event->is_creation()) {
+        auto p_creation = dynamic_cast<CreationEvent *>(p_event.get());
+        if (p_creation->has_position()) {
+            if (p_creation->has_velocity()) {
+                add_entity(p_creation->json_template_name(),
+                           p_creation->pos()(0), p_creation->pos()(1),
+                           p_creation->vel()(0), p_creation->vel()(1));
+            } else {
+                add_entity(p_creation->json_template_name(),
+                           p_creation->pos()(0), p_creation->pos()(1));
+            }
+        } else {
+            add_entity(p_creation->json_template_name());
+        }
+        return;
+    } else if (p_event->is_destruction()) {
+        std::cerr
+            << "World::serve_json_event : Destruction is not served yet\n";
+        return;
+    } else {
+        std::cerr
+            << "World::serve_json_event : This event type is not recognized\n";
+        return;
     }
 }

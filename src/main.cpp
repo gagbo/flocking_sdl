@@ -13,6 +13,7 @@
  */
 
 #include <SDL2/SDL.h>
+#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -58,14 +59,21 @@ int main(int argc, char* argv[]) {
 
     // Initialize time variables
     float frame_in_ms = 1000.0f / FRAMERATE;
-    world.set_time_step(frame_in_ms);
+    world.set_time_step(frame_in_ms/1000.0);
 
     // Initialize game loop variables
     bool quit = false;
     SDL_Event e;
 
-    for (int i = 0; i < ANT_COUNT; ++i) {
-        world.add_entity(Entity::Type::ANT);
+    if (argc <= 1) {
+        for (int i = 0; i < ANT_COUNT; ++i) {
+            world.add_entity(Entity::Type::ANT);
+        }
+    } else {
+        std::fstream events_file;
+        events_file.open(argv[1]);
+        assert(events_file.is_open());
+        world.add_events(events_file);
     }
 
     while (!quit) {
