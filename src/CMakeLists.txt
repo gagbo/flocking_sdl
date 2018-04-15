@@ -1,5 +1,5 @@
 set (Flocking_VERSION_MAJOR 0)
-set (Flocking_VERSION_MINOR 2)
+set (Flocking_VERSION_MINOR 5)
 set (Install_data_dir "\"${CMAKE_INSTALL_PREFIX}/data/\"")
 
 # configure a header file to pass some of the CMake settings

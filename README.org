@@ -41,16 +41,12 @@ make install
    in =install_directory/data/entity= for the installed ones). Currently you can use
    schema_ant.json to validate a template so the code will not bug when trying to read it.
 
-   Currently the only way to access these json is to hard-code them in the main function (calling
-   #+BEGIN_SRC cpp
-   World::add_entity(json_name.json, pos_x = random, pos_y = random, vel_x = 0, vel_y = 0);
-   #+END_SRC
-   The objective is to eventually replace the =json_name.json= argument by something read from
-   another JSON file, describing "World events" (when read by the program from stdin / file),
-   or simply from a menu (Although menus and clickable UIs are much better done in Qt, so I
-   will probably only implement a JSON interface through command-line arguments for this
-   project).
+   Interacting with the progam is made with a json describing the creation
+   events we want (see =data/event_test.json= and =data/event_sample.json=
+   for examples). Making a menu may be planned (Although menus and clickable
+   UIs are much better done in Qt, so I will probably only implement a JSON
+   interface through command-line arguments for this project).
 
-   TODO : Use JSON to give an event list to the World so we can add/destroy agents as we want. (in
-   =user_input/json_events=)
-   TODO : Add Food json schema and default types
+   Schemas are given for ants and events to test them before feeding
+   arguments to the program, but the validation is currently not implemented
+   in the code. User has to do it manually.
