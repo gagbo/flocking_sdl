@@ -154,7 +154,7 @@ class Entity {
     // Mass of the entity
     float mass{1.0};
     // Maximum acceleration possible for Entity
-    float max_acceleration{5e-4};
+    float max_acceleration{5e1};
     // Coefficient of friction (drag)
     float friction_factor{0};
     // Color used to display entity (in hex RGBA)

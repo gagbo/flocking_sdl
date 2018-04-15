@@ -10,4 +10,5 @@ install(FILES ant_explorer.json DESTINATION data/entity)
 
 # Events
 install(FILES event_sample.json DESTINATION data/events)
+install(FILES event_test.json DESTINATION data/events)
 install(FILES schema_events.json DESTINATION data/events)

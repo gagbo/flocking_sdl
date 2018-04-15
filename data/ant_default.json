@@ -7,8 +7,8 @@
    ],
    "friction_factor" : 0.0,
    "mass" : 1.0,
-   "max_acceleration" : 0.0005,
-   "cruise_speed" : 5.0,
+   "max_acceleration" : 300,
+   "cruise_speed" : 3,
    "vision" :
    {
       "angle_degrees" : 60.0,

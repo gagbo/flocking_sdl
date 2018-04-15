@@ -1,0 +1,47 @@
+{
+    "events": [
+        {
+            "time_stamp": 2.5,
+            "creation": {
+                "type": "ant_explorer.json",
+                "world_situation": {
+                    "position": [
+                        25,
+                        43.9
+                    ]
+                }
+            }
+        },
+        {
+            "time_stamp": 3.0,
+            "creation": {
+                "type": "ant_soldier.json",
+                "world_situation": {
+                    "position": [
+                        30.8,
+                        40
+                    ]
+                }
+            }
+        },
+        {
+            "time_stamp": 2,
+            "creation": {
+                "type": "ant_worker.json",
+                "world_situation": {
+                    "position": [
+                        20.2,
+                        41
+                    ]
+                }
+            }
+        },
+        {
+            "time_stamp": 5.0,
+            "destruction": {
+                "type": "Ant",
+                "id": 1
+            }
+        }
+    ]
+}
