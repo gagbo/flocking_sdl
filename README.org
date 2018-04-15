@@ -7,6 +7,10 @@
 #+NAME: codecov
 [[https://codecov.io/gh/gagbo/flocking_sdl][https://codecov.io/gh/gagbo/flocking_sdl/branch/master/graph/badge.svg]]
 
+/Note: This project is 'frozen' for the time being. The feature set is currently good enough by my standards,
+and I wish to learn more about different concepts before coming back. But now I like Qt more because of portability
+and ease of GUI creation./
+
 * What is this ?
 This is a port of the [[https://github.com/gagbo/Flocking][Flocking project]]
 I started in Qt. For learning
@@ -33,15 +37,18 @@ so there are no system implications about making the install target.
 mkdir build && cd build
 cmake ..
 make install
-./install/bin/flocks
+./install/bin/flocks events_list
 #+END_SRC
+=events_list= is an optional argument. It is a path to a valid JSON file
+reprensenting a list of WorldEvents.
 
 ** Add new ant templates
    See the templates already done (either in =data= directory from the sources, or
    in =install_directory/data/entity= for the installed ones). Currently you can use
    schema_ant.json to validate a template so the code will not bug when trying to read it.
 
-   Interacting with the progam is made with a json describing the creation
+** Interact with the simulation
+   Interacting with the program is made with a json describing the creation
    events we want (see =data/event_test.json= and =data/event_sample.json=
    for examples). Making a menu may be planned (Although menus and clickable
    UIs are much better done in Qt, so I will probably only implement a JSON
