@@ -73,4 +73,12 @@ TEST_CASE("WorldEventsList construction", "[events][json_read]") {
         CHECK(creation_found != last_two.end());
         CHECK(destruction_found != last_two.end());
     }
+
+    SECTION("Test filename constructor") {
+        WorldEventsList test_list_2("event_sample.json");
+        // It simply test the size of the imported list, all other tests
+        // are ran by the input stream constructor
+        CHECK(test_list_2.list().size() == 3);
+    }
+
 }
