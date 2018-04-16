@@ -147,7 +147,7 @@ Eigen::Vector2d Ant::decision_separation_velocity() const {
         }
     }
     desired.normalize();
-    desired *= cruise_speed / parent_world->get_time_step();
+    desired *= cruise_speed / parent_world->time_step();
 
     return desired;
 }
@@ -168,7 +168,7 @@ Eigen::Vector2d Ant::decision_alignment_velocity() const {
     }
 
     desired.normalize();
-    desired *= cruise_speed / parent_world->get_time_step();
+    desired *= cruise_speed / parent_world->time_step();
 
     return desired;
 }
@@ -183,7 +183,7 @@ Eigen::Vector2d Ant::decision_cohesion_velocity() const {
     }
 
     desired.normalize();
-    desired *= cruise_speed / parent_world->get_time_step();
+    desired *= cruise_speed / parent_world->time_step();
 
     return desired;
 }

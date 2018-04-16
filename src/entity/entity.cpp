@@ -35,8 +35,8 @@ std::string Entity::get_type_string() const {
 Entity::Entity(int i, World &world) : ent_id(i), parent_world(&world) {
     std::random_device r;
     std::default_random_engine e1(r());
-    std::uniform_real_distribution<double> width_dist(0, world.width);
-    std::uniform_real_distribution<double> height_dist(0, world.height);
+    std::uniform_real_distribution<double> width_dist(0, world._width);
+    std::uniform_real_distribution<double> height_dist(0, world._height);
 
     position(0) = width_dist(e1);
     position(1) = height_dist(e1);
@@ -71,8 +71,8 @@ Eigen::Vector2d Entity::get_friction_acceleration() {
     float vel_norm = velocity.norm();
     float scaling_factor = friction_factor * vel_norm;
 
-    if (scaling_factor >= mass * vel_norm / parent_world->time_step) {
-        scaling_factor = vel_norm * mass / parent_world->time_step;
+    if (scaling_factor >= mass * vel_norm / parent_world->_time_step) {
+        scaling_factor = vel_norm * mass / parent_world->_time_step;
     }
 
     result *= scaling_factor / mass;
@@ -83,8 +83,8 @@ void Entity::decision() { acceleration << 0, 0; }
 
 void Entity::update() {
     acceleration += get_friction_acceleration();
-    velocity += parent_world->time_step * acceleration;
-    position += parent_world->time_step * velocity;
+    velocity += parent_world->_time_step * acceleration;
+    position += parent_world->_time_step * velocity;
     parent_world->wrap_around(position);
 
     acceleration << 0, 0;
@@ -105,7 +105,7 @@ Entity::~Entity() {
 }
 
 Eigen::Vector2d Entity::accel_towards(const Eigen::Vector2d &target_velocity) {
-    float dt = parent_world->get_time_step();
+    float dt = parent_world->time_step();
     Eigen::Vector2d result = target_velocity - velocity;
     result /= dt;
     return result;

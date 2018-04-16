@@ -22,40 +22,40 @@
 #include "ui/window/mainwindow.h"
 #include "world.h"
 
-World::World(int w, int h, float dt) : width(w), height(h), time_step(dt) {}
+World::World(int w, int h, float dt) : _width(w), _height(h), _time_step(dt) {}
 
 World::~World() {}
 
-void World::set_render_window(MainWindow &window) { render_window = &window; }
+void World::set_render_window(MainWindow &window) { _render_window = &window; }
 
 void World::set_world_size(int w, int h) {
-    width = w;
-    height = h;
+    _width = w;
+    _height = h;
 }
 
-void World::set_time_step(float t) { time_step = t; }
+void World::set_time_step(float t) { _time_step = t; }
 
 void World::wrap_around(Eigen::Vector2d &position) {
-    while (position(0) >= width || position(0) < 0) {
+    while (position(0) >= _width || position(0) < 0) {
         if (position(0) < 0) {
-            position(0) += width;
-        } else if (position(0) >= width) {
-            position(0) -= width;
+            position(0) += _width;
+        } else if (position(0) >= _width) {
+            position(0) -= _width;
         }
     }
-    while (position(1) >= height || position(1) < 0) {
+    while (position(1) >= _height || position(1) < 0) {
         if (position(1) < 0) {
-            position(1) += height;
-        } else if (position(1) >= height) {
-            position(1) -= height;
+            position(1) += _height;
+        } else if (position(1) >= _height) {
+            position(1) -= _height;
         }
     }
 }
 
 Eigen::Vector2d World::convert(const Eigen::Vector2d &position) const {
     Eigen::Matrix2d transform;
-    transform << static_cast<float>(width_in_px) / width, 0, 0,
-        static_cast<float>(height_in_px) / height;
+    transform << static_cast<float>(_width_in_px) / _width, 0, 0,
+        static_cast<float>(_height_in_px) / _height;
     Eigen::Vector2d result = transform * position;
     result(0) = std::floor(result(0));
     result(1) = std::floor(result(1));
@@ -64,32 +64,32 @@ Eigen::Vector2d World::convert(const Eigen::Vector2d &position) const {
 
 Eigen::Vector2d World::point_to(const Eigen::Vector2d &tail,
                                 const Eigen::Vector2d &head) {
-    if (!(head(0) >= 0 && head(1) < width && tail(0) >= 0 &&
-          tail(1) < height)) {
+    if (!(head(0) >= 0 && head(1) < _width && tail(0) >= 0 &&
+          tail(1) < _height)) {
         throw std::runtime_error(
             "The provided vectors for point_to are not within World square !");
     }
     Eigen::Vector2d result = head - tail;
 
-    if (result(0) > width / 2) {
-        result(0) -= width;
-    } else if (result(0) < -width / 2) {
-        result(0) += width;
+    if (result(0) > _width / 2) {
+        result(0) -= _width;
+    } else if (result(0) < -_width / 2) {
+        result(0) += _width;
     }
 
-    if (result(1) > height / 2) {
-        result(1) -= height;
-    } else if (result(1) < -height / 2) {
-        result(1) += height;
+    if (result(1) > _height / 2) {
+        result(1) -= _height;
+    } else if (result(1) < -_height / 2) {
+        result(1) += _height;
     }
 
     return result;
 }
 
-MainWindow &World::get_mut_window() { return *render_window; }
+MainWindow &World::get_mut_window() { return *_render_window; }
 
 void World::update() {
-    _time += time_step;
+    _time += _time_step;
     find_and_serve_new_events();
     update_tree();
     update_entity_neighbourhoods();
@@ -99,7 +99,7 @@ void World::update() {
 
 void World::find_and_serve_new_events() {
     auto new_events_to_serve =
-        events.events_in_time_frame(_time - time_step, _time);
+        _events.events_in_time_frame(_time - _time_step, _time);
 
     for (auto &&event : new_events_to_serve) {
         serve_json_event(event);
@@ -107,43 +107,43 @@ void World::find_and_serve_new_events() {
 }
 
 void World::update_tree() {
-    entity_tree.clean();
-    for (auto &&entity : entity_list) {
-        entity_tree.insert(entity);
+    _entity_tree.clean();
+    for (auto &&entity : _entity_list) {
+        _entity_tree.insert(entity);
     }
 }
 
 void World::update_entity_neighbourhoods() {
-    for (auto &&entity : entity_list) {
+    for (auto &&entity : _entity_list) {
         entity->clear_neighbours();
         // Base case, get all neighbours inside
-        auto ent_neighbours = entity_tree.norm1_range_query(
+        auto ent_neighbours = _entity_tree.norm1_range_query(
             *entity, entity->get_vision_distance());
         // Add the neighbours from the edges in case of wrapping around
         float x = entity->get_pos()(0);
         float y = entity->get_pos()(1);
         float radius = entity->get_vision_distance();
         if (x - radius < 0) {
-            Eigen::Vector2d fictive_position(x + width, y);
+            Eigen::Vector2d fictive_position(x + _width, y);
             float fictive_radius(radius - x);
             auto add_neighbours =
-                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+                _entity_tree.norm1_range_query(fictive_position, fictive_radius);
             ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
                                   add_neighbours.end());
             if (y - radius < 0) {
-                Eigen::Vector2d fictive_position2(x + width, y + height);
+                Eigen::Vector2d fictive_position2(x + _width, y + _height);
                 float fictive_radius2(radius - y);
-                auto add_neighbours2 = entity_tree.norm1_range_query(
+                auto add_neighbours2 = _entity_tree.norm1_range_query(
                     fictive_position2,
                     std::max(fictive_radius, fictive_radius2));
                 ent_neighbours.insert(ent_neighbours.end(),
                                       add_neighbours2.begin(),
                                       add_neighbours2.end());
             }
-            if (y + radius > height) {
-                Eigen::Vector2d fictive_position2(x + width, y - height);
-                float fictive_radius2(radius - (height - y));
-                auto add_neighbours2 = entity_tree.norm1_range_query(
+            if (y + radius > _height) {
+                Eigen::Vector2d fictive_position2(x + _width, y - _height);
+                float fictive_radius2(radius - (_height - y));
+                auto add_neighbours2 = _entity_tree.norm1_range_query(
                     fictive_position2,
                     std::max(fictive_radius, fictive_radius2));
                 ent_neighbours.insert(ent_neighbours.end(),
@@ -151,27 +151,27 @@ void World::update_entity_neighbourhoods() {
                                       add_neighbours2.end());
             }
         }
-        if (x + radius > width) {
-            Eigen::Vector2d fictive_position(x - width, y);
-            float fictive_radius(radius - (width - x));
+        if (x + radius > _width) {
+            Eigen::Vector2d fictive_position(x - _width, y);
+            float fictive_radius(radius - (_width - x));
             auto add_neighbours =
-                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+                _entity_tree.norm1_range_query(fictive_position, fictive_radius);
             ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
                                   add_neighbours.end());
             if (y - radius < 0) {
-                Eigen::Vector2d fictive_position2(x - width, y + height);
+                Eigen::Vector2d fictive_position2(x - _width, y + _height);
                 float fictive_radius2(radius - y);
-                auto add_neighbours2 = entity_tree.norm1_range_query(
+                auto add_neighbours2 = _entity_tree.norm1_range_query(
                     fictive_position2,
                     std::max(fictive_radius, fictive_radius2));
                 ent_neighbours.insert(ent_neighbours.end(),
                                       add_neighbours2.begin(),
                                       add_neighbours2.end());
             }
-            if (y + radius > height) {
-                Eigen::Vector2d fictive_position2(x - width, y - height);
-                float fictive_radius2(radius - (height - y));
-                auto add_neighbours2 = entity_tree.norm1_range_query(
+            if (y + radius > _height) {
+                Eigen::Vector2d fictive_position2(x - _width, y - _height);
+                float fictive_radius2(radius - (_height - y));
+                auto add_neighbours2 = _entity_tree.norm1_range_query(
                     fictive_position2,
                     std::max(fictive_radius, fictive_radius2));
                 ent_neighbours.insert(ent_neighbours.end(),
@@ -180,18 +180,18 @@ void World::update_entity_neighbourhoods() {
             }
         }
         if (y - radius < 0) {
-            Eigen::Vector2d fictive_position(x, y + height);
+            Eigen::Vector2d fictive_position(x, y + _height);
             float fictive_radius(radius - y);
             auto add_neighbours =
-                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+                _entity_tree.norm1_range_query(fictive_position, fictive_radius);
             ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
                                   add_neighbours.end());
         }
-        if (y + radius > height) {
-            Eigen::Vector2d fictive_position(x, y - height);
-            float fictive_radius(radius - (height - y));
+        if (y + radius > _height) {
+            Eigen::Vector2d fictive_position(x, y - _height);
+            float fictive_radius(radius - (_height - y));
             auto add_neighbours =
-                entity_tree.norm1_range_query(fictive_position, fictive_radius);
+                _entity_tree.norm1_range_query(fictive_position, fictive_radius);
             ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
                                   add_neighbours.end());
         }
@@ -209,19 +209,19 @@ void World::update_entity_neighbourhoods() {
 }
 
 void World::call_entity_decision() {
-    for (auto &&entity : entity_list) {
+    for (auto &&entity : _entity_list) {
         // Update the timestep of the Entity, necessary for computation
         entity->decision();
     }
 }
 
 void World::update_entity_and_renderer() {
-    for (auto &&entity : entity_list) {
+    for (auto &&entity : _entity_list) {
         entity->update();
         Eigen::Vector2d screen_pos = convert(entity->get_pos());
         Eigen::Vector2d screen_size = convert(entity->get_size());
-        if (render_window != nullptr) {
-            render_window->add_FillRect_to_renderer(
+        if (_render_window != nullptr) {
+            _render_window->add_FillRect_to_renderer(
                 screen_pos(0), screen_pos(1), screen_size(0), screen_size(0),
                 entity->get_color());
         }
@@ -232,22 +232,22 @@ std::weak_ptr<Entity> World::add_entity(Entity::Type type, float x, float y) {
     int next_id;
     std::weak_ptr<Entity> result;
     try {
-        next_id = entity_count.at(type);
+        next_id = _entity_count.at(type);
     } catch (const std::out_of_range &e) {
-        entity_count[type] = 0;
+        _entity_count[type] = 0;
         next_id = 0;
     }
 
     if (x < 0 || y < 0) {
         auto p_newEnt = Entity::makeEntity(type, next_id, *this);
-        entity_list.push_back(std::move(p_newEnt));
-        result = entity_list.back();
+        _entity_list.push_back(std::move(p_newEnt));
+        result = _entity_list.back();
     } else {
         auto p_newEnt = Entity::makeEntity(type, next_id, *this, x, y);
-        entity_list.push_back(std::move(p_newEnt));
-        result = entity_list.back();
+        _entity_list.push_back(std::move(p_newEnt));
+        result = _entity_list.back();
     }
-    entity_count[type]++;
+    _entity_count[type]++;
     return result;
 }
 
@@ -256,16 +256,16 @@ std::weak_ptr<Entity> World::add_entity(Entity::Type type, float x, float y,
     int next_id;
     std::weak_ptr<Entity> result;
     try {
-        next_id = entity_count.at(type);
+        next_id = _entity_count.at(type);
     } catch (const std::out_of_range &e) {
-        entity_count[type] = 0;
+        _entity_count[type] = 0;
         next_id = 0;
     }
 
     auto p_newEnt = Entity::makeEntity(type, next_id, *this, x, y, vx, vy);
-    entity_list.push_back(std::move(p_newEnt));
-    result = entity_list.back();
-    entity_count[type]++;
+    _entity_list.push_back(std::move(p_newEnt));
+    result = _entity_list.back();
+    _entity_count[type]++;
     return result;
 }
 
@@ -293,24 +293,24 @@ std::weak_ptr<Entity> World::add_entity(std::string json_name, float x, float y,
 
         int next_id;
         try {
-            next_id = entity_count.at(entity_type);
+            next_id = _entity_count.at(entity_type);
         } catch (const std::out_of_range &e) {
-            entity_count[entity_type] = 0;
+            _entity_count[entity_type] = 0;
             next_id = 0;
         }
 
         if (x < 0 || y < 0) {
             auto p_newEnt =
                 Entity::makeEntity(entity_type, next_id, *this, json_root);
-            entity_list.push_back(std::move(p_newEnt));
-            result = entity_list.back();
+            _entity_list.push_back(std::move(p_newEnt));
+            result = _entity_list.back();
         } else {
             auto p_newEnt = Entity::makeEntity(entity_type, next_id, *this,
                                                json_root, x, y, vx, vy);
-            entity_list.push_back(std::move(p_newEnt));
-            result = entity_list.back();
+            _entity_list.push_back(std::move(p_newEnt));
+            result = _entity_list.back();
         }
-        entity_count[entity_type]++;
+        _entity_count[entity_type]++;
         return result;
     }
 }

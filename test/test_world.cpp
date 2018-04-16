@@ -26,13 +26,13 @@ TEST_CASE("World setting functions", "[world][set]") {
     World world;
     SECTION("Set world size") {
         world.set_world_size(420, 122);
-        REQUIRE(world.width == Approx(420));
-        REQUIRE(world.height == Approx(122));
+        REQUIRE(world._width == Approx(420));
+        REQUIRE(world._height == Approx(122));
     }
 
     SECTION("Set world time step") {
         world.set_time_step(1e-5);
-        REQUIRE(world.time_step == Approx(1e-5));
+        REQUIRE(world.time_step() == Approx(1e-5));
     }
 }
 
@@ -128,8 +128,8 @@ TEST_CASE("World convert functions", "[world][convert]") {
     Eigen::Vector2d res;
 
     SECTION("Convert -- unchanged scale") {
-        world.width_in_px = world.width;
-        world.height_in_px = world.height;
+        world._width_in_px = world._width;
+        world._height_in_px = world._height;
         res = world.convert(pos1);
         REQUIRE(res(0) == 0);
         REQUIRE(res(1) == 0);
@@ -142,37 +142,37 @@ TEST_CASE("World convert functions", "[world][convert]") {
     }
 
     SECTION("Convert -- reduced scale") {
-        world.width_in_px = 67;
-        world.height_in_px = 95;
+        world._width_in_px = 67;
+        world._height_in_px = 95;
         res = world.convert(pos1);
         REQUIRE(res(0) == 0);
         REQUIRE(res(1) == 0);
         res = world.convert(pos2);
-        REQUIRE(res(0) == world.width_in_px - 1);
-        REQUIRE(res(1) == world.height_in_px - 1);
+        REQUIRE(res(0) == world._width_in_px - 1);
+        REQUIRE(res(1) == world._height_in_px - 1);
         res = world.convert(pos3);
         REQUIRE(res(0) ==
-                std::floor(pos3(0) / world.width * world.width_in_px));
+                std::floor(pos3(0) / world._width * world._width_in_px));
         REQUIRE(res(1) ==
-                std::floor(pos3(1) / world.height * world.height_in_px));
+                std::floor(pos3(1) / world._height * world._height_in_px));
     }
 
     SECTION("Convert -- bigger scale") {
-        world.width_in_px = 1000;
-        world.height_in_px = 1000;
+        world._width_in_px = 1000;
+        world._height_in_px = 1000;
         res = world.convert(pos1);
         REQUIRE(res(0) == 0);
         REQUIRE(res(1) == 0);
         res = world.convert(pos2);
         REQUIRE(res(0) ==
-                std::floor(pos2(0) / world.width * world.width_in_px));
+                std::floor(pos2(0) / world._width * world._width_in_px));
         REQUIRE(res(1) ==
-                std::floor(pos2(1) / world.height * world.height_in_px));
+                std::floor(pos2(1) / world._height * world._height_in_px));
         res = world.convert(pos3);
         REQUIRE(res(0) ==
-                std::floor(pos3(0) / world.width * world.width_in_px));
+                std::floor(pos3(0) / world._width * world._width_in_px));
         REQUIRE(res(1) ==
-                std::floor(pos3(1) / world.height * world.height_in_px));
+                std::floor(pos3(1) / world._height * world._height_in_px));
     }
 }
 
@@ -181,19 +181,19 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
 
     SECTION("Add random ant") {
         world.add_entity(Entity::Type::ANT);
-        REQUIRE(world.get_entity_list().size() == 1);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 1);
+        auto it = world.entity_list().begin();
         Eigen::Vector2d pos = (*it)->get_pos();
-        REQUIRE(pos[0] < world.width);
+        REQUIRE(pos[0] < world._width);
         REQUIRE(pos[0] >= 0);
-        REQUIRE(pos[1] < world.height);
+        REQUIRE(pos[1] < world._height);
         REQUIRE(pos[1] >= 0);
     }
 
     SECTION("Add positioned ant") {
         world.add_entity(Entity::Type::ANT, 23.9, 90);
-        REQUIRE(world.get_entity_list().size() == 1);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 1);
+        auto it = world.entity_list().begin();
         Eigen::Vector2d pos = (*it)->get_pos();
         REQUIRE(pos[0] == Approx(23.9));
         REQUIRE(pos[1] == Approx(90));
@@ -201,19 +201,19 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
 
     SECTION("Add random food") {
         world.add_entity(Entity::Type::FOOD);
-        REQUIRE(world.get_entity_list().size() == 1);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 1);
+        auto it = world.entity_list().begin();
         Eigen::Vector2d pos = (*it)->get_pos();
-        REQUIRE(pos[0] < world.width);
+        REQUIRE(pos[0] < world._width);
         REQUIRE(pos[0] >= 0);
-        REQUIRE(pos[1] < world.height);
+        REQUIRE(pos[1] < world._height);
         REQUIRE(pos[1] >= 0);
     }
 
     SECTION("Add positioned food") {
         world.add_entity(Entity::Type::FOOD, 23.9, 90);
-        REQUIRE(world.get_entity_list().size() == 1);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 1);
+        auto it = world.entity_list().begin();
         Eigen::Vector2d pos = (*it)->get_pos();
         REQUIRE(pos[0] == Approx(23.9));
         REQUIRE(pos[1] == Approx(90));
@@ -224,8 +224,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::ANT);
         world.add_entity(Entity::Type::ANT);
         world.add_entity(Entity::Type::FOOD);
-        REQUIRE(world.get_entity_list().size() == 4);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 4);
+        auto it = world.entity_list().begin();
         REQUIRE((*it)->get_type_string() == "Food");
         it = std::next(it);
         REQUIRE((*it)->get_type_string() == "Ant");
@@ -243,8 +243,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
 
         soldier_file >> soldier_root;
         world.add_entity("ant_soldier.json");
-        REQUIRE(world.get_entity_list().size() == 1);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 1);
+        auto it = world.entity_list().begin();
         auto pAnt = std::dynamic_pointer_cast<Ant>(*it);
         CHECK(pAnt->get_cruise_speed() == Approx(soldier_root["cruise_speed"].asFloat()));
     }
@@ -257,8 +257,8 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
 
         worker_file >> worker_root;
         world.add_entity("ant_worker.json", 23.9, 90);
-        REQUIRE(world.get_entity_list().size() == 1);
-        auto it = world.get_entity_list().begin();
+        REQUIRE(world.entity_list().size() == 1);
+        auto it = world.entity_list().begin();
         auto pAnt = std::dynamic_pointer_cast<Ant>(*it);
         Eigen::Vector2d pos = pAnt->get_pos();
         CHECK(pos[0] == Approx(23.9));

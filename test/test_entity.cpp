@@ -145,7 +145,7 @@ TEST_CASE("Ant decision", "[ant][decision]") {
     ant_1->set_friction_factor(0);
     ant_1->set_cruise_speed(2);
 
-    REQUIRE(world.get_time_step() == Approx(1));
+    REQUIRE(world.time_step() == Approx(1));
     REQUIRE(ant_1->get_max_acceleration() == Approx(1e20));
 
     // SECTION("Test Separation") {

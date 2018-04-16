@@ -43,15 +43,15 @@ class World {
     ~World();
 
     // Width of the world in arbitrary unit
-    int width{DEFAULT_WORLD_WIDTH};
+    int _width{DEFAULT_WORLD_WIDTH};
     // Height of the world in arbitrary unit
-    int height{DEFAULT_WORLD_HEIGHT};
+    int _height{DEFAULT_WORLD_HEIGHT};
     // Width of the world in pixels
-    int width_in_px{DEFAULT_PIX_WIDTH};
+    int _width_in_px{DEFAULT_PIX_WIDTH};
     // Height of the world in pixels
-    int height_in_px{DEFAULT_PIX_HEIGHT};
+    int _height_in_px{DEFAULT_PIX_HEIGHT};
     // Time step for the physics engine
-    float time_step{DEFAULT_TIME_STEP};
+    float _time_step{DEFAULT_TIME_STEP};
 
     // Setter for the MainWindow on which to draw
     void set_render_window(MainWindow &window);
@@ -86,7 +86,7 @@ class World {
     // Add events from json input stream, with default behaviour of overwriting
     // current event list
     inline void add_events(std::istream &in, bool append = false) {
-        events.read_istream(in, append);
+        _events.read_istream(in, append);
     }
 
     // Calls update on every entity and then send everything to renderer
@@ -108,17 +108,17 @@ class World {
 
     // Accessors
     MainWindow &get_mut_window();
-    inline const auto &get_entity_list() const { return entity_list; }
-    inline float get_time_step() const { return time_step; }
+    inline const auto &entity_list() const { return _entity_list; }
+    inline float time_step() const { return _time_step; }
     inline double time() const { return _time; }
 
  protected:
-    std::vector<std::shared_ptr<Entity>> entity_list{};
-    KDTree<Entity> entity_tree{};
-    WorldEventsList events{};
-    std::map<Entity::Type, int> entity_count;
+    std::vector<std::shared_ptr<Entity>> _entity_list{};
+    KDTree<Entity> _entity_tree{};
+    WorldEventsList _events{};
+    std::map<Entity::Type, int> _entity_count;
     // Pointer to the MainWindow on which to draw
-    MainWindow *render_window{nullptr};
+    MainWindow *_render_window{nullptr};
     // Elapsed time
     double _time{0};
 };
