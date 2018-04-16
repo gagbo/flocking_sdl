@@ -43,18 +43,18 @@ TEST_CASE("Insertion into a tree", "[kdtree][insert]") {
         tree.insert(ent_4);
         tree.insert(ent_5);
         // root should be ent_1
-        REQUIRE(tree.get_root()->get_data().lock() == ent_1);
-        REQUIRE(tree.get_root()->go_left()->get_data().lock() == ent_2);
-        REQUIRE(tree.get_root()->go_right()->get_data().lock() == ent_3);
-        REQUIRE(tree.get_root()->go_right()->go_left()->get_data().lock() ==
+        REQUIRE(tree.root()->data().lock() == ent_1);
+        REQUIRE(tree.root()->go_left()->data().lock() == ent_2);
+        REQUIRE(tree.root()->go_right()->data().lock() == ent_3);
+        REQUIRE(tree.root()->go_right()->go_left()->data().lock() ==
                 ent_4);
-        REQUIRE(tree.get_root()->go_right()->go_right()->get_data().lock() ==
+        REQUIRE(tree.root()->go_right()->go_right()->data().lock() ==
                 ent_5);
     }
 
     SECTION("Test the data accessors from the tree") {
-        REQUIRE(tree.get_root()->x() == Approx(ent_1->get_pos()(0)));
-        REQUIRE(tree.get_root()->y() == Approx(ent_1->get_pos()(1)));
+        REQUIRE(tree.root()->x() == Approx(ent_1->pos()(0)));
+        REQUIRE(tree.root()->y() == Approx(ent_1->pos()(1)));
     }
 }
 
@@ -65,9 +65,9 @@ TEST_CASE("Tree cleanup", "[kdtree][clean]") {
     tree.insert(ent_1);
 
     SECTION("Correct cleaning up of k-d tree") {
-      REQUIRE(tree.get_root() != nullptr);
+      REQUIRE(tree.root() != nullptr);
       tree.clean();
-      REQUIRE(tree.get_root() == nullptr);
+      REQUIRE(tree.root() == nullptr);
     }
 }
 

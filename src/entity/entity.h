@@ -51,9 +51,9 @@ class Entity {
     template <typename... Ts>
     static auto makeEntity(Type type, Ts &&... params) {
         auto delEntity = [](Entity *pEntity) {
-            std::cerr << "Deleting " << pEntity->get_type_string() << " "
-                      << pEntity->ent_id << " (" << pEntity->position(0) << ", "
-                      << pEntity->position(1) << ")\n";
+            std::cerr << "Deleting " << pEntity->type_string() << " "
+                      << pEntity->ent_id << " (" << pEntity->_position(0) << ", "
+                      << pEntity->_position(1) << ")\n";
             delete pEntity;
         };
 
@@ -90,84 +90,84 @@ class Entity {
     // Setters
     inline void set_color(unsigned char r, unsigned char g, unsigned char b,
                           unsigned char a) {
-        color[0] = r;
-        color[1] = g;
-        color[2] = b;
-        color[3] = a;
+        _color[0] = r;
+        _color[1] = g;
+        _color[2] = b;
+        _color[3] = a;
     }
 
     inline void set_color(int arg_color[4]) {
         set_color(arg_color[0], arg_color[1], arg_color[2], arg_color[3]);
     }
 
-    inline void set_vision_distance(float d) { vision_distance = d; }
+    inline void set_vision_distance(float d) { _vision_distance = d; }
 
     inline void clear_neighbours() {
         // is neighbours.clear(); enough ?
-        for (auto &&neigh : neighbours) {
+        for (auto &&neigh : _neighbours) {
             neigh.reset();
         }
-        neighbours.clear();
+        _neighbours.clear();
     }
 
-    inline auto &get_neighbourhood() { return neighbours; }
+    inline auto &neighbours() { return _neighbours; }
 
-    inline void set_size(float sx, float sy) { size << sx, sy; }
-    inline void set_mass(float m) { mass = m; }
-    inline void set_max_acceleration(float m_a) { max_acceleration = m_a; }
-    inline void set_friction_factor(float f) { friction_factor = f; }
+    inline void set_size(float sx, float sy) { _size << sx, sy; }
+    inline void set_mass(float m) { _mass = m; }
+    inline void set_max_acceleration(float m_a) { _max_acceleration = m_a; }
+    inline void set_friction_factor(float f) { _friction_factor = f; }
 
     // Accessors
-    inline const Eigen::Vector2d &get_pos() const { return position; }
-    inline const Eigen::Vector2d &get_vel() const { return velocity; }
-    inline const Eigen::Vector2d &get_size() const { return size; }
-    inline const float &get_mass() const { return mass; }
-    inline const float &get_max_acceleration() const {
-        return max_acceleration;
+    inline const Eigen::Vector2d &pos() const { return _position; }
+    inline const Eigen::Vector2d &vel() const { return _velocity; }
+    inline const Eigen::Vector2d &size() const { return _size; }
+    inline const float &mass() const { return _mass; }
+    inline const float &max_acceleration() const {
+        return _max_acceleration;
     }
-    inline const float &get_friction_factor() const { return friction_factor; }
+    inline const float &friction_factor() const { return _friction_factor; }
     inline int id() const { return ent_id; }
-    inline int *get_color() { return color; }
-    inline Type get_type() { return type; }
-    std::string get_type_string() const;
-    inline float get_vision_distance() const { return vision_distance; }
-    inline Json::Value json() const { return json_root; }
+    inline int *color() { return _color; }
+    inline Type type() { return _type; }
+    std::string type_string() const;
+    inline float vision_distance() const { return _vision_distance; }
+    inline Json::Value json() const { return _json_root; }
 
     virtual void update_json() const;
     virtual void read_from_json();
 
  protected:
     // Type of the entity
-    Type type{Type::NONE};
+    Type _type{Type::NONE};
     // Id of the entity
     int ent_id{-1};
     // Pointer to the parent World
     World *parent_world{nullptr};
     // Size of the bounding rect that represents Entity
-    Eigen::Vector2d size{5, 5};
+    Eigen::Vector2d _size{5, 5};
     // Position of the entity
-    Eigen::Vector2d position{0, 0};
+    Eigen::Vector2d _position{0, 0};
     // Velocity of the entity
-    Eigen::Vector2d velocity{0, 0};
+    Eigen::Vector2d _velocity{0, 0};
     // Acceleration of the entity
-    Eigen::Vector2d acceleration{0, 0};
+    Eigen::Vector2d _acceleration{0, 0};
     // Mass of the entity
-    float mass{1.0};
+    float _mass{1.0};
     // Maximum acceleration possible for Entity
-    float max_acceleration{5e1};
+    float _max_acceleration{5e1};
     // Coefficient of friction (drag)
-    float friction_factor{0};
+    float _friction_factor{0};
     // Color used to display entity (in hex RGBA)
-    int color[4]{0x44, 0x44, 0x44, 0xFF};
+    int _color[4]{0x44, 0x44, 0x44, 0xFF};
     // Maximum radius of vision (0 means the object will see nothing)
-    float vision_distance{0};
+    float _vision_distance{0};
     // List of neighbors that we MAY see within vision_distance
-    std::vector<std::weak_ptr<Entity>> neighbours{};
+    std::vector<std::weak_ptr<Entity>> _neighbours{};
     // Root of JSON for IO
-    mutable Json::Value json_root{};
+    mutable Json::Value _json_root{};
 
     // Compute a linear then quadratic friction acceleration
-    Eigen::Vector2d get_friction_acceleration();
+    Eigen::Vector2d compute_friction_acceleration();
 
     Eigen::Vector2d accel_towards(const Eigen::Vector2d &target_velocity);
 };

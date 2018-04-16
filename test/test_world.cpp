@@ -183,7 +183,7 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::ANT);
         REQUIRE(world.entity_list().size() == 1);
         auto it = world.entity_list().begin();
-        Eigen::Vector2d pos = (*it)->get_pos();
+        Eigen::Vector2d pos = (*it)->pos();
         REQUIRE(pos[0] < world._width);
         REQUIRE(pos[0] >= 0);
         REQUIRE(pos[1] < world._height);
@@ -194,7 +194,7 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::ANT, 23.9, 90);
         REQUIRE(world.entity_list().size() == 1);
         auto it = world.entity_list().begin();
-        Eigen::Vector2d pos = (*it)->get_pos();
+        Eigen::Vector2d pos = (*it)->pos();
         REQUIRE(pos[0] == Approx(23.9));
         REQUIRE(pos[1] == Approx(90));
     }
@@ -203,7 +203,7 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::FOOD);
         REQUIRE(world.entity_list().size() == 1);
         auto it = world.entity_list().begin();
-        Eigen::Vector2d pos = (*it)->get_pos();
+        Eigen::Vector2d pos = (*it)->pos();
         REQUIRE(pos[0] < world._width);
         REQUIRE(pos[0] >= 0);
         REQUIRE(pos[1] < world._height);
@@ -214,7 +214,7 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::FOOD, 23.9, 90);
         REQUIRE(world.entity_list().size() == 1);
         auto it = world.entity_list().begin();
-        Eigen::Vector2d pos = (*it)->get_pos();
+        Eigen::Vector2d pos = (*it)->pos();
         REQUIRE(pos[0] == Approx(23.9));
         REQUIRE(pos[1] == Approx(90));
     }
@@ -226,13 +226,13 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         world.add_entity(Entity::Type::FOOD);
         REQUIRE(world.entity_list().size() == 4);
         auto it = world.entity_list().begin();
-        REQUIRE((*it)->get_type_string() == "Food");
+        REQUIRE((*it)->type_string() == "Food");
         it = std::next(it);
-        REQUIRE((*it)->get_type_string() == "Ant");
+        REQUIRE((*it)->type_string() == "Ant");
         it = std::next(it);
-        REQUIRE((*it)->get_type_string() == "Ant");
+        REQUIRE((*it)->type_string() == "Ant");
         it = std::next(it);
-        REQUIRE((*it)->get_type_string() == "Food");
+        REQUIRE((*it)->type_string() == "Food");
     }
 
     SECTION("Add json ant") {
@@ -246,7 +246,7 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         REQUIRE(world.entity_list().size() == 1);
         auto it = world.entity_list().begin();
         auto pAnt = std::dynamic_pointer_cast<Ant>(*it);
-        CHECK(pAnt->get_cruise_speed() == Approx(soldier_root["cruise_speed"].asFloat()));
+        CHECK(pAnt->cruise_speed() == Approx(soldier_root["cruise_speed"].asFloat()));
     }
 
     SECTION("Add positionned json ant") {
@@ -260,10 +260,10 @@ TEST_CASE("World adds entities", "[world][add_entity]") {
         REQUIRE(world.entity_list().size() == 1);
         auto it = world.entity_list().begin();
         auto pAnt = std::dynamic_pointer_cast<Ant>(*it);
-        Eigen::Vector2d pos = pAnt->get_pos();
+        Eigen::Vector2d pos = pAnt->pos();
         CHECK(pos[0] == Approx(23.9));
         CHECK(pos[1] == Approx(90));
-        CHECK(pAnt->get_cruise_speed() == Approx(worker_root["cruise_speed"].asFloat()));
+        CHECK(pAnt->cruise_speed() == Approx(worker_root["cruise_speed"].asFloat()));
     }
 }
 
@@ -289,12 +289,12 @@ TEST_CASE("World computes good neighbourhoods for entities",
     world.update_tree();
     world.update_entity_neighbourhoods();
     SECTION("Entities are seen only once") {
-        auto inside_neigh = inside_see_all->get_neighbourhood();
+        auto inside_neigh = inside_see_all->neighbours();
         CHECK(inside_neigh.size() == 5);
         inside_see_all->set_vision_distance(8000.0);
         world.update_tree();
         world.update_entity_neighbourhoods();  // Invalidates inside_neigh
-        inside_neigh = inside_see_all->get_neighbourhood();
+        inside_neigh = inside_see_all->neighbours();
         CHECK(inside_neigh.size() == 5);
     }
 }

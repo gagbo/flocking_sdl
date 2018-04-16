@@ -37,20 +37,20 @@ class Ant : public Entity {
 
     ~Ant();
 
-    inline void set_vision_angle_deg(float d) { vision_angle_degrees = d; }
-    inline void set_cruise_speed(float cs) { cruise_speed = cs; }
+    inline void set_vision_angle_deg(float d) { _vision_angle_degrees = d; }
+    inline void set_cruise_speed(float cs) { _cruise_speed = cs; }
     inline void set_separation_exp(float exp) {
-        separation_potential_exp = exp;
+        _separation_potential_exp = exp;
     }
-    inline void set_cohesion_weight(float wt) { cohesion_weight = wt; }
-    inline void set_alignment_weight(float wt) { alignment_weight = wt; }
-    inline void set_separation_weight(float wt) { separation_weight = wt; }
+    inline void set_cohesion_weight(float wt) { _cohesion_weight = wt; }
+    inline void set_alignment_weight(float wt) { _alignment_weight = wt; }
+    inline void set_separation_weight(float wt) { _separation_weight = wt; }
     inline void set_max_force(float max_force) {
-        max_acceleration = max_force / mass;
+        _max_acceleration = max_force / _mass;
     }
 
-    inline float get_cruise_speed() const { return cruise_speed; }
-    inline float get_max_force() const { return mass * max_acceleration; }
+    inline float cruise_speed() const { return _cruise_speed; }
+    inline float max_force() const { return _mass * _max_acceleration; }
 
     // Sets acceleration according to the decision of the ant
     void decision();
@@ -70,7 +70,7 @@ class Ant : public Entity {
         update_json();
         Json::StreamWriterBuilder wbuilder;
         wbuilder["indentation"] = "   ";
-        out << Json::writeString(wbuilder, json_root);
+        out << Json::writeString(wbuilder, _json_root);
     }
     // Read from the json to update the object
     void read_from_json();
@@ -80,13 +80,13 @@ class Ant : public Entity {
     int capped_force_color[4]{0xA0, 0x22, 0xA0, 0xFF};
 
  protected:
-    float vision_angle_degrees{60};
-    float cruise_speed{5};
-    float separation_potential_exp{0.5};
+    float _vision_angle_degrees{60};
+    float _cruise_speed{5};
+    float _separation_potential_exp{0.5};
 
-    float cohesion_weight{0.1};
-    float alignment_weight{0.6};
-    float separation_weight{0.3};
+    float _cohesion_weight{0.1};
+    float _alignment_weight{0.6};
+    float _separation_weight{0.3};
 
     void cap_acceleration();
     void cap_force(float max_force);

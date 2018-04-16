@@ -118,11 +118,11 @@ void World::update_entity_neighbourhoods() {
         entity->clear_neighbours();
         // Base case, get all neighbours inside
         auto ent_neighbours = _entity_tree.norm1_range_query(
-            *entity, entity->get_vision_distance());
+            *entity, entity->vision_distance());
         // Add the neighbours from the edges in case of wrapping around
-        float x = entity->get_pos()(0);
-        float y = entity->get_pos()(1);
-        float radius = entity->get_vision_distance();
+        float x = entity->pos()(0);
+        float y = entity->pos()(1);
+        float radius = entity->vision_distance();
         if (x - radius < 0) {
             Eigen::Vector2d fictive_position(x + _width, y);
             float fictive_radius(radius - x);
@@ -195,16 +195,16 @@ void World::update_entity_neighbourhoods() {
             ent_neighbours.insert(ent_neighbours.end(), add_neighbours.begin(),
                                   add_neighbours.end());
         }
-        entity->get_neighbourhood().insert(entity->get_neighbourhood().end(),
+        entity->neighbours().insert(entity->neighbours().end(),
                                            ent_neighbours.begin(),
                                            ent_neighbours.end());
         // Keep only unique references
-        std::sort(entity->get_neighbourhood().begin(),
-                  entity->get_neighbourhood().end());
-        entity->get_neighbourhood().erase(
-            std::unique(entity->get_neighbourhood().begin(),
-                        entity->get_neighbourhood().end()),
-            entity->get_neighbourhood().end());
+        std::sort(entity->neighbours().begin(),
+                  entity->neighbours().end());
+        entity->neighbours().erase(
+            std::unique(entity->neighbours().begin(),
+                        entity->neighbours().end()),
+            entity->neighbours().end());
     }
 }
 
@@ -218,12 +218,12 @@ void World::call_entity_decision() {
 void World::update_entity_and_renderer() {
     for (auto &&entity : _entity_list) {
         entity->update();
-        Eigen::Vector2d screen_pos = convert(entity->get_pos());
-        Eigen::Vector2d screen_size = convert(entity->get_size());
+        Eigen::Vector2d screen_pos = convert(entity->pos());
+        Eigen::Vector2d screen_size = convert(entity->size());
         if (_render_window != nullptr) {
             _render_window->add_FillRect_to_renderer(
                 screen_pos(0), screen_pos(1), screen_size(0), screen_size(0),
-                entity->get_color());
+                entity->color());
         }
     }
 }

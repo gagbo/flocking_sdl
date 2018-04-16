@@ -24,52 +24,52 @@
 #include <vector>
 
 // A 2 dimensional templated k-d tree
-template <typename T>  // T has a get_pos method that returns a Vector
+template <typename T>  // T has a pos method that returns a Vector
                        // implementing operator()
 class KDTree {
  public:
     KDTree() = default;
-    ~KDTree() { delete root; }
+    ~KDTree() { delete _root; }
 
     inline void insert(const std::shared_ptr<T> x) {
-        insert(x, root, KD_DIM_1);
+        insert(x, _root, KD_DIM_1);
     }
 
-    inline auto get_root() const { return root; }
+    inline auto root() const { return _root; }
 
     inline std::vector<std::weak_ptr<T>> norm1_range_query(const T& center,
                                                            float radius) const {
-        return norm1_range_query(center.get_pos(), radius);
+        return norm1_range_query(center.pos(), radius);
     }
 
     inline std::vector<std::weak_ptr<T>> norm1_range_query(
         const Eigen::Vector2d& center, float radius) const {
-        return norm1_range_query(center, radius, root, KD_DIM_1);
+        return norm1_range_query(center, radius, _root, KD_DIM_1);
     }
 
     inline void clean() {
-        delete root;
-        root = nullptr;
+        delete _root;
+        _root = nullptr;
     }
 
  private:
     struct KDNode {
-        std::weak_ptr<T> data{};
+        std::weak_ptr<T> _data{};
         KDNode* left{nullptr};
         KDNode* right{nullptr};
         KDNode() = default;
-        KDNode(const std::shared_ptr<T>& x) : data(x) {}
-        inline auto get_data() { return data; }
+        KDNode(const std::shared_ptr<T>& x) : _data(x) {}
+        inline auto data() { return _data; }
         auto x() {
-            if (auto spt = data.lock()) {
-                return spt->get_pos()(0);
+            if (auto spt = _data.lock()) {
+                return spt->pos()(0);
             } else {
                 return -1.0;
             }
         }
         auto y() {
-            if (auto spt = data.lock()) {
-                return spt->get_pos()(1);
+            if (auto spt = _data.lock()) {
+                return spt->pos()(1);
             } else {
                 return -1.0;
             }
@@ -79,7 +79,7 @@ class KDTree {
         ~KDNode() {
             delete left;
             delete right;
-            data.reset();
+            _data.reset();
         }
     };
 
@@ -87,8 +87,8 @@ class KDTree {
                 int split_direction) {
         if (current == nullptr) {
             current = new KDNode(x);
-        } else if (x->get_pos()(split_direction) <
-                   current->data.lock()->get_pos()(split_direction)) {
+        } else if (x->pos()(split_direction) <
+                   current->_data.lock()->pos()(split_direction)) {
             insert(x, current->left, (split_direction + 1) % KD_TOT_DIM);
         } else {
             insert(x, current->right, (split_direction + 1) % KD_TOT_DIM);
@@ -102,12 +102,12 @@ class KDTree {
         float pos_rad = std::abs(radius);
 
         if (current != nullptr && radius != 0) {
-            if (auto spt = current->data.lock()) {
+            if (auto spt = current->_data.lock()) {
                 // We want to find all points so that
                 // center(0) - radius <= x <= center(0) + radius
                 // center(1) - radius <= y <= center(1) + radius
-                double x(spt->get_pos()(0));
-                double y(spt->get_pos()(1));
+                double x(spt->pos()(0));
+                double y(spt->pos()(1));
                 double min[KD_TOT_DIM] = {center(0) - pos_rad,
                                           center(1) - pos_rad};
                 double max[KD_TOT_DIM] = {center(0) + pos_rad,
@@ -115,11 +115,11 @@ class KDTree {
 
                 // Check if current point is in range
                 if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1]) {
-                    result.push_back(current->data);
+                    result.push_back(current->_data);
                 }
 
                 // Recursively check left children if there may be points there
-                if (min[split_direction] <= spt->get_pos()(split_direction)) {
+                if (min[split_direction] <= spt->pos()(split_direction)) {
                     auto left_result =
                         norm1_range_query(center, radius, current->left,
                                           (split_direction + 1) % KD_TOT_DIM);
@@ -128,7 +128,7 @@ class KDTree {
                 }
 
                 // Recursively check right children if there may be points there
-                if (max[split_direction] >= spt->get_pos()(split_direction)) {
+                if (max[split_direction] >= spt->pos()(split_direction)) {
                     auto right_result =
                         norm1_range_query(center, radius, current->right,
                                           (split_direction + 1) % KD_TOT_DIM);
@@ -142,7 +142,7 @@ class KDTree {
     }
 
  protected:
-    KDNode* root{nullptr};
+    KDNode* _root{nullptr};
 };
 
 #endif  // WORLD_KDTREE_H_

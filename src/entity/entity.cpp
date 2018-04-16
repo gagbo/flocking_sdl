@@ -17,8 +17,8 @@
 #include "entity/food/food.h"
 #include "world/world.h"
 
-std::string Entity::get_type_string() const {
-    switch (type) {
+std::string Entity::type_string() const {
+    switch (_type) {
         case (Type::ANT):
             return "Ant";
             break;
@@ -38,12 +38,12 @@ Entity::Entity(int i, World &world) : ent_id(i), parent_world(&world) {
     std::uniform_real_distribution<double> width_dist(0, world._width);
     std::uniform_real_distribution<double> height_dist(0, world._height);
 
-    position(0) = width_dist(e1);
-    position(1) = height_dist(e1);
+    _position(0) = width_dist(e1);
+    _position(1) = height_dist(e1);
 }
 
 Entity::Entity(int i, World &world, Json::Value &&root) : Entity(i, world) {
-    json_root = std::move(root);
+    _json_root = std::move(root);
     read_from_json();
 }
 
@@ -51,68 +51,68 @@ Entity::Entity(int i, World &world, float x, float y, float vx, float vy,
                float ax, float ay)
     : ent_id(i),
       parent_world(&world),
-      position(x, y),
-      velocity(vx, vy),
-      acceleration(ax, ay) {}
+      _position(x, y),
+      _velocity(vx, vy),
+      _acceleration(ax, ay) {}
 
 Entity::Entity(int i, World &world, Json::Value &&root, float x, float y,
                float vx, float vy, float ax, float ay)
     : Entity(i, world, x, y, vx, vy, ax, ay) {
-    json_root = std::move(root);
+    _json_root = std::move(root);
     read_from_json();
 }
 
 Entity::Entity(float x, float y, float vx, float vy, float ax, float ay)
-    : position(x, y), velocity(vx, vy), acceleration(ax, ay) {}
+    : _position(x, y), _velocity(vx, vy), _acceleration(ax, ay) {}
 
-Eigen::Vector2d Entity::get_friction_acceleration() {
-    Eigen::Vector2d result = -1 * velocity;
+Eigen::Vector2d Entity::compute_friction_acceleration() {
+    Eigen::Vector2d result = -1 * _velocity;
     result.normalize();
-    float vel_norm = velocity.norm();
-    float scaling_factor = friction_factor * vel_norm;
+    float vel_norm = _velocity.norm();
+    float scaling_factor = _friction_factor * vel_norm;
 
-    if (scaling_factor >= mass * vel_norm / parent_world->_time_step) {
-        scaling_factor = vel_norm * mass / parent_world->_time_step;
+    if (scaling_factor >= _mass * vel_norm / parent_world->_time_step) {
+        scaling_factor = vel_norm * _mass / parent_world->_time_step;
     }
 
-    result *= scaling_factor / mass;
+    result *= scaling_factor / _mass;
     return result;
 }
 
-void Entity::decision() { acceleration << 0, 0; }
+void Entity::decision() { _acceleration << 0, 0; }
 
 void Entity::update() {
-    acceleration += get_friction_acceleration();
-    velocity += parent_world->_time_step * acceleration;
-    position += parent_world->_time_step * velocity;
-    parent_world->wrap_around(position);
+    _acceleration += compute_friction_acceleration();
+    _velocity += parent_world->_time_step * _acceleration;
+    _position += parent_world->_time_step * _velocity;
+    parent_world->wrap_around(_position);
 
-    acceleration << 0, 0;
+    _acceleration << 0, 0;
 }
 
 void Entity::print() const {
     std::cout << "***********************************\n";
-    std::cout << "Position : " << position(0) << "\t" << position(1) << "\n";
-    std::cout << "Velocity : " << velocity(0) << "\t" << velocity(1) << "\n";
-    std::cout << "Acceleration : " << acceleration(0) << "\t" << acceleration(1)
+    std::cout << "Position : " << _position(0) << "\t" << _position(1) << "\n";
+    std::cout << "Velocity : " << _velocity(0) << "\t" << _velocity(1) << "\n";
+    std::cout << "Acceleration : " << _acceleration(0) << "\t" << _acceleration(1)
               << "\n";
 }
 
 Entity::~Entity() {
-    for (auto &&neighbour : neighbours) {
+    for (auto &&neighbour : _neighbours) {
         neighbour.reset();
     }
 }
 
 Eigen::Vector2d Entity::accel_towards(const Eigen::Vector2d &target_velocity) {
     float dt = parent_world->time_step();
-    Eigen::Vector2d result = target_velocity - velocity;
+    Eigen::Vector2d result = target_velocity - _velocity;
     result /= dt;
     return result;
 }
 
 bool Entity::operator<(const Entity &rhs) const {
-    if (type < rhs.type) {
+    if (_type < rhs._type) {
         return true;
     }
     return ent_id < rhs.ent_id;
@@ -129,34 +129,34 @@ bool operator==(const std::weak_ptr<Entity> &lhs,
 }
 
 void Entity::update_json() const {
-    json_root["type"] = get_type_string();
-    json_root["id"] = ent_id;
-    json_root["vision"]["distance"] = vision_distance;
-    json_root["size"][0] = size(0);
-    json_root["size"][1] = size(1);
-    json_root["world_situation"]["position"][0] = position(0);
-    json_root["world_situation"]["position"][1] = position(1);
-    json_root["world_situation"]["velocity"][0] = velocity(0);
-    json_root["world_situation"]["velocity"][1] = velocity(1);
-    json_root["world_situation"]["acceleration"][0] = acceleration(0);
-    json_root["world_situation"]["acceleration"][1] = acceleration(1);
-    json_root["mass"] = mass;
-    json_root["max_acceleration"] = max_acceleration;
-    json_root["friction_factor"] = friction_factor;
+    _json_root["type"] = type_string();
+    _json_root["id"] = ent_id;
+    _json_root["vision"]["distance"] = _vision_distance;
+    _json_root["size"][0] = _size(0);
+    _json_root["size"][1] = _size(1);
+    _json_root["world_situation"]["position"][0] = _position(0);
+    _json_root["world_situation"]["position"][1] = _position(1);
+    _json_root["world_situation"]["velocity"][0] = _velocity(0);
+    _json_root["world_situation"]["velocity"][1] = _velocity(1);
+    _json_root["world_situation"]["acceleration"][0] = _acceleration(0);
+    _json_root["world_situation"]["acceleration"][1] = _acceleration(1);
+    _json_root["mass"] = _mass;
+    _json_root["max_acceleration"] = _max_acceleration;
+    _json_root["friction_factor"] = _friction_factor;
 }
 
 void Entity::read_from_json() {
-    if (json_root["type"] == "Food") {
-        type = Type::FOOD;
-    } else if (json_root["type"] == "Ant") {
-        type = Type::ANT;
+    if (_json_root["type"] == "Food") {
+        _type = Type::FOOD;
+    } else if (_json_root["type"] == "Ant") {
+        _type = Type::ANT;
     } else {
-        type = Type::NONE;
+        _type = Type::NONE;
     }
     // ent_id = json_root["id"].asInt();
-    vision_distance = json_root["vision"]["distance"].asFloat();
-    size(0) = json_root["size"][0].asDouble();
-    size(1) = json_root["size"][1].asDouble();
+    _vision_distance = _json_root["vision"]["distance"].asFloat();
+    _size(0) = _json_root["size"][0].asDouble();
+    _size(1) = _json_root["size"][1].asDouble();
     // position(0) = json_root["world_situation"]["position"][0].asDouble();
     // position(1) = json_root["world_situation"]["position"][1].asDouble();
     // velocity(0) = json_root["world_situation"]["velocity"][0].asDouble();
@@ -165,7 +165,7 @@ void Entity::read_from_json() {
     // json_root["world_situation"]["acceleration"][0].asDouble();
     // acceleration(1) =
     // json_root["world_situation"]["acceleration"][1].asDouble();
-    mass = json_root["mass"].asFloat();
-    max_acceleration = json_root["max_acceleration"].asFloat();
-    friction_factor = json_root["friction_factor"].asFloat();
+    _mass = _json_root["mass"].asFloat();
+    _max_acceleration = _json_root["max_acceleration"].asFloat();
+    _friction_factor = _json_root["friction_factor"].asFloat();
 }

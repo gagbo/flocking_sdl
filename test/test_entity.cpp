@@ -29,22 +29,22 @@ TEST_CASE("Ant setters", "[ant][set]") {
     ant_1.set_mass(2.3);
     ant_1.set_max_acceleration(25.7);
     ant_1.set_cruise_speed(20);
-    CHECK(ant_1.get_color()[0] == ant_1.default_color[0]);
-    CHECK(ant_1.get_color()[1] == ant_1.default_color[1]);
-    CHECK(ant_1.get_color()[2] == ant_1.default_color[2]);
-    CHECK(ant_1.get_color()[3] == ant_1.default_color[3]);
+    CHECK(ant_1.color()[0] == ant_1.default_color[0]);
+    CHECK(ant_1.color()[1] == ant_1.default_color[1]);
+    CHECK(ant_1.color()[2] == ant_1.default_color[2]);
+    CHECK(ant_1.color()[3] == ant_1.default_color[3]);
 
-    CHECK(ant_1.get_size()(0) == Approx(8));
-    CHECK(ant_1.get_size()(1) == Approx(7.9));
+    CHECK(ant_1.size()(0) == Approx(8));
+    CHECK(ant_1.size()(1) == Approx(7.9));
 
-    CHECK(ant_1.get_mass() == Approx(2.3));
-    CHECK(ant_1.get_max_acceleration() == Approx(25.7));
-    CHECK(ant_1.get_cruise_speed() == Approx(20));
+    CHECK(ant_1.mass() == Approx(2.3));
+    CHECK(ant_1.max_acceleration() == Approx(25.7));
+    CHECK(ant_1.cruise_speed() == Approx(20));
 
-    CHECK(ant_1.get_max_force() == Approx(2.3 * 25.7));
+    CHECK(ant_1.max_force() == Approx(2.3 * 25.7));
     ant_1.set_max_force(1.0e30);
-    CHECK(ant_1.get_max_force() == Approx(1e30));
-    CHECK(ant_1.get_max_acceleration() == Approx(1e30 / 2.3));
+    CHECK(ant_1.max_force() == Approx(1e30));
+    CHECK(ant_1.max_acceleration() == Approx(1e30 / 2.3));
 }
 
 TEST_CASE("Ant json writing", "[ant][json]") {
@@ -146,7 +146,7 @@ TEST_CASE("Ant decision", "[ant][decision]") {
     ant_1->set_cruise_speed(2);
 
     REQUIRE(world.time_step() == Approx(1));
-    REQUIRE(ant_1->get_max_acceleration() == Approx(1e20));
+    REQUIRE(ant_1->max_acceleration() == Approx(1e20));
 
     // SECTION("Test Separation") {
     //   ant_1->set_separation_weight(1);
@@ -169,9 +169,9 @@ TEST_CASE("Ant decision", "[ant][decision]") {
                 Approx(std::sqrt(2)));
         world.call_entity_decision();
         world.update_entity_and_renderer();
-        REQUIRE(ant_1->get_neighbourhood().size() == 2);
-        CHECK(ant_1->get_vel()(0) == Approx(std::sqrt(2)));
-        CHECK(ant_1->get_vel()(1) == Approx(std::sqrt(2)));
+        REQUIRE(ant_1->neighbours().size() == 2);
+        CHECK(ant_1->vel()(0) == Approx(std::sqrt(2)));
+        CHECK(ant_1->vel()(1) == Approx(std::sqrt(2)));
     }
 
     SECTION("Test Cohesion") {
@@ -184,8 +184,8 @@ TEST_CASE("Ant decision", "[ant][decision]") {
         REQUIRE(ant_1->decision_cohesion_velocity()(1) == Approx(std::sqrt(2)));
         world.call_entity_decision();
         world.update_entity_and_renderer();
-        REQUIRE(ant_1->get_neighbourhood().size() == 2);
-        CHECK(ant_1->get_pos()(0) == Approx(50 + std::sqrt(2)));
-        CHECK(ant_1->get_pos()(1) == Approx(31 + std::sqrt(2)));
+        REQUIRE(ant_1->neighbours().size() == 2);
+        CHECK(ant_1->pos()(0) == Approx(50 + std::sqrt(2)));
+        CHECK(ant_1->pos()(1) == Approx(31 + std::sqrt(2)));
     }
 }

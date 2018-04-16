@@ -15,35 +15,35 @@
 #include "food.h"
 
 Food::Food() : Entity() {
-    type = Entity::Type::FOOD;
-    mass = 1;
+    _type = Entity::Type::FOOD;
+    _mass = 1;
 }
 
 Food::Food(int i, World &parent_world) : Entity(i, parent_world) {
-    type = Entity::Type::FOOD;
-    mass = 1;
+    _type = Entity::Type::FOOD;
+    _mass = 1;
 }
 
 Food::Food(int i, World &world, float x, float y, float vx, float vy)
     : Entity(i, world, x, y, vx, vy, 0, 0) {
-    type = Entity::Type::FOOD;
-    mass = 1;
+    _type = Entity::Type::FOOD;
+    _mass = 1;
 }
 
 Food::Food(int i, World &parent_world, Json::Value &root)
     : Entity(i, parent_world, std::move(root)) {
-    mass = 1;
+    _mass = 1;
 }
 
 Food::Food(int i, World &world, Json::Value &root, float x, float y, float vx,
            float vy)
     : Entity(i, world, std::move(root), x, y, vx, vy, 0, 0) {
-    mass = 1;
+    _mass = 1;
 }
 
 Food::Food(float x, float y, float vx, float vy) : Entity(x, y, vx, vy, 0, 0) {
-    type = Entity::Type::FOOD;
-    mass = 1;
+    _type = Entity::Type::FOOD;
+    _mass = 1;
 }
 
 Food::~Food() {}
